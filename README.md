@@ -1,0 +1,4 @@
+odin
+====
+
+A BWAPI bot

@@ -160,6 +160,7 @@ ClientBin/
 *.pfx
 *.publishsettings
 node_modules/
+__log.txt
 
 # RIA/Silverlight projects
 Generated_Code/

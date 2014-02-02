@@ -7,7 +7,7 @@ using namespace Filter;
 void ExampleAIModule::onStart()
 {
   // Hello World!
-  Broodwar->sendText("Hello world!");
+  Broodwar->sendText("Hello! My name is Odin");
 
   // Print the map name.
   // BWAPI returns std::string when retrieving a string, don't forget to add .c_str() when printing!

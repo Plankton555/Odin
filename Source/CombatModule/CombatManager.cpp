@@ -1,9 +1,10 @@
 #include "CombatManager.h"
 
+using namespace BWAPI;
 
 CombatManager::CombatManager()
 {
-	BWAPI::Broodwar->sendText("Inside constructor of CombatManager");
+	Broodwar->sendText("Inside constructor of CombatManager");
 }
 
 

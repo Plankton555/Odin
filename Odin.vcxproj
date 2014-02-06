@@ -88,11 +88,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\CombatModule\CombatManager.cpp" />
+    <ClCompile Include="Source\ProductionModule\ProductionManager.cpp" />
     <ClCompile Include="Source\Dll.cpp" />
     <ClCompile Include="Source\OdinBot.cpp" />
+    <ClCompile Include="Source\StrategyModule\StrategyManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\CombatModule\CombatManager.h" />
+    <ClInclude Include="Source\ProductionModule\ProductionManager.h" />
     <ClInclude Include="Source\OdinBot.h" />
+    <ClInclude Include="Source\StrategyModule\StrategyManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

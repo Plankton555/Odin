@@ -1,5 +1,7 @@
 #pragma once
 #include <BWAPI.h>
+#include "../CombatModule/CombatManager.h"
+#include "../ProductionModule/ProductionManager.h"
 class StrategyManager
 {
 public:
@@ -22,5 +24,9 @@ public:
 	void onUnitRenegade(BWAPI::Unit unit);
 	void onSaveGame(std::string gameName);
 	void onUnitComplete(BWAPI::Unit unit);
+
+private:
+	CombatManager *combManager;
+	ProductionManager *prodManager;
 };
 

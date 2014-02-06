@@ -4,6 +4,9 @@
 StrategyManager::StrategyManager()
 {
 	BWAPI::Broodwar->sendText("Inside constructor of StrategyManager");
+
+	prodManager = new ProductionManager();
+	combManager = new CombatManager();
 }
 
 

@@ -1,12 +1,13 @@
 #include "StrategyManager.h"
 
 
-StrategyManager::StrategyManager(void)
+StrategyManager::StrategyManager()
 {
+	BWAPI::Broodwar->sendText("Inside constructor of StrategyManager");
 }
 
 
-StrategyManager::~StrategyManager(void)
+StrategyManager::~StrategyManager()
 {
 }
 

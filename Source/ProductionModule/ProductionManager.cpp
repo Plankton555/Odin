@@ -1,12 +1,13 @@
 #include "ProductionManager.h"
 
 
-ProductionManager::ProductionManager(void)
+ProductionManager::ProductionManager()
 {
+	BWAPI::Broodwar->sendText("Inside constructor of ProductionManager");
 }
 
 
-ProductionManager::~ProductionManager(void)
+ProductionManager::~ProductionManager()
 {
 }
 

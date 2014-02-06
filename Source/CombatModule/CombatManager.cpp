@@ -1,12 +1,13 @@
 #include "CombatManager.h"
 
 
-CombatManager::CombatManager(void)
+CombatManager::CombatManager()
 {
+	BWAPI::Broodwar->sendText("Inside constructor of CombatManager");
 }
 
 
-CombatManager::~CombatManager(void)
+CombatManager::~CombatManager()
 {
 }
 

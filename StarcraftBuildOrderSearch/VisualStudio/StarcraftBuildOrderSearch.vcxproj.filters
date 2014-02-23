@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="..\Source\starcraftsearch\Timer.hpp">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\starcraftsearch\SearchParameters.hpp">
+      <Filter>data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\starcraftsearch\SearchResults.hpp">
+      <Filter>data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\starcraftsearch\SearchSaveState.hpp">
+      <Filter>data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\starcraftsearch\StarcraftAction.hpp">
+      <Filter>data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\starcraftsearch\StarcraftData.hpp">
+      <Filter>data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\starcraftsearch\StarcraftSearchGoal.hpp">
+      <Filter>data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\starcraftsearch\StarcraftState.hpp">
+      <Filter>data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\starcraftsearch\MacroAction.hpp">
+      <Filter>data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\starcraftsearch\DependencyGraph.hpp">
+      <Filter>data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\starcraftsearch\BuildingData.hpp">
+      <Filter>data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\starcraftsearch\ActionSet.hpp">
+      <Filter>data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\starcraftsearch\ActionInProgress.hpp">
+      <Filter>data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\starcraftsearch\DFBBStarcraftSearch.hpp">
+      <Filter>search</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\starcraftsearch\MacroActionBuilder.hpp">
+      <Filter>search</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\starcraftsearch\SmartStarcraftSearch.hpp">
+      <Filter>search</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\starcraftsearch\StarcraftSearch.hpp">
+      <Filter>search</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\starcraftsearch\Common.h">
+      <Filter>data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\starcraftsearch\StarcraftSearchConstraint.hpp">
+      <Filter>data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\starcraftsearch\ArmySearch.hpp">
+      <Filter>search</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\starcraftsearch\SmartArmySearch.hpp">
+      <Filter>search</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Source\starcraftsearch\test.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\starcraftsearch\StarcraftData.cpp">
+      <Filter>data</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="data">
+      <UniqueIdentifier>{55181111-4e65-4d8f-b18a-d235da1fbe65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="util">
+      <UniqueIdentifier>{b9a59aa6-4ded-49fa-aaa9-b6dc98f1443d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="main">
+      <UniqueIdentifier>{7be468b6-253e-4f20-bcb2-71618377e6b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="search">
+      <UniqueIdentifier>{b673d50a-7c47-4df2-ae09-c1a58c4c995f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

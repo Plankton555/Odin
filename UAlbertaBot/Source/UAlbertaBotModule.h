@@ -16,12 +16,14 @@
 #include "UnitCommandManager.h"
 
 #include "Options.h"
+#include "ReplayModule.h"
 
 class UAlbertaBotModule : public BWAPI::AIModule
 {
 	GameCommander			gameCommander;
 	EnhancedInterface		eui;
 	//SparCraftManager		micro;
+	ReplayModule			replayModule;
 
 public:
 			

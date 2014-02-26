@@ -139,6 +139,7 @@
     <ClCompile Include="..\Source\micromanagement\RangedManager.cpp" />
     <ClCompile Include="..\Source\micromanagement\TransportManager.cpp" />
     <ClCompile Include="..\Source\Options.cpp" />
+    <ClCompile Include="..\Source\ReplayModule.cpp" />
     <ClCompile Include="..\Source\ReplayVisualizer.cpp" />
     <ClCompile Include="..\Source\ScoutManager.cpp" />
     <ClCompile Include="..\Source\Squad.cpp" />
@@ -183,6 +184,7 @@
     <ClInclude Include="..\Source\micromanagement\RangedManager.h" />
     <ClInclude Include="..\Source\micromanagement\TransportManager.h" />
     <ClInclude Include="..\Source\Options.h" />
+    <ClInclude Include="..\Source\ReplayModule.h" />
     <ClInclude Include="..\Source\ReplayVisualizer.h" />
     <ClInclude Include="..\Source\ScoutManager.h" />
     <ClInclude Include="..\Source\Squad.h" />

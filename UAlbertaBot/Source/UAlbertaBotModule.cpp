@@ -73,7 +73,7 @@ void UAlbertaBotModule::onEnd(bool isWinner)
 {	
 	if(BWAPI::Broodwar->isReplay())
 	{
-
+		replayModule.onEnd(isWinner);
 	}else{
 
 		if (Options::Modules::USING_GAMECOMMANDER)
@@ -157,7 +157,7 @@ void UAlbertaBotModule::onUnitDestroy(BWAPI::Unit * unit)
 {
 	if(BWAPI::Broodwar->isReplay())
 	{
-
+		replayModule.onUnitDestroy(unit);
 	}else{
 		if (Options::Modules::USING_GAMECOMMANDER) { gameCommander.onUnitDestroy(unit); }
 		if (Options::Modules::USING_ENHANCED_INTERFACE) { eui.onUnitDestroy(unit); }
@@ -167,7 +167,7 @@ void UAlbertaBotModule::onUnitDestroy(BWAPI::Unit * unit)
 void UAlbertaBotModule::onUnitMorph(BWAPI::Unit * unit)
 {	if(BWAPI::Broodwar->isReplay())
 	{
-
+		replayModule.onUnitMorph(unit);
 	}else{
 		if (Options::Modules::USING_GAMECOMMANDER) { gameCommander.onUnitMorph(unit); }
 	}
@@ -177,7 +177,7 @@ void UAlbertaBotModule::onSendText(std::string text)
 { 
 	if(BWAPI::Broodwar->isReplay())
 	{
-
+		//Do nothing
 	}else{
 
 		BWAPI::Broodwar->sendText(text.c_str());
@@ -248,7 +248,7 @@ void UAlbertaBotModule::onUnitCreate(BWAPI::Unit * unit)
 { 
 	if(BWAPI::Broodwar->isReplay())
 	{
-
+		replayModule.onUnitCreate(unit);
 	}else{
 
 		if (Options::Modules::USING_GAMECOMMANDER) { gameCommander.onUnitCreate(unit); }
@@ -260,7 +260,7 @@ void UAlbertaBotModule::onUnitShow(BWAPI::Unit * unit)
 {	
 	if(BWAPI::Broodwar->isReplay())
 	{
-
+		//Do nothing
 	}else{
 		if (Options::Modules::USING_GAMECOMMANDER) { gameCommander.onUnitShow(unit); }
 	}
@@ -270,7 +270,7 @@ void UAlbertaBotModule::onUnitHide(BWAPI::Unit * unit)
 { 
 	if(BWAPI::Broodwar->isReplay())
 	{
-
+		//Do nothing
 	}else{
 		if (Options::Modules::USING_GAMECOMMANDER) { gameCommander.onUnitHide(unit); }
 	}
@@ -280,8 +280,18 @@ void UAlbertaBotModule::onUnitRenegade(BWAPI::Unit * unit)
 { 
 	if(BWAPI::Broodwar->isReplay())
 	{
-
+		replayModule.onUnitRenegade(unit);
 	}else{
 		if (Options::Modules::USING_GAMECOMMANDER) { gameCommander.onUnitRenegade(unit); }
+	}
+
+	
+}
+
+void UAlbertaBotModule::onUnitComplete(BWAPI::Unit * unit)
+{
+	if(BWAPI::Broodwar->isReplay())
+	{
+		replayModule.onUnitComplete(unit);
 	}
 }

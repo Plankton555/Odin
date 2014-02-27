@@ -27,6 +27,8 @@ void UAlbertaBotModule::onStart()
 
 	if(BWAPI::Broodwar->isReplay()){
 
+		BWAPI::Broodwar->setLocalSpeed(0);
+		BWAPI::Broodwar->setGUI(false);
 		replayModule.onStart();
 
 	}else{

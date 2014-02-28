@@ -26,5 +26,6 @@ private:
 	std::ofstream myfile;
 
 	void writeToFile(char* file, std::map<const char*,int> stuffToWrite);
+	void formatPeriods();
 
 };

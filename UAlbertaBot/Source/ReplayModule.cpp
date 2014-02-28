@@ -40,17 +40,17 @@ void ReplayModule::onEnd(bool isWinner)
 	
 	if(!zergUnits.empty())
 	{
-		writeToFile("zerg.txt", zergUnits);
+		writeToFile("replaydatastuff/zerg.txt", zergUnits);
 	}
 	
 	if(!protossUnits.empty())
 	{
-		writeToFile("protoss.txt", protossUnits);
+		writeToFile("replaydatastuff/protoss.txt", protossUnits);
 	}
 	
 	if(!terranUnits.empty())
 	{
-		writeToFile("terran.txt", terranUnits);
+		writeToFile("replaydatastuff/terran.txt", terranUnits);
 	}
 	
 
@@ -58,15 +58,17 @@ void ReplayModule::onEnd(bool isWinner)
 
 void ReplayModule::writeToFile(char* file, std::map<const char*,int> stuffToWrite)
 {
-	myfile.open (file);
-		std::map<const char*,int>::iterator it;
-		for(it=stuffToWrite.begin(); it!=stuffToWrite.end();)
-		{				 
-			myfile << it->first <<" " << it->second << "\n";
-			it++;
-		}
-		myfile.close();
+	myfile.open (file, std::ios::app);
+	std::map<const char*,int>::iterator it;
+	for(it=stuffToWrite.begin(); it!=stuffToWrite.end();)
+	{				 
+		int timePeriod = it->second+1000;
+		myfile << it->first <<" " << it->second << "\n";
+		it++;
+	}
+	myfile.close();
 }
+
 
 void ReplayModule::onUnitDestroy(BWAPI::Unit * unit)
 {
@@ -75,6 +77,7 @@ void ReplayModule::onUnitDestroy(BWAPI::Unit * unit)
 
 void ReplayModule::onUnitMorph(BWAPI::Unit * unit)
 {	
+	
 	if(unit->getType().isBuilding())
 	{
 		morphingBuildings.push_front(unit);
@@ -87,11 +90,11 @@ void ReplayModule::onUnitMorph(BWAPI::Unit * unit)
 			if(zergUnits.count(unit->getType().c_str())==0)
 			{
 				zergUnits.insert(std::map<const char*,int>::value_type (unit->getType().c_str(),Broodwar->getFrameCount()));
-			}else if(unit->getType().getRace()==Races::Protoss)
-			{
-				protossUnits.insert(std::map<const char*,int>::value_type (unit->getType().c_str(),Broodwar->getFrameCount()));
-			}	
-		}
+			}
+		}else if(unit->getType().getRace()==Races::Protoss)
+		{
+			protossUnits.insert(std::map<const char*,int>::value_type (unit->getType().c_str(),Broodwar->getFrameCount()));
+		}	
 	}
 }
 

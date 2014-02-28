@@ -11,13 +11,17 @@ ReplayModule::~ReplayModule() {}
 void ReplayModule::onStart()
 {
 	//Print Hello
+	string filename = Broodwar->mapFileName();
+	string pathname = Broodwar->mapPathName();
 	Broodwar->printf("Hello, my name is Odin! This is a replay.");
-	Broodwar->printf("Map: %s \n", BWAPI::Broodwar->mapFileName().c_str());
-	Broodwar->printf("Map: %s \n", BWAPI::Broodwar->mapPathName().c_str());
+	Broodwar->printf("Replay: %s \n", filename.c_str());
+	Broodwar->printf("Location: %s \n", pathname.c_str());
 
 	//Check if this replay was checked already
+	string folder;
+	folder = pathname.substr(0, pathname.size()-filename.size());
 	string line;
-	ifstream myfile ("example.txt");
+	ifstream myfile ((folder + "seen.txt").c_str());
 	if (myfile.is_open()) {
 		while (getline(myfile,line)) {
 			if (line.compare(Broodwar->mapFileName()) == 0) {
@@ -31,7 +35,7 @@ void ReplayModule::onStart()
 	}
 
 	//Set this replay as checked if it wasn't already
-	ofstream myfile2 ("example.txt", ios::app);
+	ofstream myfile2 ((folder + "seen.txt").c_str(), ios::app);
 	if (myfile2.is_open())
 	{
 		myfile2 << Broodwar->mapFileName().c_str() << endl;

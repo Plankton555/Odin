@@ -6,6 +6,7 @@
 
 class ScoutManager {
 
+	bool			circling;
 	BWAPI::Unit *	workerScout;
 	int				numWorkerScouts;
 

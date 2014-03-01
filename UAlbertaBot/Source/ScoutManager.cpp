@@ -69,15 +69,42 @@ void ScoutManager::moveScouts()
 			// if the worker scout is not under attack
 			if (!scoutUnderAttack)
 			{
+				/*
 				// if there is a worker nearby, harass it
 				if (closestWorker && (workerScout->getDistance(closestWorker) < 800))
 				{
 					smartAttack(workerScout, closestWorker);
 				}
+				*/
+
+				// if the worker is close to the enemyBaseLocation, circle around base
+				if (workerScout->getDistance(enemyBaseLocation->getPosition()) < 800)
+				{
+					//If the worker is too close
+					if (workerScout->getDistance(enemyBaseLocation->getPosition()) < 100) {
+						int xDiff = workerScout->getPosition().x() - enemyBaseLocation->getPosition().x();
+						int yDiff = workerScout->getPosition().y() - enemyBaseLocation->getPosition().y();
+						//move
+						BWAPI::Position newPosition (enemyBaseLocation->getPosition().x()+xDiff*2, enemyBaseLocation->getPosition().y()+yDiff*2);
+						smartMove(workerScout, newPosition);
+					} else if (!workerScout->isMoving() || circling == false) {
+						circling = true;
+						int xDiff = workerScout->getPosition().x() - enemyBaseLocation->getPosition().x();
+						int yDiff = workerScout->getPosition().y() - enemyBaseLocation->getPosition().y();
+						//Rotate
+						int newX = yDiff;
+						int newY = -xDiff;
+						//move
+						BWAPI::Position newPosition (enemyBaseLocation->getPosition().x()+newX, enemyBaseLocation->getPosition().y()+newY);
+						smartMove(workerScout, newPosition);
+					}
+				}
+
 				// otherwise keep moving to the enemy region
 				else
 				{
 					// move to the enemy region
+					circling = false;
 					smartMove(workerScout, enemyBaseLocation->getPosition());
 					BWAPI::Broodwar->drawLineMap(workerScout->getPosition().x(), workerScout->getPosition().y(), 
 						enemyBaseLocation->getPosition().x(), enemyBaseLocation->getPosition().y(),

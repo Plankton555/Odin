@@ -8,6 +8,14 @@
  +----------------------------------------------------------------------+
  | Author: David Churchill <dave.churchill@gmail.com>                   |
  +----------------------------------------------------------------------+
+ | Modified by:                                                         |
+ | Björn Persson Mattsson <bjorn.pm@plankter.se>                        |
+ | Filip Brynfors <brynfors@student.chalmers.se>                        |
+ | Jakob Jarmar <jarmar@student.chalmers.se>                            |
+ | Jakob Svensson <svjakob@student.chalmers.se>                         |
+ | Henrik Alburg <alburgh@student.chalmers.se>                          |
+ | Florian Minges <minges@student.chalmers.se>                          |
+ +----------------------------------------------------------------------+
 */
 
 #include "Common.h"

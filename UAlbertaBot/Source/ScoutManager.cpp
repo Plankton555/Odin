@@ -2,7 +2,7 @@
 #include "ScoutManager.h"
 #include "InformationManager.h"
 
-ScoutManager::ScoutManager() : workerScout(NULL), numWorkerScouts(0), scoutUnderAttack(false)
+ScoutManager::ScoutManager() : workerScout(NULL), numWorkerScouts(0), scoutUnderAttack(false), circlingDone(false), circling(NULL), circlingOpposite(false)
 {
 }
 
@@ -69,26 +69,36 @@ void ScoutManager::moveScouts()
 			// if the worker scout is not under attack
 			if (!scoutUnderAttack)
 			{
-				/*
-				// if there is a worker nearby, harass it
-				if (closestWorker && (workerScout->getDistance(closestWorker) < 800))
+				
+				// if circling is done and there is a worker nearby, harass it
+				if (circlingDone && workerScout->getDistance(closestWorker) < 100 &&
+						closestWorker && (workerScout->getDistance(closestWorker) < 800))
 				{
 					smartAttack(workerScout, closestWorker);
+					BWAPI::Broodwar->drawTextMap(workerScout->getPosition().x(), workerScout->getPosition().y(), "HARASSING");
 				}
-				*/
 
 				// if the worker is close to the enemyBaseLocation, circle around base
-				if (workerScout->getDistance(enemyBaseLocation->getPosition()) < 800)
+				else if (workerScout->getDistance(enemyBaseLocation->getPosition()) < 500)
 				{
 					//If the worker is too close
-					if (workerScout->getDistance(enemyBaseLocation->getPosition()) < 100) {
+					if (workerScout->getDistance(enemyBaseLocation->getPosition()) < 100)
+					{
 						int xDiff = workerScout->getPosition().x() - enemyBaseLocation->getPosition().x();
 						int yDiff = workerScout->getPosition().y() - enemyBaseLocation->getPosition().y();
 						//move
 						BWAPI::Position newPosition (enemyBaseLocation->getPosition().x()+xDiff*2, enemyBaseLocation->getPosition().y()+yDiff*2);
 						smartMove(workerScout, newPosition);
-					} else if (!workerScout->isMoving() || circling == false) {
-						circling = true;
+						BWAPI::Broodwar->drawTextMap(workerScout->getPosition().x(), workerScout->getPosition().y(), "TOO CLOSE - MOVING AWAY");
+					}
+					//Circle when possible
+					else if (!workerScout->isMoving() || !circling)
+					{
+						//The the start position of the circling so we can know when a lap is done
+						if (!circling) {
+							circling = &(workerScout->getPosition());
+						}
+
 						int xDiff = workerScout->getPosition().x() - enemyBaseLocation->getPosition().x();
 						int yDiff = workerScout->getPosition().y() - enemyBaseLocation->getPosition().y();
 						//Rotate
@@ -97,6 +107,30 @@ void ScoutManager::moveScouts()
 						//move
 						BWAPI::Position newPosition (enemyBaseLocation->getPosition().x()+newX, enemyBaseLocation->getPosition().y()+newY);
 						smartMove(workerScout, newPosition);
+						BWAPI::Broodwar->drawTextMap(workerScout->getPosition().x(), workerScout->getPosition().y(), "STARTED CIRCLING");
+					}
+					//Else just keep circling and check if done
+					else {
+						//if the worker has reached the opposite side of the startposition
+						BWAPI::Position opposite (-circling->x(), -circling->y());
+						if (workerScout->getDistance(opposite) < 200) {
+							circlingOpposite = true;
+						}
+						//if the worker has reached back to the startposition
+						else if (workerScout->getDistance(*circling) < 200) {
+							circlingDone = true;
+						}
+						std::string out ("Circling");
+						if(circlingOpposite) out.append(" - OPPOSITE");
+						if(circlingDone) out.append(" - DONE");
+
+						BWAPI::Broodwar->drawLineMap(workerScout->getPosition().x(), workerScout->getPosition().y(), 
+								opposite.x(), opposite.y(),
+								BWAPI::Colors::Yellow); //Draw from bot to opposite
+
+
+						BWAPI::Broodwar->drawTextMap(workerScout->getPosition().x(), workerScout->getPosition().y(), out.c_str());
+						//BWAPI::Broodwar->drawTextMap(workerScout->getPosition().x(), workerScout->getPosition().y(), "CIRCLING");
 					}
 				}
 
@@ -104,11 +138,13 @@ void ScoutManager::moveScouts()
 				else
 				{
 					// move to the enemy region
-					circling = false;
+					//circling = NULL;
+					//circlingOpposite = false;
 					smartMove(workerScout, enemyBaseLocation->getPosition());
 					BWAPI::Broodwar->drawLineMap(workerScout->getPosition().x(), workerScout->getPosition().y(), 
 						enemyBaseLocation->getPosition().x(), enemyBaseLocation->getPosition().y(),
 						BWAPI::Colors::Yellow);
+					BWAPI::Broodwar->drawTextMap(workerScout->getPosition().x(), workerScout->getPosition().y(), "MOVING TO BASE");
 				}
 				
 			}

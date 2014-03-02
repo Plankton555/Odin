@@ -47,6 +47,7 @@ public:
 	void				GetUnits(UnitVector & units, BWAPI::Position center, int radius, bool ourUnits, bool oppUnits);
 	BWAPI::Position		getLeastExplored();
 	BWAPI::Position		getNaturalExpansion();
+	BWAPI::Position		getLeastExploredIn(std::vector <BWAPI::Position> region);
 
 	GridCell & getCellByIndex(int r, int c)		{ return cells[r*cols + c]; }
 	GridCell & getCell(BWAPI::Position pos)		{ return getCellByIndex(pos.y() / cellSize, pos.x() / cellSize); }

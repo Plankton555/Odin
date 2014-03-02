@@ -60,6 +60,21 @@ BWAPI::Position MapGrid::getLeastExplored()
 	return getCellCenter(leastRow, leastCol);
 }
 
+BWAPI::Position MapGrid::getLeastExploredIn(std::vector <BWAPI::Position> region)
+{
+	int minSeen = 1000000;
+	BWAPI::Position minPos;
+	BOOST_FOREACH(BWAPI::Position pos, region)
+	{
+		if(getCell(pos).timeLastVisited < minSeen)
+		{
+			minSeen = getCell(pos).timeLastVisited;
+			minPos = pos;
+		}
+	}
+	return minPos;
+}
+
 void MapGrid::calculateCellCenters()
 {
 	for (int r=0; r < rows; ++r)

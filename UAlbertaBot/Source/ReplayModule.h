@@ -23,9 +23,12 @@ private:
 	std::map<const char*,int> zergUnits;
 	std::map<const char*,int> terranUnits;
 	std::map<const char*,int> protossUnits;
+	std::map<const char*,int> zergUnitsALl;
+	std::map<const char*,int> terranUnitsAll;
+	std::map<const char*,int> protossUnitsAll;
 	std::ofstream myfile;
 
 	void writeToFile(char* file, std::map<const char*,int> stuffToWrite);
-	void formatPeriods();
+	void createMaps();
 
 };

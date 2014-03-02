@@ -19,7 +19,7 @@ void ObserverManager::executeMicro(const UnitVector & targets)
 
 	cloakedUnitMap.clear();
 	UnitVector cloakedUnits;
-
+	bool enemyHasCloak = false;
 	// figure out targets
 	BOOST_FOREACH (BWAPI::Unit * unit, BWAPI::Broodwar->enemy()->getUnits())
 	{
@@ -30,6 +30,7 @@ void ObserverManager::executeMicro(const UnitVector & targets)
 		{
 			cloakedUnits.push_back(unit);
 			cloakedUnitMap[unit] = false;
+			enemyHasCloak = true;
 		}
 	}
 
@@ -39,7 +40,7 @@ void ObserverManager::executeMicro(const UnitVector & targets)
 	BOOST_FOREACH(BWAPI::Unit * observer, observers)
 	{
 		// if we need to regroup, move the observer to that location
-		if (!observerInBattle && unitClosestToEnemy && unitClosestToEnemy->getPosition().isValid())
+		if (!observerInBattle && unitClosestToEnemy && unitClosestToEnemy->getPosition().isValid() && enemyHasCloak)
 		{
 			smartMove(observer, unitClosestToEnemy->getPosition());
 			observerInBattle = true;

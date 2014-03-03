@@ -116,29 +116,34 @@ void ReplayModule::writeToFile(char* file, std::map<const char*,int> stuffToWrit
 		}
 		
 		
-		myfile << it->first <<" " << it->second << "\n";
+		//myfile << it->first <<" " << it->second << "\n";
 		it++;
 	}
-
+	/*
 	for(it=protossUnitsAll.begin(); it!=protossUnitsAll.end();)
 	{
-		myfile << it->first <<" ";
+		myfile << it->first <<",";
 		it++;
 	}
-	myfile << "\n";
+	myfile << "\n";*/
 	for(int timePeriod = 1; timePeriod <= 15; timePeriod++)
 	{
-		myfile << timePeriod << "  ";
+		myfile << "period" <<timePeriod << ",";
 		
 		for(int i = 1; i < temp.size(); i++)
 		{		
 			if(temp.at(i)>0&&(temp.at(i)/1000<timePeriod||timePeriod==15))
 			{
-				myfile << 1 << " ";
+				myfile << 1;
 			}else
 			{
-				myfile << 0 << " ";
+				myfile << 0;
 			}
+			if(i<temp.size()-1)
+			{
+				myfile << ",";
+			}
+
 		}
 		myfile << "\n";
 	}

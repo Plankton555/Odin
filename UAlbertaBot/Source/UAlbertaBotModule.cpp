@@ -28,8 +28,8 @@ void UAlbertaBotModule::onStart()
 	if(BWAPI::Broodwar->isReplay()){
 
 		BWAPI::Broodwar->setLocalSpeed(0);
-		//BWAPI::Broodwar->setFrameSkip(2400); //optional, but improves speed
-		//BWAPI::Broodwar->setGUI(false);
+		BWAPI::Broodwar->setFrameSkip(2400); //optional, but improves speed
+		BWAPI::Broodwar->setGUI(false);
 		replayModule.onStart();
 
 	}else{

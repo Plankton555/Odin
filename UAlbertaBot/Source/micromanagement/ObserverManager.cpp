@@ -19,7 +19,7 @@ void ObserverManager::executeMicro(const UnitVector & targets)
 
 	cloakedUnitMap.clear();
 	UnitVector cloakedUnits;
-
+	bool enemyHasCloak = false;
 	// figure out targets
 	BOOST_FOREACH (BWAPI::Unit * unit, BWAPI::Broodwar->enemy()->getUnits())
 	{
@@ -30,6 +30,7 @@ void ObserverManager::executeMicro(const UnitVector & targets)
 		{
 			cloakedUnits.push_back(unit);
 			cloakedUnitMap[unit] = false;
+			enemyHasCloak = true;
 		}
 	}
 
@@ -39,7 +40,7 @@ void ObserverManager::executeMicro(const UnitVector & targets)
 	BOOST_FOREACH(BWAPI::Unit * observer, observers)
 	{
 		// if we need to regroup, move the observer to that location
-		if (!observerInBattle && unitClosestToEnemy && unitClosestToEnemy->getPosition().isValid())
+		if (!observerInBattle && unitClosestToEnemy && unitClosestToEnemy->getPosition().isValid() && enemyHasCloak)
 		{
 			smartMove(observer, unitClosestToEnemy->getPosition());
 			observerInBattle = true;
@@ -48,12 +49,39 @@ void ObserverManager::executeMicro(const UnitVector & targets)
 		// send him to scout around the map
 		else
 		{
-			BWAPI::Position explorePosition = MapGrid::Instance().getLeastExplored();
-			smartMove(observer, explorePosition);
+			// get the enemy base location, if we have one
+			BWTA::BaseLocation * enemyBaseLocation = InformationManager::Instance().getMainBaseLocation(BWAPI::Broodwar->enemy());
+
+			// determine the region that the enemy is in
+			BWTA::Region * enemyRegion = enemyBaseLocation ? enemyBaseLocation->getRegion() : NULL;
+			// determine the region the observer is in
+			BWAPI::TilePosition scoutTile(observer->getPosition());
+			BWTA::Region * observerRegion = scoutTile.isValid() ? BWTA::getRegion(scoutTile) : NULL;
+			//if we know where the enemy is
+			if(enemyRegion)
+			{
+				if(enemyRegion == observerRegion)
+				{
+					//if we are in the enemyregion go to the place in the region we visited last
+					//should probably check timeframe here, no need to go around and around
+					BWAPI::Position explorePosition = MapGrid::Instance().getLeastExploredIn(enemyRegion->getPolygon());
+					smartMove(observer, explorePosition);
+				}
+				else
+				{
+					//else go there
+					smartMove(observer, enemyBaseLocation->getPosition());
+				}
+			}
+			else
+			{
+				//Just scout were we havnt been if we cant find the enemy
+				BWAPI::Position explorePosition = MapGrid::Instance().getLeastExplored();
+				smartMove(observer, explorePosition);
+			}
 		}
 	}
 }
-
 
 BWAPI::Unit * ObserverManager::closestCloakedUnit(const UnitVector & cloakedUnits, BWAPI::Unit * observer)
 {

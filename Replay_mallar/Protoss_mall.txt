@@ -1,0 +1,1 @@
+Timeperiod,Pylon,Gateway,Assimilator,Cybernetics Core,Citadel of Adun,Forge,Photon Cannon,Stargate,Robotics Facility,Robotics Support Bay,Observatory,Arbiter Tribunal,Templar Archives,Fleet Beacon,Shield Battery,Zealot,Dragoon,Dark Templar,High Templar,Archon,Dark Archon,Reaver,Scout,Corsair,Arbiter,Carrier,Observer,Shuttle

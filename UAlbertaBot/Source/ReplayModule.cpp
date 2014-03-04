@@ -15,7 +15,7 @@ void ReplayModule::createMaps()
 	//Buildings 
 	protossUnitsAll["Pylon"] = 1;
 	protossUnitsAll["Gateway"] = 2;
-	protossUnitsAll["Assimilatior"] = 3;
+	protossUnitsAll["Assimilator"] = 3;
 	protossUnitsAll["Cybernetics Core"] = 4;
 	protossUnitsAll["Citadel of Adun"] = 5;
 	protossUnitsAll["Forge"] = 6;
@@ -42,6 +42,68 @@ void ReplayModule::createMaps()
 	protossUnitsAll["Carrier"] = 26;
 	protossUnitsAll["Observer"] = 27;
 	protossUnitsAll["Shuttle"] = 28;
+
+
+	terranUnitsAll["Supply Depot"] = 1;
+	terranUnitsAll["Barracks"] = 2;
+	terranUnitsAll["Refinery"] = 3;
+	terranUnitsAll["Engineering Bay"] = 4;
+	terranUnitsAll["Bunker"] = 5;
+	terranUnitsAll["Academy"] = 6;
+	terranUnitsAll["Missile Turret"] = 7;
+	terranUnitsAll["Factory"] = 8;
+	terranUnitsAll["Starport"] = 9;
+	terranUnitsAll["Armory"] = 10;
+	terranUnitsAll["Science Facility"] = 11;
+	terranUnitsAll["Comsat Station"] = 12;
+	terranUnitsAll["Nuclear Silo"] = 13;
+	terranUnitsAll["Machine Shop"] = 14;
+	terranUnitsAll["Control Tower"] = 15;
+	terranUnitsAll["Physics Lab"] = 16;
+	terranUnitsAll["Covert Ops"] = 17;
+
+	terranUnitsAll["Marine"] = 18;
+	terranUnitsAll["Firebat"] = 19;
+	terranUnitsAll["Medic"] = 20;
+	terranUnitsAll["Ghost"] = 21;
+	terranUnitsAll["Vulture"] = 22;
+	terranUnitsAll["Spider Mine"] = 23;
+	terranUnitsAll["Siege Tank"] = 24;
+	terranUnitsAll["Goliath"] = 25;
+	terranUnitsAll["Wraith"] = 26;
+	terranUnitsAll["Dropship"] = 27;
+	terranUnitsAll["Science Vessel"] = 28;
+	terranUnitsAll["Battlecruiser"] = 29;
+	terranUnitsAll["Valkyrie"] = 30;
+
+
+	zergUnitsAll["Creep Colony"] = 1;
+	zergUnitsAll["Sunken Colony"] = 2;
+	zergUnitsAll["Spore Colony"] = 3;
+	zergUnitsAll["Extractor"] = 4;
+	zergUnitsAll["Spawning Pool"] = 5;
+	zergUnitsAll["Evolution Chamber"] = 6;
+	zergUnitsAll["Hydralisk Den"] = 7;
+	zergUnitsAll["Lair"] = 8;
+	zergUnitsAll["Spire"] = 9;
+	zergUnitsAll["Queen's Nest"] = 10;
+	zergUnitsAll["Hive"] = 11;
+	zergUnitsAll["Greater Spire"] = 12;
+	zergUnitsAll["Nydus Canal"] = 13;
+	zergUnitsAll["Ultralisk Cavern"] = 14;
+	zergUnitsAll["Defiler Mound"] = 15;
+
+	zergUnitsAll["Zergling"] = 16;
+	zergUnitsAll["Hydralisk"] = 17;
+	zergUnitsAll["Lurker"] = 18;
+	zergUnitsAll["Ultralisk"] = 19;
+	zergUnitsAll["Defiler"] = 20;
+	zergUnitsAll["Overlord"] = 21;
+	zergUnitsAll["Mutalisk"] = 22;
+	zergUnitsAll["Scourge"] = 23;
+	zergUnitsAll["Queen"] = 24;
+	zergUnitsAll["Guardian"] = 25;
+	zergUnitsAll["Devour"] = 26;
 
 }
 
@@ -74,9 +136,18 @@ void ReplayModule::onFrame()
 			if(zergUnits.count((*it)->getType().c_str())==0)
 			{
 				if((*it)->getType().getRace()==Races::Zerg)
-				{
-					zergUnits.insert(std::map<const char*,int>::value_type ((*it)->getType().c_str(),Broodwar->getFrameCount()));
-				}
+				{	
+					const char* temp = (*it)->getType().c_str() + 5;
+					zergUnits.insert(std::map<const char*,int>::value_type (temp,Broodwar->getFrameCount()));
+				}else if((*it)->getType().getRace()==Races::Protoss)
+				{	
+					const char* temp = (*it)->getType().c_str() + 8;
+					protossUnits.insert(std::map<const char*,int>::value_type (temp,Broodwar->getFrameCount()));
+				}else if((*it)->getType().getRace()==Races::Terran)
+				{	
+					const char* temp = (*it)->getType().c_str() + 7;
+					terranUnits.insert(std::map<const char*,int>::value_type (temp,Broodwar->getFrameCount()));
+				}		
 			}
 			it = morphingBuildings.erase(it);
 		}else
@@ -92,34 +163,34 @@ void ReplayModule::onEnd(bool isWinner)
 	
 	if(!zergUnits.empty())
 	{
-		writeToFile("replaydatastuff/zerg.txt", zergUnits);
+		writeToFile("replaydatastuff/zerg.txt", zergUnits, zergUnitsAll);
 	}
 	
 	if(!protossUnits.empty())
 	{
-		writeToFile("replaydatastuff/protoss.txt", protossUnits);
+		writeToFile("replaydatastuff/protoss.txt", protossUnits, protossUnitsAll);
 	}
 	
 	if(!terranUnits.empty())
 	{
-		writeToFile("replaydatastuff/terran.txt", terranUnits);
+		writeToFile("replaydatastuff/terran.txt", terranUnits, terranUnitsAll);
 	}
 	
 
 }
 
-void ReplayModule::writeToFile(char* file, std::map<const char*,int> stuffToWrite)
+void ReplayModule::writeToFile(char* file, std::map<const char*,int> stuffToWrite, std::map<const char*,int> unitList)
 {
 	myfile.open (file, std::ios::app);
 	
 	
-	std::vector<int> temp(protossUnitsAll.size()+1);
+	std::vector<int> temp(unitList.size()+1);
 	std::map<const char*,int>::iterator it;
 	for(it=stuffToWrite.begin(); it!=stuffToWrite.end();)
 	{				 
 		
 		std::map<const char*,int>::iterator tempIt;
-		for(tempIt=protossUnitsAll.begin(); tempIt!=protossUnitsAll.end();)
+		for(tempIt=unitList.begin(); tempIt!=unitList.end();)
 		{
 			if(strcmp(tempIt->first ,it->first)==0)
 			{
@@ -133,13 +204,12 @@ void ReplayModule::writeToFile(char* file, std::map<const char*,int> stuffToWrit
 		//myfile << it->first <<" " << it->second << "\n";
 		it++;
 	}
-	/*
-	for(it=protossUnitsAll.begin(); it!=protossUnitsAll.end();)
+	for(it=unitList.begin(); it!=unitList.end();)
 	{
 		myfile << it->first <<",";
 		it++;
 	}
-	myfile << "\n";*/
+	myfile << "\n";
 	for(int timePeriod = 1; timePeriod <= 15; timePeriod++)
 	{
 		myfile << "period" <<timePeriod << ",";
@@ -183,8 +253,9 @@ void ReplayModule::onUnitMorph(BWAPI::Unit * unit)
 		if(unit->getType().getRace()==Races::Zerg)
 		{
 			if(zergUnits.count(unit->getType().c_str())==0)
-			{
-				zergUnits.insert(std::map<const char*,int>::value_type (unit->getType().c_str(),Broodwar->getFrameCount()));
+			{	
+				const char* temp = unit->getType().c_str() + 5;
+				zergUnits.insert(std::map<const char*,int>::value_type (temp,Broodwar->getFrameCount()));
 			}
 		}else if(unit->getType().getRace()==Races::Protoss)
 		{	
@@ -196,7 +267,7 @@ void ReplayModule::onUnitMorph(BWAPI::Unit * unit)
 
 void ReplayModule::onUnitRenegade(BWAPI::Unit * unit)
 {
-	//Not needed yet
+	morphingBuildings.push_front(unit);
 }
 void ReplayModule::onUnitCreate(BWAPI::Unit * unit)
 {
@@ -212,8 +283,10 @@ void ReplayModule::onUnitComplete(BWAPI::Unit * unit)
 
 		protossUnits.insert(std::map<const char*,int>::value_type (temp,Broodwar->getFrameCount()));
 	}else if (unit->getType().getRace()==Races::Terran)
-	{
-		terranUnits.insert(std::map<const char*,int>::value_type (unit->getType().c_str(),Broodwar->getFrameCount()));
+	{	
+		const char* temp = unit->getType().c_str() + 7;
+
+		terranUnits.insert(std::map<const char*,int>::value_type (temp,Broodwar->getFrameCount()));
 	}
 }
 

@@ -225,14 +225,18 @@ void ReplayModule::writeToFile(char* file, std::map<const char*,int> stuffToWrit
 		//myfile << it->first <<" " << it->second << "\n";
 		it++;
 	}
+	// TODO No empty row between games
+	// TODO Don't save data if game is in seen.txt
+	// TODO Don't save data for tuples where the game ended before the last period
 	myfile << "\n";
-	for(int timePeriod = 1; timePeriod <= 15; timePeriod++)
+	int nrOfPeriods = 25;
+	for(int timePeriod = 1; timePeriod <= nrOfPeriods; timePeriod++)
 	{
 		myfile << "period" <<timePeriod << ",";
 		
 		for(int i = 1; i < temp.size(); i++)
 		{		
-			if(temp.at(i)>0&&(temp.at(i)/1000<timePeriod||timePeriod==15))
+			if(temp.at(i)>0&&(temp.at(i)/1000<timePeriod||timePeriod==nrOfPeriods))
 			{
 				myfile << 1;
 			}else

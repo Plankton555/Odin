@@ -2,7 +2,10 @@
 
 using namespace BWAPI;
 
-ReplayModule::ReplayModule()  {}
+Player* ReplayModule::player = NULL;
+Player* ReplayModule::enemy = NULL;
+
+ReplayModule::ReplayModule()  { ReplayModule::analyzePlayers(); }
 ReplayModule::~ReplayModule() {}
 
 
@@ -50,6 +53,17 @@ void ReplayModule::onStart()
 
 void ReplayModule::onFrame()
 {
+	if (Options::Debug::DRAW_UALBERTABOT_DEBUG) 
+	{
+		/* Doesn't seem to be possible to get size from the Game itself. */
+		int width = 640;
+		int height = 480;
+		int x = width - 200;
+		int y = 25;
+
+		ReplayModule::drawUnitInformation(x, y);
+	} 
+
 	//Check if any morphing buildigns is completed
 	std::list<Unit*>::iterator it;
 	for(it=morphingBuildings.begin(); it!=morphingBuildings.end();)
@@ -203,3 +217,77 @@ void ReplayModule::onUnitComplete(BWAPI::Unit * unit)
 	}
 }
 
+
+/* Displays unit count and predictions during replays. */
+void ReplayModule::drawUnitInformation(int x, int y) {
+	if (!Options::Debug::DRAW_UALBERTABOT_DEBUG) return;
+
+	std::string prefix = "\x04";
+
+	//if (Options::Debug::DRAW_UALBERTABOT_DEBUG) BWAPI::Broodwar->drawTextScreen(x, y-10, "\x03Lost:\x04 S \x1f%d \x07%d\x04 E \x1f%d \x07%d ", 
+		//selfUnitData.getMineralsLost(), selfUnitData.getGasLost(), enemyUnitData.getMineralsLost(), enemyUnitData.getGasLost());
+	BWAPI::Broodwar->drawTextScreen(x, y+20, "\x04UNIT NAME");
+	BWAPI::Broodwar->drawTextScreen(x+140, y+20, "\x04#");
+	BWAPI::Broodwar->drawTextScreen(x+160, y+20, "\x04X");
+	BWAPI::Broodwar->drawTextScreen(x+180, y+20, "\x04->");
+
+	int yspace = 0;
+
+	Player* enemy = getEnemy();
+	if (enemy == NULL)	return;
+
+	BWAPI::Broodwar->drawTextScreen(x, y, "\x04 Enemy Unit Information: %s", enemy->getRace().getName().c_str());
+
+	std::set<Unit*> enemyUnitData = enemy->getUnits();
+	BOOST_FOREACH (BWAPI::UnitType t, BWAPI::UnitTypes::allUnitTypes()) 
+	{
+		int numUnits = enemy->completedUnitCount(t); //player->allUnitCount(t)
+		int numDeadUnits = enemy->deadUnitCount(t);
+		int numPredictedUnits = 0;
+
+		// if there exist units in the vector
+		if (numUnits > 0 || numDeadUnits > 0) 
+		{
+			if (t.isDetector())			{ prefix = "\x10"; }		
+			else if (t.canAttack())		{ prefix = "\x08"; }		
+			else if (t.isBuilding())	{ prefix = "\x03"; }
+			else						{ prefix = "\x04"; }
+
+			BWAPI::Broodwar->drawTextScreen(x, y+40+((yspace)*10), "%s%s", prefix.c_str(), t.getName().c_str());
+			BWAPI::Broodwar->drawTextScreen(x+140, y+40+((yspace)*10), "%s%d", prefix.c_str(), numUnits);
+			BWAPI::Broodwar->drawTextScreen(x+160, y+40+((yspace)*10), "%s%d", prefix.c_str(), numDeadUnits);
+			BWAPI::Broodwar->drawTextScreen(x+180, y+40+((yspace++)*10), "%s%d", prefix.c_str(), numPredictedUnits);
+		}
+	}
+}
+
+void ReplayModule::analyzePlayers(void) {
+	/* Loop over all players. */
+	std::set<Player*> allPlayers = Broodwar->getPlayers();
+	std::set<Player*>::iterator it;
+	bool foundProtoss = false;
+	for (it = allPlayers.begin(); it != allPlayers.end(); ++it)
+	{
+		Player* p = *it; 
+		if (p->isObserver() || p->isNeutral())	continue;
+		if (p->getRace() == BWAPI::Races::Protoss && !foundProtoss ) {
+			player = p;
+			foundProtoss = true; 
+			continue; 
+		}
+
+		enemy = p;
+	}
+
+}
+
+
+Player* ReplayModule::getEnemy() {
+	if (!ReplayModule::enemy)	ReplayModule::analyzePlayers();
+	return ReplayModule::enemy;
+}
+
+Player* ReplayModule::getPlayer() {
+	if (!ReplayModule::player)	ReplayModule::analyzePlayers();
+	return ReplayModule::player;
+}

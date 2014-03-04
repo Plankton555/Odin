@@ -26,7 +26,8 @@ void UAlbertaBotModule::onStart()
 {	
 
 	if(BWAPI::Broodwar->isReplay()){
-
+		/* If we want to show stuff on the screen. */
+		Options::Debug::DRAW_UALBERTABOT_DEBUG = true;
 		replayModule.onStart();
 
 	}else{

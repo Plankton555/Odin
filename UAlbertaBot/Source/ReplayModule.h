@@ -18,6 +18,9 @@ public:
 	void onUnitCreate(BWAPI::Unit * unit);
 	void onUnitComplete(BWAPI::Unit * unit);
 
+	static BWAPI::Player* getEnemy(void);
+	static BWAPI::Player* getPlayer(void);
+
 private:
 	std::list<BWAPI::Unit*> morphingBuildings;  
 	std::map<const char*,int> zergUnits;
@@ -30,5 +33,11 @@ private:
 
 	void writeToFile(char* file, std::map<const char*,int> stuffToWrite);
 	void createMaps();
+
+	static BWAPI::Player* ReplayModule::enemy;
+	static BWAPI::Player* ReplayModule::player;
+
+	static void analyzePlayers(void);
+	void drawUnitInformation(int x, int y);
 
 };

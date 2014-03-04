@@ -12,7 +12,7 @@ void ReplayModule::createMaps()
 	//Buildings 
 	protossUnitsAll["Pylon"] = 1;
 	protossUnitsAll["Gateway"] = 2;
-	protossUnitsAll["Assimilatior"] = 3;
+	protossUnitsAll["Assimilator"] = 3;
 	protossUnitsAll["Cybernetics Core"] = 4;
 	protossUnitsAll["Citadel of Adun"] = 5;
 	protossUnitsAll["Forge"] = 6;
@@ -62,7 +62,11 @@ void ReplayModule::onFrame()
 				if((*it)->getType().getRace()==Races::Zerg)
 				{
 					zergUnits.insert(std::map<const char*,int>::value_type ((*it)->getType().c_str(),Broodwar->getFrameCount()));
-				}
+				}else if((*it)->getType().getRace()==Races::Protoss)
+				{	
+					const char* temp = (*it)->getType().c_str() + 8;
+					protossUnits.insert(std::map<const char*,int>::value_type (temp,Broodwar->getFrameCount()));
+				}	
 			}
 			it = morphingBuildings.erase(it);
 		}else
@@ -182,7 +186,7 @@ void ReplayModule::onUnitMorph(BWAPI::Unit * unit)
 
 void ReplayModule::onUnitRenegade(BWAPI::Unit * unit)
 {
-	//Not needed yet
+	morphingBuildings.push_front(unit);
 }
 void ReplayModule::onUnitCreate(BWAPI::Unit * unit)
 {

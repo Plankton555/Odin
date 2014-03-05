@@ -310,6 +310,7 @@ void ReplayModule::drawUnitInformation(int x, int y) {
 	if (enemy == NULL)	return;
 
 	BWAPI::Broodwar->drawTextScreen(x, y, "\x04 Enemy Unit Information: %s", enemy->getRace().getName().c_str());
+	BWAPI::Broodwar->setTextSize(0);
 
 	std::set<Unit*> enemyUnitData = enemy->getUnits();
 	BOOST_FOREACH (BWAPI::UnitType t, BWAPI::UnitTypes::allUnitTypes()) 
@@ -317,15 +318,15 @@ void ReplayModule::drawUnitInformation(int x, int y) {
 		int numUnits = enemy->completedUnitCount(t); //player->allUnitCount(t)
 		int numDeadUnits = enemy->deadUnitCount(t);
 		int numPredictedUnits = 0;
-
+		
 		// if there exist units in the vector
-		if (numUnits > 0 || numDeadUnits > 0) 
+		if (t.getRace() == enemy->getRace() && !t.isHero()) //numUnits > 0 || numDeadUnits > 0
 		{
 			if (t.isDetector())			{ prefix = "\x10"; }		
 			else if (t.canAttack())		{ prefix = "\x08"; }		
 			else if (t.isBuilding())	{ prefix = "\x03"; }
 			else						{ prefix = "\x04"; }
-
+			
 			BWAPI::Broodwar->drawTextScreen(x, y+40+((yspace)*10), "%s%s", prefix.c_str(), t.getName().c_str());
 			BWAPI::Broodwar->drawTextScreen(x+140, y+40+((yspace)*10), "%s%d", prefix.c_str(), numUnits);
 			BWAPI::Broodwar->drawTextScreen(x+160, y+40+((yspace)*10), "%s%d", prefix.c_str(), numDeadUnits);

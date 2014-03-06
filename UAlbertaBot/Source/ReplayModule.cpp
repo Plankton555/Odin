@@ -117,6 +117,9 @@ void ReplayModule::onStart()
 	Broodwar->printf("Replay: %s \n", filename.c_str());
 	Broodwar->printf("Location: %s \n", pathname.c_str());
 
+	gameSeen = false;
+	replayLength = Broodwar->getReplayFrameCount();
+
 	//Check if this replay was checked already
 	string folder;
 	folder = pathname.substr(0, pathname.size()-filename.size());
@@ -126,6 +129,7 @@ void ReplayModule::onStart()
 		while (getline(myfile,line)) {
 			if (line.compare(Broodwar->mapFileName()) == 0) {
 				Broodwar->printf("This replay has already been seen.");
+				gameSeen = true;
 				Broodwar->leaveGame();
 			}
 		}
@@ -181,22 +185,23 @@ void ReplayModule::onFrame()
 void ReplayModule::onEnd(bool isWinner)
 {
 	//Replay has ended. Save data to database here
-	
-	if(!zergUnits.empty())
+	if(!gameSeen)
 	{
-		writeToFile("replaydatastuff/zerg.txt", zergUnits, zergUnitsAll);
-	}
+		if(!zergUnits.empty())
+		{
+			writeToFile("replaydatastuff/zerg.txt", zergUnits, zergUnitsAll);
+		}
 	
-	if(!protossUnits.empty())
-	{
-		writeToFile("replaydatastuff/protoss.txt", protossUnits, protossUnitsAll);
-	}
+		if(!protossUnits.empty())
+		{
+			writeToFile("replaydatastuff/protoss.txt", protossUnits, protossUnitsAll);
+		}
 	
-	if(!terranUnits.empty())
-	{
-		writeToFile("replaydatastuff/terran.txt", terranUnits, terranUnitsAll);
+		if(!terranUnits.empty())
+		{
+			writeToFile("replaydatastuff/terran.txt", terranUnits, terranUnitsAll);
+		}
 	}
-	
 
 }
 
@@ -225,11 +230,12 @@ void ReplayModule::writeToFile(char* file, std::map<const char*,int> stuffToWrit
 		//myfile << it->first <<" " << it->second << "\n";
 		it++;
 	}
-	// TODO No empty row between games
-	// TODO Don't save data if game is in seen.txt
-	// TODO Don't save data for tuples where the game ended before the last period
-	myfile << "\n";
-	int nrOfPeriods = 25;
+	
+	int nrOfPeriods = replayLength/1000;
+	if(nrOfPeriods>25)
+	{
+		nrOfPeriods = 25;
+	}
 	for(int timePeriod = 1; timePeriod <= nrOfPeriods; timePeriod++)
 	{
 		myfile << "period" <<timePeriod << ",";

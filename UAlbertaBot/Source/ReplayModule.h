@@ -27,6 +27,8 @@ private:
 	std::map<const char*,int> terranUnitsAll;
 	std::map<const char*,int> protossUnitsAll;
 	std::ofstream myfile;
+	bool gameSeen;
+	int replayLength;
 
 	void writeToFile(char* file, std::map<const char*,int> stuffToWrite, std::map<const char*,int> unitList);
 	void createMaps();

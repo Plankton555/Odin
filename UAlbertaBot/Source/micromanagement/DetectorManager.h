@@ -14,6 +14,9 @@ class DetectorManager : public MicroManager
 
 	BWAPI::Unit * unitClosestToEnemy;
 
+	bool detectorsInMain;
+
+
 public:
 
 	DetectorManager();

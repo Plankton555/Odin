@@ -8,6 +8,14 @@
  +----------------------------------------------------------------------+
  | Author: David Churchill <dave.churchill@gmail.com>                   |
  +----------------------------------------------------------------------+
+ | Modified by:                                                         |
+ | Björn Persson Mattsson <bjorn.pm@plankter.se>                        |
+ | Filip Brynfors <brynfors@student.chalmers.se>                        |
+ | Jakob Jarmar <jarmar@student.chalmers.se>                            |
+ | Jakob Svensson <svjakob@student.chalmers.se>                         |
+ | Henrik Alburg <alburgh@student.chalmers.se>                          |
+ | Florian Minges <minges@student.chalmers.se>                          |
+ +----------------------------------------------------------------------+
 */
 
 #include "Common.h"
@@ -26,8 +34,15 @@ void UAlbertaBotModule::onStart()
 {	
 
 	if(BWAPI::Broodwar->isReplay()){
+
 		/* If we want to show stuff on the screen. */
 		Options::Debug::DRAW_UALBERTABOT_DEBUG = true;
+
+		/* Speed up replay. */
+		BWAPI::Broodwar->setLocalSpeed(0);
+		BWAPI::Broodwar->setFrameSkip(2400); //optional, but improves speed
+		BWAPI::Broodwar->setGUI(false);
+
 		replayModule.onStart();
 
 	}else{

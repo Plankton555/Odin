@@ -11,7 +11,7 @@ class ObserverManager : public MicroManager
 	std::map<BWAPI::Unit *, bool>	cloakedUnitMap;
 
 	bool isAssigned(BWAPI::Unit * unit);
-
+	
 	BWAPI::Unit * unitClosestToEnemy;
 
 public:

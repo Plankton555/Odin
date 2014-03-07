@@ -1,6 +1,7 @@
 #include "ReplayModule.h"
 #include <iostream>
 #include <fstream>
+#include <boost\filesystem.hpp>
 
 using namespace BWAPI;
 using namespace std;
@@ -106,7 +107,7 @@ void ReplayModule::createMaps()
 	zergUnitsAll["Scourge"] = 23;
 	zergUnitsAll["Queen"] = 24;
 	zergUnitsAll["Guardian"] = 25;
-	zergUnitsAll["Devour"] = 26;
+	zergUnitsAll["Devourer"] = 26;
 
 }
 
@@ -121,6 +122,9 @@ void ReplayModule::onStart()
 	Broodwar->printf("Replay: %s \n", filename.c_str());
 	Broodwar->printf("Location: %s \n", pathname.c_str());
 
+	gameSeen = false;
+	replayLength = Broodwar->getReplayFrameCount();
+
 	//Check if this replay was checked already
 	string folder;
 	folder = pathname.substr(0, pathname.size()-filename.size());
@@ -130,7 +134,9 @@ void ReplayModule::onStart()
 		while (getline(myfile,line)) {
 			if (line.compare(Broodwar->mapFileName()) == 0) {
 				Broodwar->printf("This replay has already been seen.");
+				gameSeen = true;
 				Broodwar->leaveGame();
+				return;
 			}
 		}
 		myfile.close();
@@ -196,22 +202,54 @@ void ReplayModule::onFrame()
 void ReplayModule::onEnd(bool isWinner)
 {
 	//Replay has ended. Save data to database here
-	
-	if(!zergUnits.empty())
+	if(!gameSeen)
 	{
-		writeToFile("replaydatastuff/zerg.txt", zergUnits, zergUnitsAll);
-	}
+		if(!zergUnits.empty())
+		{
+			writeToFile("replaydatastuff/zerg.txt", zergUnits, zergUnitsAll);
+		}
 	
-	if(!protossUnits.empty())
+		if(!protossUnits.empty())
+		{
+			writeToFile("replaydatastuff/protoss.txt", protossUnits, protossUnitsAll);
+		}
+	
+		if(!terranUnits.empty())
+		{
+			writeToFile("replaydatastuff/terran.txt", terranUnits, terranUnitsAll);
+		}
+	}
+
+		string filename = Broodwar->mapFileName();
+	string pathname = Broodwar->mapPathName();
+	string folder;
+	folder = pathname.substr(0, pathname.size()-filename.size());
+
+	//Count seen replays
+	string line;
+	int nrFiles = 0;
+	ifstream myfile ((folder + "seen.txt").c_str());
+	if (myfile.is_open()) {
+		while (getline(myfile,line)) {
+			nrFiles++;
+		}
+		myfile.close();
+	} else {
+		Broodwar->printf("Unable to open file.");
+	}
+
+	int nrFilesInFolder = 0;
+	//Get how many replays there are in total
+	for(boost::filesystem::directory_iterator it(folder); it != boost::filesystem::directory_iterator(); ++it)
 	{
-		writeToFile("replaydatastuff/protoss.txt", protossUnits, protossUnitsAll);
+		nrFilesInFolder++;
 	}
-	
-	if(!terranUnits.empty())
+
+	//If seen all, then exit
+	if (nrFiles == nrFilesInFolder-1)
 	{
-		writeToFile("replaydatastuff/terran.txt", terranUnits, terranUnitsAll);
+		exit(0);
 	}
-	
 
 }
 
@@ -240,19 +278,19 @@ void ReplayModule::writeToFile(char* file, std::map<const char*,int> stuffToWrit
 		//myfile << it->first <<" " << it->second << "\n";
 		it++;
 	}
-	for(it=unitList.begin(); it!=unitList.end();)
+	
+	int nrOfPeriods = replayLength/1000;
+	if(nrOfPeriods>25)
 	{
-		myfile << it->first <<",";
-		it++;
+		nrOfPeriods = 25;
 	}
-	myfile << "\n";
-	for(int timePeriod = 1; timePeriod <= 15; timePeriod++)
+	for(int timePeriod = 1; timePeriod <= nrOfPeriods; timePeriod++)
 	{
 		myfile << "period" <<timePeriod << ",";
 		
 		for(int i = 1; i < temp.size(); i++)
 		{		
-			if(temp.at(i)>0&&(temp.at(i)/1000<timePeriod||timePeriod==15))
+			if(temp.at(i)>0&&(temp.at(i)/1000<timePeriod||timePeriod==nrOfPeriods))
 			{
 				myfile << 1;
 			}else

@@ -1,1 +1,1 @@
-Timeperiod,Creep Colony,Sunken Colony,Spore Colony,Extractor,Spawning Pool,Evolution Chamber,Hydralisk Den,Lair,Spire,Queen's Nest,Hive,Greater Spire,Nydus Canal,Ultralisk Cavern,Defiler Mound,Zergling,Hydralisk,Lurker,Ultralisk,Defiler,Overlord,Mutalisk,Scourge,Queen,Guardian,Devour
+Timeperiod,CreepColony,SunkenColony,SporeColony,Extractor,SpawningPool,EvolutionChamber,HydraliskDen,Lair,Spire,QueensNest,Hive,GreaterSpire,NydusCanal,UltraliskCavern,DefilerMound,Zergling,Hydralisk,Lurker,Ultralisk,Defiler,Overlord,Mutalisk,Scourge,Queen,Guardian,Devourer

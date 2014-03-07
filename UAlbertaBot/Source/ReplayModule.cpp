@@ -295,16 +295,13 @@ void ReplayModule::onUnitComplete(BWAPI::Unit * unit)
 void ReplayModule::drawUnitInformation(int x, int y) {
 	if (!Options::Debug::DRAW_UALBERTABOT_DEBUG) return;
 
-	std::string prefix = "\x04";
-
-	//if (Options::Debug::DRAW_UALBERTABOT_DEBUG) BWAPI::Broodwar->drawTextScreen(x, y-10, "\x03Lost:\x04 S \x1f%d \x07%d\x04 E \x1f%d \x07%d ", 
-		//selfUnitData.getMineralsLost(), selfUnitData.getGasLost(), enemyUnitData.getMineralsLost(), enemyUnitData.getGasLost());
 	BWAPI::Broodwar->drawTextScreen(x, y+20, "\x04UNIT NAME");
 	BWAPI::Broodwar->drawTextScreen(x+140, y+20, "\x04#");
 	BWAPI::Broodwar->drawTextScreen(x+160, y+20, "\x04X");
 	BWAPI::Broodwar->drawTextScreen(x+180, y+20, "\x04->");
 
 	int yspace = 0;
+	std::string prefix = "\x04";
 
 	Player* enemy = getEnemy();
 	if (enemy == NULL)	return;
@@ -315,12 +312,12 @@ void ReplayModule::drawUnitInformation(int x, int y) {
 	std::set<Unit*> enemyUnitData = enemy->getUnits();
 	BOOST_FOREACH (BWAPI::UnitType t, BWAPI::UnitTypes::allUnitTypes()) 
 	{
-		int numUnits = enemy->completedUnitCount(t); //player->allUnitCount(t)
+		int numUnits = enemy->completedUnitCount(t); 
 		int numDeadUnits = enemy->deadUnitCount(t);
 		int numPredictedUnits = 0;
 		
 		// if there exist units in the vector
-		if (t.getRace() == enemy->getRace() && !t.isHero()) //numUnits > 0 || numDeadUnits > 0
+		if (t.getRace() == enemy->getRace() && !t.isHero()) 
 		{
 			if (t.isDetector())			{ prefix = "\x10"; }		
 			else if (t.canAttack())		{ prefix = "\x08"; }		

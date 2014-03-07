@@ -107,6 +107,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX86</TargetMachine>
       <GenerateMapFile>true</GenerateMapFile>
+      <AdditionalLibraryDirectories>$(BOOST_DIR)\lib32-msvc-9.0</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -196,6 +197,10 @@
     <ClInclude Include="..\Source\UnitCommandManager.h" />
     <ClInclude Include="..\Source\UnitData.h" />
     <ClInclude Include="..\Source\Visualizer.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\..\..\..\Installed Programs\boost_1_55_0-32WithBinaries\lib32-msvc-9.0\libboost_filesystem-vc90-mt-1_55.lib" />
+    <Library Include="..\..\..\..\Installed Programs\boost_1_55_0-32WithBinaries\lib32-msvc-9.0\libboost_system-vc90-mt-1_55.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

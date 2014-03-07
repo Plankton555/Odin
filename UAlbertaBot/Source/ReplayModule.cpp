@@ -1,6 +1,7 @@
 #include "ReplayModule.h"
 #include <iostream>
 #include <fstream>
+#include <boost\filesystem.hpp>
 
 using namespace BWAPI;
 using namespace std;
@@ -201,6 +202,37 @@ void ReplayModule::onEnd(bool isWinner)
 		{
 			writeToFile("replaydatastuff/terran.txt", terranUnits, terranUnitsAll);
 		}
+	}
+
+		string filename = Broodwar->mapFileName();
+	string pathname = Broodwar->mapPathName();
+	string folder;
+	folder = pathname.substr(0, pathname.size()-filename.size());
+
+	//Count seen replays
+	string line;
+	int nrFiles = 0;
+	ifstream myfile ((folder + "seen.txt").c_str());
+	if (myfile.is_open()) {
+		while (getline(myfile,line)) {
+			nrFiles++;
+		}
+		myfile.close();
+	} else {
+		Broodwar->printf("Unable to open file.");
+	}
+
+	int nrFilesInFolder = 0;
+	//Get how many replays there are in total
+	for(boost::filesystem::directory_iterator it(folder); it != boost::filesystem::directory_iterator(); ++it)
+	{
+		nrFilesInFolder++;
+	}
+
+	//If seen all, then exit
+	if (nrFiles == nrFilesInFolder)
+	{
+		exit(0);
 	}
 
 }

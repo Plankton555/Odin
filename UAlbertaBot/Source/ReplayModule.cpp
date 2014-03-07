@@ -104,7 +104,7 @@ void ReplayModule::createMaps()
 	zergUnitsAll["Scourge"] = 23;
 	zergUnitsAll["Queen"] = 24;
 	zergUnitsAll["Guardian"] = 25;
-	zergUnitsAll["Devour"] = 26;
+	zergUnitsAll["Devourer"] = 26;
 
 }
 

@@ -132,6 +132,7 @@ void ReplayModule::onStart()
 				Broodwar->printf("This replay has already been seen.");
 				gameSeen = true;
 				Broodwar->leaveGame();
+				return;
 			}
 		}
 		myfile.close();
@@ -230,7 +231,7 @@ void ReplayModule::onEnd(bool isWinner)
 	}
 
 	//If seen all, then exit
-	if (nrFiles == nrFilesInFolder)
+	if (nrFiles == nrFilesInFolder-1)
 	{
 		exit(0);
 	}

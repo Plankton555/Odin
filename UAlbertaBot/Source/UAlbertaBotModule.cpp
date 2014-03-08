@@ -43,9 +43,12 @@ void UAlbertaBotModule::onStart()
 	}else{
 		//Importing bayesian network
 		try {
+			ofstream myfile;
+			myfile.open("bnet_debug.txt");
 			BWAPI::Broodwar->printf("Reading bayesian network:");
-			BNetParser parser;
+			BNetParser parser(myfile);
 			dlib::parse_xml("testNet.xdsl", parser);
+			myfile.close();
 		}
 		catch (std::exception& e) {
 			BWAPI::Broodwar->printf(e.what());

@@ -10,8 +10,10 @@ using namespace dlib;
 
 class BNetParser : public document_handler
 {
+private:
+	ofstream* myfile;
 public:
-	BNetParser(void);
+	BNetParser(ofstream myfile);
 	~BNetParser(void);
 
 	virtual void start_document();

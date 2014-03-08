@@ -83,7 +83,7 @@
     <ClCompile>
       <Optimization>Full</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>../Source;$(BWAPI_DIR)/include;$(BOOST_DIR);$(SDL_DIR)/include;$(SDL_IMAGE_DIR);$(SDL_GFX_DIR);$(FREETYPE_DIR)/include;$(FREETYPE_DIR)/include/freetype2;$(FTGL_DIR)/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../dlib-18.6;../Source;$(BWAPI_DIR)/include;$(BOOST_DIR);$(SDL_DIR)/include;$(SDL_IMAGE_DIR);$(SDL_GFX_DIR);$(FREETYPE_DIR)/include;$(FREETYPE_DIR)/include/freetype2;$(FTGL_DIR)/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;EXAMPLEAIMODULE_EXPORTS;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -110,6 +110,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\dlib-18.6\dlib\all\source.cpp" />
     <ClCompile Include="..\Source\base\BuildLearner.cpp" />
     <ClCompile Include="..\Source\CombatSimulation.cpp" />
     <ClCompile Include="..\Source\MicroSearchManager.cpp" />

@@ -46,6 +46,9 @@
     <Filter Include="extra">
       <UniqueIdentifier>{f0cc82d6-1735-46ae-a722-c81699ab361d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="dlib">
+      <UniqueIdentifier>{e955a30c-c831-4759-940e-b36666338fb9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Source\CombatCommander.cpp">
@@ -167,6 +170,9 @@
     </ClCompile>
     <ClCompile Include="..\Source\ReplayModule.cpp">
       <Filter>module</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlib-18.6\dlib\all\source.cpp">
+      <Filter>dlib</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

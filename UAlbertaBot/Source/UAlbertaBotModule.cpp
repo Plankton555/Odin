@@ -18,6 +18,10 @@
  +----------------------------------------------------------------------+
 */
 
+#include <dlib\bayes_utils.h>
+#include <dlib\graph_utils.h>
+#include <dlib\graph.h>
+#include <dlib\directed_graph.h>
 #include "Common.h"
 #include "UAlbertaBotModule.h"
 
@@ -31,7 +35,12 @@ UAlbertaBotModule::UAlbertaBotModule()  {}
 UAlbertaBotModule::~UAlbertaBotModule() {}
 
 void UAlbertaBotModule::onStart()
-{	
+{
+	// Testing dlib
+	dlib::directed_graph<dlib::bayes_node>::kernel_1a_c net;
+	net.set_number_of_nodes(5);
+
+	// Stopped dlib testing
 
 	if(BWAPI::Broodwar->isReplay()){
 

@@ -3,6 +3,7 @@
 #include <dlib/xml_parser.h>
 #include <iostream>
 #include <fstream>
+#include <BWAPI.h>
 
 using namespace std;
 using namespace dlib;

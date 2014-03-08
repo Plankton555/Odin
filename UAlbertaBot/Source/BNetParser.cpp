@@ -12,12 +12,12 @@ BNetParser::~BNetParser(void)
 
 void BNetParser::start_document()
 {
-	cout << "parsing begins" << endl;
+	BWAPI::Broodwar->printf("Parsing begins");
 }
 
 void BNetParser::end_document()
 {
-	cout << "Parsing done" << endl;
+	BWAPI::Broodwar->printf("Parsing done");
 }
 
 void BNetParser::start_element(const unsigned long line_number, const std::string& name, const dlib::attribute_list& atts)

@@ -17,6 +17,8 @@
 
 #include "Options.h"
 #include "ReplayModule.h"
+#include "BNetParser.h"
+#include <dlib/xml_parser.h>
 
 class UAlbertaBotModule : public BWAPI::AIModule
 {

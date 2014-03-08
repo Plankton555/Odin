@@ -112,6 +112,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\dlib-18.6\dlib\all\source.cpp" />
     <ClCompile Include="..\Source\base\BuildLearner.cpp" />
+    <ClCompile Include="..\Source\BNetParser.cpp" />
     <ClCompile Include="..\Source\CombatSimulation.cpp" />
     <ClCompile Include="..\Source\MicroSearchManager.cpp" />
     <ClCompile Include="..\Source\base\BuildingData.cpp" />
@@ -154,6 +155,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\base\BuildLearner.h" />
+    <ClInclude Include="..\Source\BNetParser.h" />
     <ClInclude Include="..\Source\CombatSimulation.h" />
     <ClInclude Include="..\Source\MicroSearchManager.h" />
     <ClInclude Include="..\Source\base\BuildingData.h" />

@@ -18,11 +18,15 @@ public:
 	void onUnitCreate(BWAPI::Unit * unit);
 	void onUnitComplete(BWAPI::Unit * unit);
 
+	static BWAPI::Player* getEnemy(void);
+	static BWAPI::Player* getPlayer(void);
+
 private:
 	std::list<BWAPI::Unit*> morphingBuildings;  
 	std::map<const char*,int> zergUnits;
 	std::map<const char*,int> terranUnits;
-	std::map<const char*,int> protossUnits;
+	std::map<const char*,int> protossUnitsp1;
+	std::map<const char*,int> protossUnitsp2;
 	std::map<const char*,int> zergUnitsAll;
 	std::map<const char*,int> terranUnitsAll;
 	std::map<const char*,int> protossUnitsAll;
@@ -32,5 +36,10 @@ private:
 
 	void writeToFile(char* file, std::map<const char*,int> stuffToWrite, std::map<const char*,int> unitList);
 	void createMaps();
+
+	static BWAPI::Player* ReplayModule::enemy;
+	static BWAPI::Player* ReplayModule::player;
+
+	static void analyzePlayers(void);
 
 };

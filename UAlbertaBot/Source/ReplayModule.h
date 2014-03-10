@@ -25,7 +25,8 @@ private:
 	std::list<BWAPI::Unit*> morphingBuildings;  
 	std::map<const char*,int> zergUnits;
 	std::map<const char*,int> terranUnits;
-	std::map<const char*,int> protossUnits;
+	std::map<const char*,int> protossUnitsp1;
+	std::map<const char*,int> protossUnitsp2;
 	std::map<const char*,int> zergUnitsAll;
 	std::map<const char*,int> terranUnitsAll;
 	std::map<const char*,int> protossUnitsAll;

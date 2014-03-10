@@ -4,12 +4,18 @@
 #include <iostream>
 #include <fstream>
 #include <BWAPI.h>
+#include "BayesianNet.h"
+#include "ParsedNode.h"
 
 using namespace std;
 using namespace dlib;
 
 class BNetParser : public document_handler
 {
+private:
+	BayesianNet bn;
+	ParsedNode* currentNode;
+	int waitingForProbs;
 public:
 	BNetParser();
 	~BNetParser();

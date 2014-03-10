@@ -177,6 +177,12 @@
     <ClCompile Include="..\Source\BNetParser.cpp">
       <Filter>module</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\BayesianNet.cpp">
+      <Filter>module</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\ParsedNode.cpp">
+      <Filter>module</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\CombatCommander.h">
@@ -312,6 +318,12 @@
       <Filter>module</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\BNetParser.h">
+      <Filter>module</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\BayesianNet.h">
+      <Filter>module</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\ParsedNode.h">
       <Filter>module</Filter>
     </ClInclude>
   </ItemGroup>

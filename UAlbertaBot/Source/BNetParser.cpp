@@ -18,10 +18,29 @@ void BNetParser::start_document()
 void BNetParser::end_document()
 {
 	BWAPI::Broodwar->printf("Parsing done");
+	// put the network together
 }
 
 void BNetParser::start_element(const unsigned long line_number, const std::string& name, const dlib::attribute_list& atts)
 {
+	const char *cname = name.c_str();
+	if (strcmp(cname, "cpt") == 0)
+	{
+		// start of new node
+		// also, remember to count the nodes
+		// node name will be in atts.reset(); atts.move_next(); atts.element().value();
+	}
+	else if (strcmp(cname, "state") == 0)
+	{
+		// Each state will be enumerated here (eg. Absent/Present or Periodx)
+	}
+	else if (strcmp(cname, "parents") == 0)
+	{
+		// Prepare to receive parents in "characters" function
+	}
+	else if (strcmp(cname, "probabilities") == 0)
+	{
+	}
 	ofstream myfile("bnet_debug.txt", ios::app);
 	//BWAPI::Broodwar->printf("on line %i we hit the <%s> tag", line_number, name);
 	//cout << "on line " << line_number << " we hit the <" << name << "> tag" << endl;

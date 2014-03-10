@@ -12,6 +12,7 @@ BNetParser::~BNetParser()
 
 void BNetParser::start_document()
 {
+	bn = new BayesianNet();
 }
 
 void BNetParser::end_document()
@@ -75,6 +76,7 @@ void BNetParser::end_element(const unsigned long line_number, const std::string&
 	else if (strcmp(cname, "cpt") == 0)
 	{
 		// finished with the node
+		bn->AddNode(currentNode);
 		myfile << "on line " << line_number << " node is finished" << endl;
 	}
 

@@ -13,7 +13,7 @@ using namespace dlib;
 class BNetParser : public document_handler
 {
 private:
-	BayesianNet bn;
+	BayesianNet* bn;
 	ParsedNode* currentNode;
 	int waitingForProbs;
 public:

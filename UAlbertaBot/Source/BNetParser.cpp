@@ -18,6 +18,7 @@ void BNetParser::start_document()
 void BNetParser::end_document()
 {
 	// put the network together
+	bn->CreateNetwork();
 }
 
 void BNetParser::start_element(const unsigned long line_number, const std::string& name, const dlib::attribute_list& atts)

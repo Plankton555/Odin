@@ -88,6 +88,9 @@ void BNetParser::characters(const std::string& data)
 {
 	ofstream myfile("bnet_debug.txt", ios::app);
 	std::string tmp = data;
+	std::string delim = " ";
+	std::vector<std::string&> dataVec = splitDelim(tmp, delim);
+
 	if (waitingForProbs == 0)
 	{
 		currentNode->parents = &tmp;
@@ -105,4 +108,18 @@ void BNetParser::characters(const std::string& data)
 void BNetParser::processing_instruction(const unsigned long line_number, const std::string& target, const std::string& data)
 {
 	// Can ignore
+}
+
+std::vector<std::string&> BNetParser::splitDelim(const std::string& str, const std::string& delim)
+{
+	std::string s = str;
+	std::vector<std::string&> output;
+	size_t pos = 0;
+	std::string token;
+	while ((pos = s.find(delim)) != std::string::npos) {
+		token = s.substr(0, pos);
+		output.push_back(token);
+		s.erase(0, pos + delim.length());
+	}
+	output.push_back(token);
 }

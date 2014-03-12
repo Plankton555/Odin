@@ -10,7 +10,7 @@ public:
 	~ParsedNode();
 	
 	std::string* name;
-	std::list<std::string*> states;
-	std::string* probabilities;
-	std::string* parents;
+	std::vector<std::string*> states;
+	std::vector<std::string*> probabilities;
+	std::vector<std::string*> parents;
 };

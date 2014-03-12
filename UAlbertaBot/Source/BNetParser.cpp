@@ -87,18 +87,17 @@ void BNetParser::end_element(const unsigned long line_number, const std::string&
 void BNetParser::characters(const std::string& data)
 {
 	ofstream myfile("bnet_debug.txt", ios::app);
-	std::string tmp = data;
 	std::string delim = " ";
-	std::vector<std::string&> dataVec = splitDelim(tmp, delim);
+	std::vector<std::string*>* dataVec = splitDelim(data, delim);
 
 	if (waitingForProbs == 0)
 	{
-		currentNode->parents = &tmp;
+		currentNode->parents = *dataVec;
 		myfile << "Stored some parents in the node:\n" << data << endl;
 	}
 	else if (waitingForProbs == 1)
 	{
-		currentNode->probabilities = &tmp;
+		currentNode->probabilities = *dataVec;
 		myfile << "Stored some probabilities in the node:\n" << data << endl;
 	}
 
@@ -110,16 +109,17 @@ void BNetParser::processing_instruction(const unsigned long line_number, const s
 	// Can ignore
 }
 
-std::vector<std::string&> BNetParser::splitDelim(const std::string& str, const std::string& delim)
+std::vector<std::string*>* BNetParser::splitDelim(const std::string& str, const std::string& delim)
 {
 	std::string s = str;
-	std::vector<std::string&> output;
+	std::vector<std::string*>* output = new std::vector<std::string*>;
 	size_t pos = 0;
-	std::string token;
+	std::string* token;
 	while ((pos = s.find(delim)) != std::string::npos) {
-		token = s.substr(0, pos);
-		output.push_back(token);
+		token = &(s.substr(0, pos));
+		output->push_back(token);
 		s.erase(0, pos + delim.length());
 	}
-	output.push_back(token);
+	output->push_back(token);
+	return output;
 }

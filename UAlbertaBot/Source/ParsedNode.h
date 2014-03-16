@@ -11,6 +11,6 @@ public:
 	
 	std::string* name;
 	std::vector<std::string*> states;
-	std::vector<std::string*> probabilities;
+	std::vector<double> probabilities;
 	std::vector<std::string*> parents;
 };

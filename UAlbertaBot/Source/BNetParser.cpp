@@ -88,7 +88,7 @@ void BNetParser::characters(const std::string& data)
 {
 	ofstream myfile("bnet_debug.txt", ios::app);
 	std::string delim = " ";
-	std::vector<std::string*>* dataVec = splitDelim(data, delim);
+	std::vector<std::string*> *dataVec = splitDelim(data, delim);
 
 	if (waitingForProbs == 0)
 	{
@@ -97,8 +97,19 @@ void BNetParser::characters(const std::string& data)
 	}
 	else if (waitingForProbs == 1)
 	{
-		currentNode->probabilities = *dataVec;
+		// Convert dataVec to vector of doubles
+		std::vector<double> *doubleVec = new std::vector<double>();
+		for (int i=0; i<dataVec->size(); i++)
+		{
+			std::istringstream is(doubleVec->at(i));
+			double x;
+			if (!(is >> x))
+				x = 0;
+			doubleVec->push_back(x);
+		}
+		currentNode->probabilities = *doubleVec;
 		myfile << "Stored some probabilities in the node:\n" << data << endl;
+		// Possibly memory leak if not removing dataVec (since doubleVec is used instead)
 	}
 
 	myfile.close();

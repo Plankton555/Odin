@@ -50,7 +50,7 @@ void BayesianNet::CreateNetwork()
 		ParsedNode* current = (*it);
 		int currentID = nodeMap.find(current->name)->second;
 		bayes_node_utils::set_node_num_values(bn, currentID, current->states.size());
-		for (int i=0; i<current->parents.size(); i++)
+		for (unsigned int i=0; i<current->parents.size(); i++)
 		{
 			//Adding edges
 			std::string* parent = current->parents.at(i);
@@ -61,22 +61,15 @@ void BayesianNet::CreateNetwork()
 				bn.add_edge(parentID, currentID);
 			}
 		}
-		for (int i=0; i<current->parents.size(); i++)
-		{
-			//Setting probabilities
-			std::string* parentName = current->parents.at(i);
-			std::map<std::string*, int>::iterator parIt = nodeMap.find(parentName);
-			if (parIt != nodeMap.end())
-			{
-				int parentID = nodeMap.find(parentName)->second;
-				ParsedNode* parent = parsedNodes.at(parentID);
-				int nrOfParentStates = parent->states.size();
-			}
-		}
+		// call recursive method for setting probabilities
+		assignment parent_state;
+		std::vector<double>::iterator probIterator = current->probabilities.begin();
+		ApplyProbabilities(&(current->parents), 0, &parent_state, current, &nodeMap, &bn, &probIterator);
 	}
 }
 
-void BayesianNet::ApplyProbabilities(std::vector<std::string*> *parents, int n, assignment *parent_state, ParsedNode *currentNode, std::map<std::string*, int> *nodeMap, directed_graph<bayes_node>::kernel_1a_c *bn, std::vector<double>::iterator *it)
+void BayesianNet::ApplyProbabilities(std::vector<std::string*> *parents, int n, assignment *parent_state, ParsedNode *currentNode,
+	std::map<std::string*, int> *nodeMap, directed_graph<bayes_node>::kernel_1a_c *bn, std::vector<double>::iterator *it)
 {
 	if (n >= parents->size()) // stop condition for recursion
 	{

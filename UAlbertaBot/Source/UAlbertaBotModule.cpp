@@ -20,6 +20,7 @@
 
 #include "Common.h"
 #include "UAlbertaBotModule.h"
+#include "FuzzyModule.h"
 
 
 BWAPI::AIModule * __NewAIModule()
@@ -32,7 +33,7 @@ UAlbertaBotModule::~UAlbertaBotModule() {}
 
 void UAlbertaBotModule::onStart()
 {	
-
+	FuzzyModule::init();
 	if(BWAPI::Broodwar->isReplay()){
 
 		/* If we want to show stuff on the screen. */
@@ -46,9 +47,8 @@ void UAlbertaBotModule::onStart()
 		replayModule.onStart();
 
 	}else{
-
-		BWAPI::Broodwar->printf("Hello, my name is Odin!");
-
+		
+		BWAPI::Broodwar->printf("Hello, my name is Odin!(%d)", FuzzyModule::getFuzzyNr(0,"Pylon"));
 		Logger::Instance().log("Hello, my name is Odin2!\n");
 
 		//BWAPI::Broodwar->setLocalSpeed(100);
@@ -124,6 +124,7 @@ void UAlbertaBotModule::onEnd(bool isWinner)
 			ProductionManager::Instance().onGameEnd();
 		}	
 	}
+	FuzzyModule::destroy();
 }
 
 void UAlbertaBotModule::onFrame()

@@ -168,6 +168,9 @@
     <ClCompile Include="..\Source\ReplayModule.cpp">
       <Filter>module</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\FuzzyModule.cpp">
+      <Filter>module</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\CombatCommander.h">
@@ -300,6 +303,9 @@
       <Filter>extra</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\ReplayModule.h">
+      <Filter>module</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\FuzzyModule.h">
       <Filter>module</Filter>
     </ClInclude>
   </ItemGroup>

@@ -36,6 +36,7 @@ void BayesianNet::CreateNetwork()
 	for (it = parsedNodes.begin(); it!=parsedNodes.end(); it++)
 	{
 		// Loop through a second time to add the edges and connect the network
+
 		//bn.add_edge(A, D);
 		//set_node_num_values(bn, A, 2);
 		// Loop 
@@ -47,5 +48,13 @@ void BayesianNet::CreateNetwork()
 		//set_node_probability(bn, A, 1, parent_state, 0.99);
 		//set_node_probability(bn, A, 0, parent_state, 1-0.99);
 		ParsedNode* current = (*it);
+		int currentID = nodeMap.find(current->name)->second;
+		for (int i=0; i<current->parents.size(); i++)
+		{
+			std::string* parent = current->parents.at(i);
+			int parentID = nodeMap.find(parent)->second;
+			bn.add_edge(parentID, currentID);
+		}
+		bayes_node_utils::set_node_num_values(bn, currentID, current->states.size());
 	}
 }

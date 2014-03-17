@@ -1,5 +1,7 @@
 ;This file contains data about the units
-;Put it in the starcraft folder in /odin/
+;
+;HOW TO USE: Put it in the starcraft folder in /odin/
+;
 ;Name	noUnits	fewUnits	someUnits	manyUnits
 ;Protoss buildings
 Pylon	0	1	2	5

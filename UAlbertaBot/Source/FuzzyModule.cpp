@@ -22,12 +22,9 @@ void FuzzyModule::init()
 			units = new std::map<const char*, int*>;
 
 			while (getline(unitfile,line)) {
-				
 				if (*line.c_str() != ';') //Ignore comments
 				{
 					int i = 0;
-					//std::string unitName; //TODO: Does this even work? Need to use new? Is when is this destroyed?
-					//int data[NR_FUZZY_VALUES]; //TODO: Does this even work? Need to use new? Is when is this destroyed?
 					std::string* unitName;
 					int* data = new int[NR_FUZZY_VALUES];
 
@@ -70,12 +67,7 @@ void FuzzyModule::destroy()
 		for(it=units->begin(); it!=units->end(); it++)
 		{
 			delete (it->first); //Delete each string
-
-			//delete each int array
-			for (int i = 0; i < NR_FUZZY_VALUES-1; i++) //TODO: Shouldn't be -1? But crashes, try to debug (attach to process)
-			{
-				delete ((it->second)+i);
-			}
+			delete[] (it->second); //delete each int array
 		}
 		delete units; //delete the map itself
 	}
@@ -90,18 +82,37 @@ int FuzzyModule::getFuzzyNr(int nr, std::string name)
 	}
 
 	std::map<const char*,int*>::iterator it;
+
 	for(it=units->begin(); it!=units->end(); it++)
 	{
 		if (strcmp(it->first, name.c_str()) == 0)
 		{
 			for (int i = 0; i<NR_FUZZY_VALUES; i++)
 			{
-				if (nr < *(it->second+i))
+				if (nr <= *(it->second+i))
 				{
 					return i;
 				}
 			}
+			//More than the highest value
+			return NR_FUZZY_VALUES;
 		}
 	}
+
+	/*
+	it = units->find(name.c_str());
+	if (it != units->end())
+	{
+		BWAPI::Broodwar->printf("================================: UNIT FOUND");
+		for (int i = 0; i<NR_FUZZY_VALUES; i++)
+		{
+			if (nr <= *(it->second+i))
+			{
+				return i;
+			}
+		}
+	}
+	*/
+
 	return -1;
 }

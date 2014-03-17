@@ -48,7 +48,7 @@ void UAlbertaBotModule::onStart()
 
 	}else{
 		
-		BWAPI::Broodwar->printf("Hello, my name is Odin!(%d)", FuzzyModule::getFuzzyNr(0,"Pylon"));
+		BWAPI::Broodwar->printf("Hello, my name is Odin!");
 		Logger::Instance().log("Hello, my name is Odin2!\n");
 
 		//BWAPI::Broodwar->setLocalSpeed(100);

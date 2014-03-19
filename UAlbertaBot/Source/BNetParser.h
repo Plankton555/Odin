@@ -29,5 +29,6 @@ public:
 	virtual void characters(const std::string& data);
 	virtual void processing_instruction(const unsigned long line_number, const std::string& target, const std::string& data);
 
+	BayesianNet* getBayesianNet();
 };
 

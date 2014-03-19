@@ -134,3 +134,8 @@ std::vector<std::string*>* BNetParser::splitDelim(const std::string& str, const 
 	output->push_back(token);
 	return output;
 }
+
+BayesianNet* BNetParser::getBayesianNet()
+{
+	return bn;
+}

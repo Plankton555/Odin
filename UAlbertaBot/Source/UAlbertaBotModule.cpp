@@ -20,6 +20,7 @@
 
 #include "Common.h"
 #include "UAlbertaBotModule.h"
+#include "BayesianNet.h"
 
 
 BWAPI::AIModule * __NewAIModule()
@@ -46,6 +47,17 @@ void UAlbertaBotModule::onStart()
 			BWAPI::Broodwar->printf("Reading bayesian network:");
 			BNetParser parser;
 			dlib::parse_xml("testNet.xdsl", parser);
+			BayesianNet *bn = parser.getBayesianNet();
+			ofstream myfile("bnet_debug.txt", ios::app);
+			bn->UpdateBeliefs();
+			std::string nodeName = "TimePeriod";
+			myfile << "p(TimePeriod5) = " << bn->ReadProbability(&nodeName, 5) << endl;
+			bn->SetEvidence(&nodeName, 5);
+			myfile << "p(TimePeriod5 | TimePeriod5) = " << bn->ReadProbability(&nodeName, 5) << endl;
+			myfile << "p(TimePeriod3 | TimePeriod5) = " << bn->ReadProbability(&nodeName, 3) << endl;
+
+			myfile.close();
+
 		}
 		catch (std::exception& e) {
 			BWAPI::Broodwar->printf(e.what());

@@ -9,8 +9,8 @@ public:
 	ParsedNode();
 	~ParsedNode();
 	
-	std::string* name;
-	std::vector<std::string*> states;
+	std::string name;
+	std::vector<std::string> states;
 	std::vector<double> probabilities;
-	std::vector<std::string*> parents;
+	std::vector<std::string> parents;
 };

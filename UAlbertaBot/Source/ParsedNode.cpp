@@ -2,10 +2,10 @@
 
 ParsedNode::ParsedNode()// : name(NULL), probabilities(NULL), parents(NULL)
 {
-	name = NULL;
-	states = std::vector<std::string*>();
+	name = "";
+	states = std::vector<std::string>();
 	probabilities = std::vector<double>();
-	parents = std::vector<std::string*>();
+	parents = std::vector<std::string>();
 }
 
 

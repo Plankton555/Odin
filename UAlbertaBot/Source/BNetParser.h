@@ -17,7 +17,7 @@ private:
 	ParsedNode* currentNode;
 	int waitingForProbs;
 
-	std::vector<std::string*>* splitDelim(const std::string& str, const std::string& delim); 
+	std::vector<std::string>* splitDelim(const std::string& str, const std::string& delim);
 public:
 	BNetParser();
 	~BNetParser();

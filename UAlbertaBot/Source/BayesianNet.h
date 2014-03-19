@@ -17,9 +17,9 @@ private:
 	typedef graph<set_type, set_type>::kernel_1a_c join_tree_type;
 	join_tree_type join_tree;
 	bayesian_network_join_tree *solution;
-	std::map<std::string*, int> nodeMap;
+	std::map<std::string, int> nodeMap;
 
-	void ApplyProbabilities(std::vector<std::string*> *parents, unsigned int n, assignment *parent_state, ParsedNode *currentNode, std::vector<double>::iterator *it);
+	void ApplyProbabilities(std::vector<std::string> *parents, unsigned int n, assignment *parent_state, ParsedNode *currentNode, std::vector<double>::iterator *it);
 public:
 	BayesianNet();
 	~BayesianNet();
@@ -27,8 +27,8 @@ public:
 	void AddNode(ParsedNode* node);
 	void CreateNetwork();
 
-	void SetEvidence(std::string *nodeName, int nodeState);
+	void SetEvidence(const std::string &, int nodeState);
 	void ClearEvidence();
-	double ReadProbability(std::string *nodeName, int nodeState);
+	double ReadProbability(const std::string &nodeName, int nodeState);
 	void UpdateBeliefs();
 };

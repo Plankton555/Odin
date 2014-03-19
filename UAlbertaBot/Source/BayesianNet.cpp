@@ -28,7 +28,7 @@ void BayesianNet::CreateNetwork()
 	{
 		// Loop through nodes and connect name to id nr
 		ParsedNode* current = (*it);
-		nodeMap.insert(std::map<std::string*, int>::value_type (current->name, index));
+		nodeMap.insert(std::map<std::string, int>::value_type (current->name, index));
 	}
 
 	for (it = parsedNodes.begin(); it!=parsedNodes.end(); it++)
@@ -40,8 +40,8 @@ void BayesianNet::CreateNetwork()
 		for (unsigned int i=0; i<current->parents.size(); i++)
 		{
 			//Adding edges
-			std::string* parent = current->parents.at(i);
-			std::map<std::string*, int>::iterator parIt = nodeMap.find(parent);
+			std::string parent = current->parents.at(i);
+			std::map<std::string, int>::iterator parIt = nodeMap.find(parent);
 			if (parIt != nodeMap.end())
 			{
 				int parentID = parIt->second;
@@ -61,7 +61,7 @@ void BayesianNet::CreateNetwork()
 /*
 	Recursive method for setting probabilities.
 */
-void BayesianNet::ApplyProbabilities(std::vector<std::string*> *parents, unsigned int n, assignment *parent_state, ParsedNode *currentNode, std::vector<double>::iterator *it)
+void BayesianNet::ApplyProbabilities(std::vector<std::string> *parents, unsigned int n, assignment *parent_state, ParsedNode *currentNode, std::vector<double>::iterator *it)
 {
 	if (n >= parents->size()) // stop condition for recursion
 	{
@@ -93,7 +93,7 @@ void BayesianNet::ApplyProbabilities(std::vector<std::string*> *parents, unsigne
 }
 
 
-void BayesianNet::SetEvidence(std::string *nodeName, int nodeState)
+void BayesianNet::SetEvidence(const std::string &nodeName, int nodeState)
 {
 	int nodeID = nodeMap.find(nodeName)->second;
 	bayes_node_utils::set_node_value(bn, nodeID, nodeState);
@@ -103,7 +103,7 @@ void BayesianNet::SetEvidence(std::string *nodeName, int nodeState)
 
 void BayesianNet::ClearEvidence()
 {
-	std::map<std::string*, int>::iterator it;
+	std::map<std::string, int>::iterator it;
 	for (it = nodeMap.begin(); it != nodeMap.end(); it++)
 	{
 		int currNodeID = (*it).second;
@@ -112,7 +112,7 @@ void BayesianNet::ClearEvidence()
 }
 
 
-double BayesianNet::ReadProbability(std::string *nodeName, int nodeState)
+double BayesianNet::ReadProbability(const std::string &nodeName, int nodeState)
 {
 	int nodeID = nodeMap.find(nodeName)->second;
 	return solution->probability(nodeID)(nodeState);

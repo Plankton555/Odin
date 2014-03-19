@@ -6,6 +6,7 @@ BayesianNet::BayesianNet()
 
 BayesianNet::~BayesianNet()
 {
+	delete solution;
 }
 
 void BayesianNet::AddNode(ParsedNode* node)
@@ -120,6 +121,6 @@ double BayesianNet::ReadProbability(std::string *nodeName, int nodeState)
 
 void BayesianNet::UpdateBeliefs()
 {
-	bayesian_network_join_tree sol(bn, join_tree);
-	solution = &sol;
+	delete solution;
+	solution = new bayesian_network_join_tree(bn, join_tree);
 }

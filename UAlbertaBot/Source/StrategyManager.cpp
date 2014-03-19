@@ -92,7 +92,7 @@ void StrategyManager::readResults()
 	// if the file doesn't exist something is wrong so just set them to default settings
 	if (stat(Options::FileIO::FILE_SETTINGS, &buf) == -1)
 	{
-		readDir = "bwapi-data/testio/read/";
+		readDir = "bwapi-data/testio/write/";
 		writeDir = "bwapi-data/testio/write/";
 	}
 	else
@@ -104,7 +104,7 @@ void StrategyManager::readResults()
 	}
 
 	// the file corresponding to the enemy's previous results
-	std::string readFile = readDir + BWAPI::Broodwar->enemy()->getName() + ".txt";
+	std::string readFile = readDir + BWAPI::Broodwar->enemy()->getRace().c_str() + ".txt";
 
 	// if the file doesn't exist, set the results to zeros
 	if (stat(readFile.c_str(), &buf) == -1)
@@ -128,16 +128,20 @@ void StrategyManager::readResults()
 		results[ProtossDragoons].first = atoi(line.c_str());
 		getline(f_in, line);
 		results[ProtossDragoons].second = atoi(line.c_str());
+		getline(f_in, line);
+		results[ProtossObserver].first = atoi(line.c_str());
+		getline(f_in, line);
+		results[ProtossObserver].second = atoi(line.c_str());
 		f_in.close();
 	}
 
-	BWAPI::Broodwar->printf("Results (%s): (%d %d) (%d %d) (%d %d)", BWAPI::Broodwar->enemy()->getName().c_str(), 
+	BWAPI::Broodwar->printf("Results (%s): (%d %d) (%d %d) (%d %d)", BWAPI::Broodwar->enemy()->getRace().c_str(), 
 		results[0].first, results[0].second, results[1].first, results[1].second, results[2].first, results[2].second);
 }
 
 void StrategyManager::writeResults()
 {
-	std::string writeFile = writeDir + BWAPI::Broodwar->enemy()->getName() + ".txt";
+	std::string writeFile = writeDir  + BWAPI::Broodwar->enemy()->getRace().c_str() + ".txt";
 	std::ofstream f_out(writeFile.c_str());
 
 	f_out << results[ProtossZealotRush].first   << "\n";
@@ -146,6 +150,8 @@ void StrategyManager::writeResults()
 	f_out << results[ProtossDarkTemplar].second << "\n";
 	f_out << results[ProtossDragoons].first     << "\n";
 	f_out << results[ProtossDragoons].second    << "\n";
+	f_out << results[ProtossObserver].first     << "\n";
+	f_out << results[ProtossObserver].second    << "\n";
 
 	f_out.close();
 }

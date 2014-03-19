@@ -15,6 +15,7 @@ void BayesianNet::AddNode(ParsedNode* node)
 
 void BayesianNet::CreateNetwork()
 {
+	using namespace bayes_node_utils;
 	// Create the network
 	int nrNodes = parsedNodes.size();
 	bn.set_number_of_nodes(nrNodes);
@@ -32,20 +33,9 @@ void BayesianNet::CreateNetwork()
 	for (it = parsedNodes.begin(); it!=parsedNodes.end(); it++)
 	{
 		// Loop through a second time to add the edges and connect the network
-
-		//bn.add_edge(A, D);
-		//set_node_num_values(bn, A, 2);
-		// Loop 
-		//assignment parent_state;
-		//parent_state.clear();
-		//parent_state.add(B, 1); (parent and its value)
-		//parent_state[B] = 0; (to change)
-		// Here we specify that p(A=1 | B=1, C=1) = 0.99 
-		//set_node_probability(bn, A, 1, parent_state, 0.99);
-		//set_node_probability(bn, A, 0, parent_state, 1-0.99);
 		ParsedNode* current = (*it);
 		int currentID = nodeMap.find(current->name)->second;
-		bayes_node_utils::set_node_num_values(bn, currentID, current->states.size());
+		set_node_num_values(bn, currentID, current->states.size());
 		for (unsigned int i=0; i<current->parents.size(); i++)
 		{
 			//Adding edges
@@ -62,6 +52,9 @@ void BayesianNet::CreateNetwork()
 		std::vector<double>::iterator probIterator = current->probabilities.begin();
 		ApplyProbabilities(&(current->parents), 0, &parent_state, current, &probIterator);
 	}
+
+	create_moral_graph(bn, join_tree);
+	create_join_tree(join_tree, join_tree);
 }
 
 /*
@@ -96,4 +89,37 @@ void BayesianNet::ApplyProbabilities(std::vector<std::string*> *parents, unsigne
 		}
 		ApplyProbabilities(parents, n+1, parent_state, currentNode, it); //recursive call
 	}
+}
+
+
+void BayesianNet::SetEvidence(std::string *nodeName, int nodeState)
+{
+	int nodeID = nodeMap.find(nodeName)->second;
+	bayes_node_utils::set_node_value(bn, nodeID, nodeState);
+	bayes_node_utils::set_node_as_evidence(bn, nodeID);
+}
+
+
+void BayesianNet::ClearEvidence()
+{
+	std::map<std::string*, int>::iterator it;
+	for (it = nodeMap.begin(); it != nodeMap.end(); it++)
+	{
+		int currNodeID = (*it).second;
+		bayes_node_utils::set_node_as_nonevidence(bn, currNodeID);
+	}
+}
+
+
+double BayesianNet::ReadProbability(std::string *nodeName, int nodeState)
+{
+	int nodeID = nodeMap.find(nodeName)->second;
+	return solution->probability(nodeID)(nodeState);
+}
+
+
+void BayesianNet::UpdateBeliefs()
+{
+	bayesian_network_join_tree sol(bn, join_tree);
+	solution = &sol;
 }

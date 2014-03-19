@@ -12,13 +12,21 @@ BNetParser::~BNetParser()
 
 void BNetParser::start_document()
 {
+	ofstream myfile("bnet_debug.txt", ios::app);
+	myfile << "Starting parsing the document" << endl;
 	bn = new BayesianNet();
+	myfile.close();
 }
 
 void BNetParser::end_document()
 {
+	ofstream myfile("bnet_debug.txt", ios::app);
+	myfile << "Stopped parsing the document" << endl;
 	// put the network together
+	myfile << "Creating the bayesian network" << endl;
 	bn->CreateNetwork();
+	myfile << "Bayesian network created and stored in parser" << endl;
+	myfile.close();
 }
 
 void BNetParser::start_element(const unsigned long line_number, const std::string& name, const dlib::attribute_list& atts)

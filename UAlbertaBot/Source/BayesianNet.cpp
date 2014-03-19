@@ -2,6 +2,9 @@
 
 BayesianNet::BayesianNet()
 {
+	ofstream myfile("bnet_debug.txt", ios::app);
+	myfile << "In constructor of BayesianNet" << endl;
+	myfile.close();
 }
 
 BayesianNet::~BayesianNet()
@@ -16,6 +19,9 @@ void BayesianNet::AddNode(ParsedNode* node)
 
 void BayesianNet::CreateNetwork()
 {
+	ofstream myfile("bnet_debug.txt", ios::app);
+	myfile << "Inside BayesianNet::CreateNetwork()" << endl;
+	myfile.close();
 	using namespace bayes_node_utils;
 	// Create the network
 	int nrNodes = parsedNodes.size();

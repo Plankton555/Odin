@@ -99,7 +99,7 @@ void BNetParser::characters(const std::string& data)
 	{
 		// Convert dataVec to vector of doubles
 		std::vector<double> *doubleVec = new std::vector<double>();
-		for (int i=0; i<dataVec->size(); i++)
+		for (unsigned int i=0; i<dataVec->size(); i++)
 		{
 			std::istringstream is(doubleVec->at(i));
 			double x;

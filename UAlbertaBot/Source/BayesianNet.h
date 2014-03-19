@@ -13,8 +13,9 @@ class BayesianNet
 private:
 	std::vector<ParsedNode*> parsedNodes;
 	directed_graph<bayes_node>::kernel_1a_c bn;
-	void ApplyProbabilities(std::vector<std::string*> *parents, int n, assignment *parent_state, ParsedNode *currentNode,
-		std::map<std::string*, int> *nodeMap, directed_graph<bayes_node>::kernel_1a_c *bn, std::vector<double>::iterator *it);
+	std::map<std::string*, int> nodeMap;
+
+	void ApplyProbabilities(std::vector<std::string*> *parents, unsigned int n, assignment *parent_state, ParsedNode *currentNode, std::vector<double>::iterator *it);
 public:
 	BayesianNet();
 	~BayesianNet();

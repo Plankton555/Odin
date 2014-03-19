@@ -30,6 +30,7 @@ void StrategyManager::addStrategies()
 	//protossOpeningBook[ProtossZealotRush]	= "0";
 	//protossOpeningBook[ProtossDarkTemplar] = "0 0 0 0 1 3 0 7 5 0 0 12 3 13 0 22 22 22 22 0 1 0";
     protossOpeningBook[ProtossDarkTemplar]	= "0 0 0 0 1 0 3 0 7 0 5 0 12 0 13 3 22 22 1 22 22 0 1 0";
+	protossOpeningBook[ProtossZealotArchon]	= "0 0 0 0 1 0 3 3 0 0 4 1 4 4 7 0 5 0 12 0 13 0 17 0 4 0 19 0 0 20 17 0 4 0 20 0 4 0 20 0 4 20 0 4 20 0 4";
 	protossOpeningBook[ProtossDragoons]		= "0 0 0 0 1 0 0 3 0 7 0 0 5 0 0 3 8 6 1 6 6 0 3 1 0 6 6 6";
 	protossOpeningBook[ProtossObserver]		= "0 0 0 0 1 0 0 3 0 0 7 0 0 5 0 0 1 0 0 8 6 0 0 1 6 0 14 6 3 6 1 16 25";
 	terranOpeningBook[TerranMarineRush]		= "0 0 0 0 0 1 0 0 3 0 0 3 0 1 0 4 0 0 0 6";
@@ -38,13 +39,14 @@ void StrategyManager::addStrategies()
 	if (selfRace == BWAPI::Races::Protoss)
 	{
 		results = std::vector<IntPair>(NumProtossStrategies);
-
+		enemyIsRandom = false;
 		if (enemyRace == BWAPI::Races::Protoss)
 		{
 			usableStrategies.push_back(ProtossZealotRush);
 			usableStrategies.push_back(ProtossDarkTemplar);
 			usableStrategies.push_back(ProtossDragoons);
 			usableStrategies.push_back(ProtossObserver);
+			usableStrategies.push_back(ProtossZealotArchon);
 		}
 		else if (enemyRace == BWAPI::Races::Terran)
 		{
@@ -52,19 +54,23 @@ void StrategyManager::addStrategies()
 			usableStrategies.push_back(ProtossDarkTemplar);
 			usableStrategies.push_back(ProtossDragoons);
 			usableStrategies.push_back(ProtossObserver);
+			usableStrategies.push_back(ProtossZealotArchon);
 		}
 		else if (enemyRace == BWAPI::Races::Zerg)
 		{
 			usableStrategies.push_back(ProtossZealotRush);
 			usableStrategies.push_back(ProtossDragoons);
 			usableStrategies.push_back(ProtossObserver);
+			usableStrategies.push_back(ProtossZealotArchon);
 		}
 		else
 		{
+			enemyIsRandom = true;
 			BWAPI::Broodwar->printf("Enemy Race Unknown");
 			usableStrategies.push_back(ProtossZealotRush);
 			usableStrategies.push_back(ProtossDragoons);
 			usableStrategies.push_back(ProtossObserver);
+			usableStrategies.push_back(ProtossZealotArchon);
 		}
 	}
 	else if (selfRace == BWAPI::Races::Terran)
@@ -104,7 +110,14 @@ void StrategyManager::readResults()
 	}
 
 	// the file corresponding to the enemy's previous results
-	std::string readFile = readDir + BWAPI::Broodwar->enemy()->getRace().c_str() + ".txt";
+	std::string readFile;
+	if(enemyIsRandom)
+	{
+		readFile = readDir +  "random.txt";
+	}else
+	{
+		readFile= readDir + BWAPI::Broodwar->enemy()->getRace().c_str() + ".txt";	
+	}
 
 	// if the file doesn't exist, set the results to zeros
 	if (stat(readFile.c_str(), &buf) == -1)
@@ -132,7 +145,12 @@ void StrategyManager::readResults()
 		results[ProtossObserver].first = atoi(line.c_str());
 		getline(f_in, line);
 		results[ProtossObserver].second = atoi(line.c_str());
+		getline(f_in, line);
+		results[ProtossZealotArchon].first = atoi(line.c_str());
+		getline(f_in, line);
+		results[ProtossZealotArchon].second = atoi(line.c_str());
 		f_in.close();
+		
 	}
 
 	BWAPI::Broodwar->printf("Results (%s): (%d %d) (%d %d) (%d %d)", BWAPI::Broodwar->enemy()->getRace().c_str(), 
@@ -142,6 +160,12 @@ void StrategyManager::readResults()
 void StrategyManager::writeResults()
 {
 	std::string writeFile = writeDir  + BWAPI::Broodwar->enemy()->getRace().c_str() + ".txt";
+
+	if(enemyIsRandom)
+	{
+		writeFile = writeDir +  "random.txt";
+	}
+
 	std::ofstream f_out(writeFile.c_str());
 
 	f_out << results[ProtossZealotRush].first   << "\n";
@@ -152,7 +176,9 @@ void StrategyManager::writeResults()
 	f_out << results[ProtossDragoons].second    << "\n";
 	f_out << results[ProtossObserver].first     << "\n";
 	f_out << results[ProtossObserver].second    << "\n";
-
+	f_out << results[ProtossZealotArchon].first     << "\n";
+	f_out << results[ProtossZealotArchon].second    << "\n";	
+	
 	f_out.close();
 }
 

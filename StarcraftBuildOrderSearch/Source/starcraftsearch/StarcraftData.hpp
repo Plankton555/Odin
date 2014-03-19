@@ -68,16 +68,16 @@ class StarcraftData {
 			actions.push_back(StarcraftAction(BWAPI::UnitTypes::Protoss_Templar_Archives, actions.size()));			// 13
 			actions.push_back(StarcraftAction(BWAPI::UnitTypes::Protoss_Robotics_Facility, actions.size()));		// 14
 			actions.push_back(StarcraftAction(BWAPI::UnitTypes::Protoss_Robotics_Support_Bay, actions.size()));		// 15
-			actions.push_back(StarcraftAction(BWAPI::UnitTypes::Protoss_Observatory, actions.size()));
-			actions.push_back(StarcraftAction(BWAPI::UnitTypes::Protoss_Stargate, actions.size()));
-			actions.push_back(StarcraftAction(BWAPI::UnitTypes::Protoss_Scout, actions.size()));
-			actions.push_back(StarcraftAction(BWAPI::UnitTypes::Protoss_Arbiter_Tribunal, actions.size()));
-			actions.push_back(StarcraftAction(BWAPI::UnitTypes::Protoss_Arbiter, actions.size()));
+			actions.push_back(StarcraftAction(BWAPI::UnitTypes::Protoss_Observatory, actions.size()));				// 16
+			actions.push_back(StarcraftAction(BWAPI::UnitTypes::Protoss_Stargate, actions.size()));					// 17
+			actions.push_back(StarcraftAction(BWAPI::UnitTypes::Protoss_Scout, actions.size()));					// 18
+			actions.push_back(StarcraftAction(BWAPI::UnitTypes::Protoss_Arbiter_Tribunal, actions.size()));			// 19
+			actions.push_back(StarcraftAction(BWAPI::UnitTypes::Protoss_Arbiter, actions.size()));					// 20
 			actions.push_back(StarcraftAction(BWAPI::UnitTypes::Protoss_Shield_Battery, actions.size()));
 			actions.push_back(StarcraftAction(BWAPI::UnitTypes::Protoss_Dark_Templar, actions.size()));
 			actions.push_back(StarcraftAction(BWAPI::UnitTypes::Protoss_Shuttle, actions.size()));
 			actions.push_back(StarcraftAction(BWAPI::UnitTypes::Protoss_Reaver, actions.size()));
-			actions.push_back(StarcraftAction(BWAPI::UnitTypes::Protoss_Observer, actions.size()));
+			actions.push_back(StarcraftAction(BWAPI::UnitTypes::Protoss_Observer, actions.size()));					// 25
 			actions.push_back(StarcraftAction(BWAPI::UnitTypes::Protoss_Corsair, actions.size()));
 			actions.push_back(StarcraftAction(BWAPI::UnitTypes::Protoss_Fleet_Beacon, actions.size()));
 			actions.push_back(StarcraftAction(BWAPI::UnitTypes::Protoss_Carrier, actions.size()));

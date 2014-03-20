@@ -1,4 +1,5 @@
 #include "ReplayModule.h"
+#include "FuzzyModule.h"
 #include <iostream>
 #include <fstream>
 #include <boost\filesystem.hpp>
@@ -373,8 +374,11 @@ void ReplayModule::writeToFile(char* file, std::map<const char*,std::list<int>*>
 	
 	int timePeriod = 1;
 	std::vector<std::list<int>::iterator> temp(unitList.size());
+	std::vector<const char*> tempNames(unitList.size());
 	std::map<const char*,std::list<int>*>::iterator it;
 	std::list<int>::iterator lastElem;
+
+	//Put the units in the correct order
 	for(it=stuffToWrite.begin(); it!=stuffToWrite.end(); it++) //Every unit
 	{
 		//Find unitID and store an iterator to the list<int> in the vector
@@ -383,6 +387,7 @@ void ReplayModule::writeToFile(char* file, std::map<const char*,std::list<int>*>
 		{
 			if(strcmp(tempIt->first ,it->first)==0)
 			{
+				tempNames.at(tempIt->second-1) = it->first;
 				temp.at(tempIt->second-1) = it->second->begin();
 				if (tempIt->second == 1)
 				{
@@ -394,6 +399,7 @@ void ReplayModule::writeToFile(char* file, std::map<const char*,std::list<int>*>
 		}
 	}
 	
+	//Actually print units
 	for (std::list<int>::iterator itLoop = temp.at(0); itLoop != lastElem;) //For every timeperiod
 	{
 		myfile << "period" <<timePeriod << ",";
@@ -403,7 +409,7 @@ void ReplayModule::writeToFile(char* file, std::map<const char*,std::list<int>*>
 			int nrEnemies = *(temp.at(i));
 			temp.at(i)++; //Increase iterator
 
-			myfile << nrEnemies;
+			myfile << FuzzyModule::getFuzzyNr(nrEnemies,tempNames.at(i));
 			if(i<temp.size()-1)
 			{
 				myfile << ",";

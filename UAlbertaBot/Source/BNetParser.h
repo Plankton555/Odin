@@ -16,6 +16,7 @@ private:
 	BayesianNet* bn;
 	ParsedNode* currentNode;
 	int waitingForProbs;
+	int documentNr;
 
 	std::vector<std::string>* splitDelim(const std::string& str, const std::string& delim);
 public:

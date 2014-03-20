@@ -14,6 +14,7 @@ void BNetParser::start_document()
 {
 	ofstream myfile("bnet_debug.txt", ios::app);
 	myfile << "Starting parsing the document" << endl;
+	documentNr = 1;
 	bn = new BayesianNet();
 	myfile.close();
 }
@@ -21,11 +22,15 @@ void BNetParser::start_document()
 void BNetParser::end_document()
 {
 	ofstream myfile("bnet_debug.txt", ios::app);
-	myfile << "Stopped parsing the document" << endl;
-	// put the network together
-	myfile << "Creating the bayesian network" << endl;
-	bn->CreateNetwork();
-	myfile << "Bayesian network created and stored in parser" << endl;
+	if (documentNr > 0)
+	{
+		documentNr = 0;
+		myfile << "Stopped parsing the document" << endl;
+		// put the network together
+		myfile << "Creating the bayesian network" << endl;
+		bn->CreateNetwork();
+		myfile << "Bayesian network created and stored in parser" << endl;
+	}
 	myfile.close();
 }
 

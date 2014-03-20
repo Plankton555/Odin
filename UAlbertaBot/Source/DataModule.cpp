@@ -29,31 +29,16 @@ void DataModule::init()
 			while (getline(unitfile,line)) {
 				if (*line.c_str() != COMMENT_CHAR) //Ignore comments
 				{
-					int i = 0;
-					std::string* unitName;
-					int* fuzzyValues = new int[NR_FUZZY_VALUES];
-
-					int n;
 					//split the line
-					while ((n = line.find(SPLIT_SYMBOL)) != std::string::npos)
-					//for int i = 0; i < NR_FUZZY_VALUES; i++)
+					std::vector<std::string>* sub = splitDelim(line, SPLIT_SYMBOL);
+
+					//Save fuzzy values
+					int* fuzzyValues = new int[NR_FUZZY_VALUES];
+					for (int i = 0; i < NR_FUZZY_VALUES; i++)
 					{
-						std::string value = line.substr(0, n);
-						line = line.substr(n+1, line.length());
-
-						//Save the data on different locations depending on what type of data the column is
-						if (!i) { //First column is unit name
-							unitName = new std::string(value);
-						} else if (FUZZY_VALUES_START <= i && i <= FUZZY_VALUES_END)
-						{
-							fuzzyValues[i-1] = atoi(value.c_str());
-						}
-						i++;
+						fuzzyValues[i] = atoi(sub->at(FUZZY_VALUES_START + i).c_str());
 					}
-					fuzzyValues[i-1] = atoi(line.c_str()); //Last column must manually be put in
-
-					//Save the unit
-					(*units)[unitName->c_str()] = fuzzyValues;
+					(*units)[sub->at(0).c_str()] = fuzzyValues;
 				}
 			}
 
@@ -95,4 +80,19 @@ int DataModule::getNrFuzzyValues()
 std::map<const char*,int*>* DataModule::getFuzzyValues()
 {
 	return units;
+}
+
+std::vector<std::string>* DataModule::splitDelim(const std::string& str, const std::string& delim)
+{
+	std::string s = str;
+	std::vector<std::string> *output = new std::vector<std::string>;
+	size_t pos = 0;
+	std::string token;
+	while ((pos = s.find(delim)) != std::string::npos) {
+		token = s.substr(0, pos);
+		output->push_back(token);
+		s.erase(0, pos + delim.length());
+	}
+	output->push_back(s);
+	return output;
 }

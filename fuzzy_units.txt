@@ -2,100 +2,100 @@
 ;
 ;HOW TO USE: Put it in the starcraft folder in /odin/
 ;
-;Name	noUnits	fewUnits	someUnits	manyUnits
+;Name,noUnits,fewUnits,someUnits,manyUnits
 ;Protoss buildings
-Pylon	0	1	2	5
-Gateway	0	1	2	5
-Assimilator	0	1	2	5
-Cybernetics Core	0	1	2	5
-Citadel of Adun	0	1	2	5
-Forge	0	1	2	5
-Photon Cannon	0	1	2	5
-Stargate	0	1	2	5
-Robotics Facility	0	1	2	5
-Robotics Support Bay	0	1	2	5
-Observatory	0	1	2	5
-Arbiter Tribunal	0	1	2	5
-Templar Archives	0	1	2	5
-Fleet Beacon	0	1	2	5
-Shield Battery	0	1	2	5
+Pylon,0,1,2,5
+Gateway,0,1,2,5
+Assimilator,0,1,2,5
+Cybernetics Core,0,1,2,5
+Citadel of Adun,0,1,2,5
+Forge,0,1,2,5
+Photon Cannon,0,1,2,5
+Stargate,0,1,2,5
+Robotics Facility,0,1,2,5
+Robotics Support Bay,0,1,2,5
+Observatory,0,1,2,5
+Arbiter Tribunal,0,1,2,5
+Templar Archives,0,1,2,5
+Fleet Beacon,0,1,2,5
+Shield Battery,0,1,2,5
 ;
 ;Protoss units
-Zealot	0	3	8	15
-Dragoon	0	3	7	12
-Dark Templar	0	3	5	7
-High Templar	0	3	5	10
-Archon	0	2	4	6
-Dark Archon	0	2	3	4
-Reaver	0	1	2	5
-Scout	0	2	4	8
-Corsair	0	3	5	10
-Arbiter	0	1	2	5
-Carrier	0	1	2	5
-Observer	0	1	2	5
-Shuttle	0	1	2	5
+Zealot,0,3,8,15
+Dragoon,0,3,7,12
+Dark Templar,0,3,5,7
+High Templar,0,3,5,10
+Archon,0,2,4,6
+Dark Archon,0,2,3,4
+Reaver,0,1,2,5
+Scout,0,2,4,8
+Corsair,0,3,5,10
+Arbiter,0,1,2,5
+Carrier,0,1,2,5
+Observer,0,1,2,5
+Shuttle,0,1,2,5
 ;
 ;Terran buildings
-Supply Depot	0	1	2	5
-Barracks	0	1	2	5
-Refinery	0	1	2	5
-Engineering Bay	0	1	2	5
-Bunker	0	1	2	5
-Academy	0	1	2	5
-Missile Turret	0	1	2	5
-Factory	0	1	2	5
-Starport	0	1	2	5
-Armory	0	1	2	5
-Science Facility	0	1	2	5
-Comsat Station	0	1	2	5
-Nuclear Silo	0	1	2	5
-Machine Shop	0	1	2	5
-Control Tower	0	1	2	5
-Physics Lab	0	1	2	5
-Covert Ops	0	1	2	5
+Supply Depot,0,1,2,5
+Barracks,0,1,2,5
+Refinery,0,1,2,5
+Engineering Bay,0,1,2,5
+Bunker,0,1,2,5
+Academy,0,1,2,5
+Missile Turret,0,1,2,5
+Factory,0,1,2,5
+Starport,0,1,2,5
+Armory,0,1,2,5
+Science Facility,0,1,2,5
+Comsat Station,0,1,2,5
+Nuclear Silo,0,1,2,5
+Machine Shop,0,1,2,5
+Control Tower,0,1,2,5
+Physics Lab,0,1,2,5
+Covert Ops,0,1,2,5
 ;
 ;Terran units
-Marine	0	3	8	15
-Firebat	0	3	7	12
-Medic	0	3	5	10
-Ghost	0	3	5	10
-Vulture	0	3	5	10
-Spider Mine	0	3	6	12
-Siege Tank	0	2	4	6
-Goliath	0	2	5	8
-Wraith	0	2	4	6
-Dropship	0	1	2	5
-Science Vessel	0	1	2	5
-Battlecruiser	0	1	2	3
-Valkyrie	0	1	2	5
+Marine,0,3,8,15
+Firebat,0,3,7,12
+Medic,0,3,5,10
+Ghost,0,3,5,10
+Vulture,0,3,5,10
+Spider Mine,0,3,6,12
+Siege Tank,0,2,4,6
+Goliath,0,2,5,8
+Wraith,0,2,4,6
+Dropship,0,1,2,5
+Science Vessel,0,1,2,5
+Battlecruiser,0,1,2,3
+Valkyrie,0,1,2,5
 ;
 ;Zerg buildings
-Creep Colony	0	1	2	5
-Sunken Colony	0	1	2	5
-Spore Colony	0	1	2	5
-Extractor	0	1	2	5
-Spawning Pool	0	1	2	5
-Evolution Chamber	0	1	2	5
-Hydralisk Den	0	1	2	5
-Lair	0	1	2	5
-Spire	0	1	2	5
-Queen's Nest	0	1	2	5
-Hive	0	1	2	5
-Greater Spire	0	1	2	5
-Nydus Canal	0	1	2	5
-Ultralisk Cavern	0	1	2	5
-Defiler Mound	0	1	2	5
+Creep Colony,0,1,2,5
+Sunken Colony,0,1,2,5
+Spore Colony,0,1,2,5
+Extractor,0,1,2,5
+Spawning Pool,0,1,2,5
+Evolution Chamber,0,1,2,5
+Hydralisk Den,0,1,2,5
+Lair,0,1,2,5
+Spire,0,1,2,5
+Queen's Nest,0,1,2,5
+Hive,0,1,2,5
+Greater Spire,0,1,2,5
+Nydus Canal,0,1,2,5
+Ultralisk Cavern,0,1,2,5
+Defiler Mound,0,1,2,5
 ;
 ;Zerg units
 ;Broodlings?
-Zergling	0	5	10	20
-Hydralisk	0	3	5	10
-Lurker	0	3	5	10
-Ultralisk	0	1	2	4
-Defiler	0	3	5	8
-Overlord	0	2	4	8
-Mutalisk	0	1	2	5
-Scourge	0	3	6	10
-Queen	0	2	4	6
-Guardian	0	3	5	8
-Devourer	0	1	2	5
+Zergling,0,5,10,20
+Hydralisk,0,3,5,10
+Lurker,0,3,5,10
+Ultralisk,0,1,2,4
+Defiler,0,3,5,8
+Overlord,0,2,4,8
+Mutalisk,0,1,2,5
+Scourge,0,3,6,10
+Queen,0,2,4,6
+Guardian,0,3,5,8
+Devourer,0,1,2,5

@@ -5,7 +5,8 @@
 
 #define NR_FUZZY_VALUES (4)
 #define FUZZY_VALUES_FILEPATH ("odin/fuzzy_units.txt")
-#define SPLIT_SYMBOL ("\t")
+#define SPLIT_SYMBOL (",")
+#define COMMENT_CHAR (';')
 
 std::map<const char*,int*> *FuzzyModule::units = NULL;
 int FuzzyModule::loaded = 0;
@@ -22,7 +23,7 @@ void FuzzyModule::init()
 			units = new std::map<const char*, int*>;
 
 			while (getline(unitfile,line)) {
-				if (*line.c_str() != ';') //Ignore comments
+				if (*line.c_str() != COMMENT_CHAR) //Ignore comments
 				{
 					int i = 0;
 					std::string* unitName;

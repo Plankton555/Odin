@@ -27,6 +27,7 @@ class StrategyManager
 	std::string					readDir;
 	std::string					writeDir;
 	std::vector<IntPair>		results;
+	std::string					readFile;
 	std::vector<int>			usableStrategies;
 	int							currentStrategy;
 
@@ -40,6 +41,7 @@ class StrategyManager
 	void	setStrategy();
 	void	readResults();
 	void	writeResults();
+	void	loadStrategiesFromFile(std::string filename);
 
 	const	int					getScore(BWAPI::Player * player) const;
 	const	double				getUCBValue(const size_t & strategy) const;

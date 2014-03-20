@@ -10,28 +10,6 @@ using namespace std;
 Player* ReplayModule::player = NULL;
 Player* ReplayModule::enemy = NULL;
 
-void debug(std::string str)
-{
-	ofstream file ("debug.txt", ios::app);
-	if (file.is_open())
-	{
-		file << str.c_str() << endl;
-		file.close();
-	} else {
-		Broodwar->printf("Unable to save file.");
-	}
-}
-
-void debug(std::string str, int i)
-{
-	std::ostringstream stringStream;
-	stringStream << str;
-	stringStream << ": ";
-	stringStream << i;
-	std::string newStr = stringStream.str();
-	debug(newStr);
-}
-
 ReplayModule::ReplayModule()  { ReplayModule::analyzePlayers(); }
 ReplayModule::~ReplayModule()
 {

@@ -171,6 +171,9 @@
     <ClCompile Include="..\Source\FuzzyModule.cpp">
       <Filter>module</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\DataModule.cpp">
+      <Filter>module</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\CombatCommander.h">
@@ -306,6 +309,9 @@
       <Filter>module</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\FuzzyModule.h">
+      <Filter>module</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\DataModule.h">
       <Filter>module</Filter>
     </ClInclude>
   </ItemGroup>

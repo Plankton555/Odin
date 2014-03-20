@@ -59,6 +59,20 @@ void UAlbertaBotModule::onStart()
 			bn->UpdateBeliefs();
 			myfile << "p(TimePeriod5 | TimePeriod5) = " << bn->ReadProbability(nodeName, 5) << endl;
 			myfile << "p(TimePeriod3 | TimePeriod5) = " << bn->ReadProbability(nodeName, 3) << endl;
+			myfile << "Clearing the bayesian network" << endl;
+			bn->ClearEvidence();
+			bn->UpdateBeliefs();
+			myfile << "p(TimePeriod5) = " << bn->ReadProbability(nodeName, 5) << endl;
+			nodeName = "TimePeriod";
+			bn->SetEvidence(nodeName, 11);
+			bn->UpdateBeliefs();
+			nodeName = "Dragoon";
+			myfile << "p(Dragoon.present | TimePeriod12) = " << bn->ReadProbability(nodeName, 1) << endl;
+			nodeName = "Assimilator";
+			bn->SetEvidence(nodeName, 1);
+			bn->UpdateBeliefs();
+			nodeName = "Dragoon";
+			myfile << "p(Dragoon.present | TimePeriod12, Assimilator.present) = " << bn->ReadProbability(nodeName, 1) << endl;
 
 			myfile.close();
 

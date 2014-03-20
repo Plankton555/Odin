@@ -311,34 +311,33 @@ void ReplayModule::onFrame()
 
 void ReplayModule::onEnd(bool isWinner)
 {
+	std::string filename = Broodwar->mapFileName();
+	std::string pathname = Broodwar->mapPathName();
+	std::string folder = pathname.substr(0, pathname.size()-filename.size());
+
 	//Replay has ended. Save data to database here
 	if(!gameSeen)
 	{
 		if(!zergUnits.empty())
 		{
-			writeToFile("replaydatastuff/zerg.txt", zergUnits, zergUnitsAll);
+			writeToFile((folder+"zerg.txt").c_str(), zergUnits, zergUnitsAll);
 		}
 	
 		if(!protossUnitsp1.empty())
 		{
-			writeToFile("replaydatastuff/protoss.txt", protossUnitsp1, protossUnitsAll);
+			writeToFile((folder+"protoss.txt").c_str(), protossUnitsp1, protossUnitsAll);
 		}
 
 		if(!protossUnitsp2.empty())
 		{
-			writeToFile("replaydatastuff/protoss.txt", protossUnitsp2, protossUnitsAll);
+			writeToFile((folder+"protoss.txt").c_str(), protossUnitsp2, protossUnitsAll);
 		}
 	
 		if(!terranUnits.empty())
 		{
-			writeToFile("replaydatastuff/terran.txt", terranUnits, terranUnitsAll);
+			writeToFile((folder+"terran.txt").c_str(), terranUnits, terranUnitsAll);
 		}
 	}
-
-		string filename = Broodwar->mapFileName();
-	string pathname = Broodwar->mapPathName();
-	string folder;
-	folder = pathname.substr(0, pathname.size()-filename.size());
 
 	//Count seen replays
 	string line;
@@ -368,7 +367,7 @@ void ReplayModule::onEnd(bool isWinner)
 
 }
 
-void ReplayModule::writeToFile(char* file, std::map<const char*,std::list<int>*> stuffToWrite, std::map<const char*,int> unitList)
+void ReplayModule::writeToFile(const char* file, std::map<const char*,std::list<int>*> stuffToWrite, std::map<const char*,int> unitList)
 {
 	myfile.open (file, std::ios::app);
 	

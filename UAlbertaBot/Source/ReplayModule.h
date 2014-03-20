@@ -33,7 +33,7 @@ private:
 	bool gameSeen;
 	int replayLength;
 
-	void writeToFile(char* file, std::map<const char*,std::list<int>*> stuffToWrite, std::map<const char*,int> unitList);
+	void writeToFile(const char* file, std::map<const char*,std::list<int>*> stuffToWrite, std::map<const char*,int> unitList);
 	void createMaps();
 
 	static BWAPI::Player* ReplayModule::enemy;

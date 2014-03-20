@@ -5,6 +5,7 @@ BayesianNet::BayesianNet()
 	ofstream myfile("bnet_debug.txt", ios::app);
 	myfile << "In constructor of BayesianNet" << endl;
 	myfile.close();
+	solution = NULL;
 }
 
 BayesianNet::~BayesianNet()
@@ -148,6 +149,11 @@ double BayesianNet::ReadProbability(const std::string &nodeName, int nodeState)
 
 void BayesianNet::UpdateBeliefs()
 {
+	ofstream myfile("bnet_debug.txt", ios::app);
+	myfile << "\n\nTrying to update beliefs" << endl;
 	delete solution;
+	myfile << "solution deleted" << endl;
 	solution = new bayesian_network_join_tree(bn, join_tree);
+	myfile << "solution created" << endl;
+	myfile.close();
 }

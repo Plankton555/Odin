@@ -56,6 +56,7 @@ void UAlbertaBotModule::onStart()
 			std::string nodeName = "TimePeriod";
 			myfile << "p(TimePeriod5) = " << bn->ReadProbability(nodeName, 5) << endl;
 			bn->SetEvidence(nodeName, 5);
+			bn->UpdateBeliefs();
 			myfile << "p(TimePeriod5 | TimePeriod5) = " << bn->ReadProbability(nodeName, 5) << endl;
 			myfile << "p(TimePeriod3 | TimePeriod5) = " << bn->ReadProbability(nodeName, 3) << endl;
 

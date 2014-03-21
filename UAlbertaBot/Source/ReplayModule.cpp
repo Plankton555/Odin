@@ -1,13 +1,16 @@
 #include "ReplayModule.h"
 #include <iostream>
 #include <fstream>
+#include <boost\filesystem.hpp>
 
 using namespace BWAPI;
 using namespace std;
 
-ReplayModule::ReplayModule()  {}
-ReplayModule::~ReplayModule() {}
+Player* ReplayModule::player = NULL;
+Player* ReplayModule::enemy = NULL;
 
+ReplayModule::ReplayModule()  { ReplayModule::analyzePlayers(); }
+ReplayModule::~ReplayModule() {}
 
 
 void ReplayModule::createMaps()
@@ -110,6 +113,7 @@ void ReplayModule::createMaps()
 void ReplayModule::onStart()
 {
 	ReplayModule::createMaps();
+
 	//Print Hello
 	string filename = Broodwar->mapFileName();
 	string pathname = Broodwar->mapPathName();
@@ -131,6 +135,7 @@ void ReplayModule::onStart()
 				Broodwar->printf("This replay has already been seen.");
 				gameSeen = true;
 				Broodwar->leaveGame();
+				return;
 			}
 		}
 		myfile.close();
@@ -151,6 +156,17 @@ void ReplayModule::onStart()
 
 void ReplayModule::onFrame()
 {
+	if (Options::Debug::DRAW_UALBERTABOT_DEBUG) 
+	{
+		/* Doesn't seem to be possible to get size from the Game itself. */
+		int width = 640;
+		int height = 480;
+		int x = width - 200;
+		int y = 25;
+
+		ReplayModule::drawUnitInformation(x, y);
+	} 
+
 	//Check if any morphing buildigns is completed
 	std::list<Unit*>::iterator it;
 	for(it=morphingBuildings.begin(); it!=morphingBuildings.end();)
@@ -164,10 +180,16 @@ void ReplayModule::onFrame()
 				{	
 					const char* temp = (*it)->getType().c_str() + 5;
 					zergUnits.insert(std::map<const char*,int>::value_type (temp,Broodwar->getFrameCount()));
-				}else if((*it)->getType().getRace()==Races::Protoss)
+				}else if((*it)->getType().getRace()==Races::Protoss&&getEnemy()->getRace() == BWAPI::Races::Protoss)
 				{	
 					const char* temp = (*it)->getType().c_str() + 8;
-					protossUnits.insert(std::map<const char*,int>::value_type (temp,Broodwar->getFrameCount()));
+					if((*it)->getPlayer() == getPlayer())
+					{
+						protossUnitsp1.insert(std::map<const char*,int>::value_type (temp,Broodwar->getFrameCount()));
+					}else
+					{
+						protossUnitsp2.insert(std::map<const char*,int>::value_type (temp,Broodwar->getFrameCount()));
+					}
 				}else if((*it)->getType().getRace()==Races::Terran)
 				{	
 					const char* temp = (*it)->getType().c_str() + 7;
@@ -192,15 +214,51 @@ void ReplayModule::onEnd(bool isWinner)
 			writeToFile("replaydatastuff/zerg.txt", zergUnits, zergUnitsAll);
 		}
 	
-		if(!protossUnits.empty())
+		if(!protossUnitsp1.empty())
 		{
-			writeToFile("replaydatastuff/protoss.txt", protossUnits, protossUnitsAll);
+			writeToFile("replaydatastuff/protoss.txt", protossUnitsp1, protossUnitsAll);
+		}
+
+		if(!protossUnitsp2.empty())
+		{
+			writeToFile("replaydatastuff/protoss.txt", protossUnitsp2, protossUnitsAll);
 		}
 	
 		if(!terranUnits.empty())
 		{
 			writeToFile("replaydatastuff/terran.txt", terranUnits, terranUnitsAll);
 		}
+	}
+
+		string filename = Broodwar->mapFileName();
+	string pathname = Broodwar->mapPathName();
+	string folder;
+	folder = pathname.substr(0, pathname.size()-filename.size());
+
+	//Count seen replays
+	string line;
+	int nrFiles = 0;
+	ifstream myfile ((folder + "seen.txt").c_str());
+	if (myfile.is_open()) {
+		while (getline(myfile,line)) {
+			nrFiles++;
+		}
+		myfile.close();
+	} else {
+		Broodwar->printf("Unable to open file.");
+	}
+
+	int nrFilesInFolder = 0;
+	//Get how many replays there are in total
+	for(boost::filesystem::directory_iterator it(folder); it != boost::filesystem::directory_iterator(); ++it)
+	{
+		nrFilesInFolder++;
+	}
+
+	//If seen all, then exit
+	if (nrFiles == nrFilesInFolder-1)
+	{
+		exit(0);
 	}
 
 }
@@ -283,10 +341,16 @@ void ReplayModule::onUnitMorph(BWAPI::Unit * unit)
 				const char* temp = unit->getType().c_str() + 5;
 				zergUnits.insert(std::map<const char*,int>::value_type (temp,Broodwar->getFrameCount()));
 			}
-		}else if(unit->getType().getRace()==Races::Protoss)
+		}else if(unit->getType().getRace()==Races::Protoss&&getEnemy()->getRace() == BWAPI::Races::Protoss)
 		{	
 			const char* temp = unit->getType().c_str() + 8;
-			protossUnits.insert(std::map<const char*,int>::value_type (temp,Broodwar->getFrameCount()));
+			if(unit->getPlayer() == getPlayer())
+			{
+				protossUnitsp1.insert(std::map<const char*,int>::value_type (temp,Broodwar->getFrameCount()));
+			}else
+			{
+				protossUnitsp2.insert(std::map<const char*,int>::value_type (temp,Broodwar->getFrameCount()));
+			}
 		}	
 	}
 }
@@ -301,13 +365,20 @@ void ReplayModule::onUnitCreate(BWAPI::Unit * unit)
 }
 
 void ReplayModule::onUnitComplete(BWAPI::Unit * unit)
-{
+{	
+
+	Player* enemy = getEnemy();
 	//Broodwar->printf("%s was created at time (%d)", unit->getType().c_str(), unit->getType().getID()); 
-	if(unit->getType().getRace()==Races::Protoss)
+	if(unit->getType().getRace()==Races::Protoss&&enemy->getRace() == BWAPI::Races::Protoss)
 	{	
 		const char* temp = unit->getType().c_str() + 8;
-
-		protossUnits.insert(std::map<const char*,int>::value_type (temp,Broodwar->getFrameCount()));
+		if(unit->getPlayer() == getPlayer())
+		{
+			protossUnitsp1.insert(std::map<const char*,int>::value_type (temp,Broodwar->getFrameCount()));
+		}else
+		{
+			protossUnitsp2.insert(std::map<const char*,int>::value_type (temp,Broodwar->getFrameCount()));
+		}
 	}else if (unit->getType().getRace()==Races::Terran)
 	{	
 		const char* temp = unit->getType().c_str() + 7;
@@ -316,3 +387,74 @@ void ReplayModule::onUnitComplete(BWAPI::Unit * unit)
 	}
 }
 
+/* Displays unit count and predictions during replays. */
+void ReplayModule::drawUnitInformation(int x, int y) {
+	if (!Options::Debug::DRAW_UALBERTABOT_DEBUG) return;
+
+	BWAPI::Broodwar->drawTextScreen(x, y+20, "\x04UNIT NAME");
+	BWAPI::Broodwar->drawTextScreen(x+140, y+20, "\x04#");
+	BWAPI::Broodwar->drawTextScreen(x+160, y+20, "\x04X");
+	BWAPI::Broodwar->drawTextScreen(x+180, y+20, "\x04->");
+
+	int yspace = 0;
+	std::string prefix = "\x04";
+
+	Player* enemy = getEnemy();
+	if (enemy == NULL)	return;
+
+	BWAPI::Broodwar->drawTextScreen(x, y, "\x04 Enemy Unit Information: %s", enemy->getRace().getName().c_str());
+	BWAPI::Broodwar->setTextSize(0);
+
+	std::set<Unit*> enemyUnitData = enemy->getUnits();
+	BOOST_FOREACH (BWAPI::UnitType t, BWAPI::UnitTypes::allUnitTypes()) 
+	{
+		int numUnits = enemy->completedUnitCount(t); 
+		int numDeadUnits = enemy->deadUnitCount(t);
+		int numPredictedUnits = 0;
+		
+		// if there exist units in the vector
+		if (t.getRace() == enemy->getRace() && !t.isHero()) 
+		{
+			if (t.isDetector())			{ prefix = "\x10"; }		
+			else if (t.canAttack())		{ prefix = "\x08"; }		
+			else if (t.isBuilding())	{ prefix = "\x03"; }
+			else						{ prefix = "\x04"; }
+			
+			BWAPI::Broodwar->drawTextScreen(x, y+40+((yspace)*10), "%s%s", prefix.c_str(), t.getName().c_str());
+			BWAPI::Broodwar->drawTextScreen(x+140, y+40+((yspace)*10), "%s%d", prefix.c_str(), numUnits);
+			BWAPI::Broodwar->drawTextScreen(x+160, y+40+((yspace)*10), "%s%d", prefix.c_str(), numDeadUnits);
+			BWAPI::Broodwar->drawTextScreen(x+180, y+40+((yspace++)*10), "%s%d", prefix.c_str(), numPredictedUnits);
+		}
+	}
+}
+
+void ReplayModule::analyzePlayers(void) {
+	/* Loop over all players. */
+	std::set<Player*> allPlayers = Broodwar->getPlayers();
+	std::set<Player*>::iterator it;
+	bool foundProtoss = false;
+	for (it = allPlayers.begin(); it != allPlayers.end(); ++it)
+	{
+		Player* p = *it; 
+		if (p->isObserver() || p->isNeutral())	continue;
+		if (p->getRace() == BWAPI::Races::Protoss && !foundProtoss ) {
+			player = p;
+			foundProtoss = true; 
+			continue; 
+		}
+
+		enemy = p;
+	}
+
+}
+
+
+Player* ReplayModule::getEnemy() {
+	if (!ReplayModule::enemy)	ReplayModule::analyzePlayers();
+	return ReplayModule::enemy;
+}
+
+Player* ReplayModule::getPlayer() {
+	if (!ReplayModule::player)	ReplayModule::analyzePlayers();
+	return ReplayModule::player;
+}

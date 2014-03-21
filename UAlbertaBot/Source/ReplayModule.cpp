@@ -133,24 +133,16 @@ void ReplayModule::createMaps()
 	//Player
 	std::map<const char*,int> *unitsAll;
 	std::map<const char*,std::list<int>*>* currentUnits;
-	if (getPlayer()->getRace() == Races::Protoss)
+	std::map<const char*,int>::iterator it;
+	if (getPlayer()->getRace() == Races::Protoss && getEnemy()->getRace() == Races::Protoss)
 	{
 		unitsAll = &protossUnitsAll;
 		currentUnits = &protossUnitsp1;
-	} else if (getPlayer()->getRace() == Races::Terran)
-	{
-		unitsAll = &terranUnitsAll;
-		currentUnits = &terranUnits;
-	}else if (getPlayer()->getRace() == Races::Zerg)
-	{
-		unitsAll = &zergUnitsAll;
-		currentUnits = &zergUnits;
-	}
 
-	std::map<const char*,int>::iterator it;
-	for(it=unitsAll->begin(); it!=unitsAll->end(); it++)
-	{
-		(*currentUnits)[it->first] = new std::list<int>;
+		for(it=unitsAll->begin(); it!=unitsAll->end(); it++)
+		{
+			(*currentUnits)[it->first] = new std::list<int>;
+		}
 	}
 
 	//Enemy
@@ -239,27 +231,19 @@ void ReplayModule::onFrame()
 		//Update player
 		std::string race;
 		std::map<const char*,std::list<int>*>* currentUnits;
-		if (getPlayer()->getRace() == Races::Protoss)
+		std::map<const char*, std::list<int>*>::iterator it;
+		if (getPlayer()->getRace() == Races::Protoss && getEnemy()->getRace() == Races::Protoss)
 		{
 			currentUnits = &protossUnitsp1;
 			race = "Protoss ";
-		} else if (getPlayer()->getRace() == Races::Terran)
-		{
-			currentUnits = &terranUnits;
-			race = "Terran ";
-		}else if (getPlayer()->getRace() == Races::Zerg)
-		{
-			currentUnits = &zergUnits;
-			race = "Zerg ";
-		}
-	
-		std::map<const char*, std::list<int>*>::iterator it;
-		for (it=currentUnits->begin(); it!=currentUnits->end(); it++)
-		{
-			std::string unitName = race;
-			unitName.append(it->first);
-			int nrUnits = player->completedUnitCount(BWAPI::UnitTypes::getUnitType(unitName));
-			it->second->push_back(nrUnits);
+
+			for (it=currentUnits->begin(); it!=currentUnits->end(); it++)
+			{
+				std::string unitName = race;
+				unitName.append(it->first);
+				int nrUnits = player->completedUnitCount(BWAPI::UnitTypes::getUnitType(unitName));
+				it->second->push_back(nrUnits);
+			}
 		}
 
 		//Update enemy

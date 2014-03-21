@@ -279,6 +279,7 @@ bool GameCommander::isValidUnit(BWAPI::Unit * unit)
 
 void GameCommander::onUnitShow(BWAPI::Unit * unit)			
 { 
+	StrategyManager::Instance().onUnitShow(unit);
 	InformationManager::Instance().onUnitShow(unit); 
 	WorkerManager::Instance().onUnitShow(unit);
 }

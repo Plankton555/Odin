@@ -1,4 +1,5 @@
-Timeperiod,Pylon,Gateway,Assimilator,CyberCore,CitadelOfAdun,Forge,PhotonCannon,Stargate,RoboticsFacility,RoboticsSupportBay,Observatory,ArbiterTribunal,TemplarArchives,FleetBeacon,ShieldBattery,Zealot,Dragoon,DarkTemplar,HighTemplar,Archon,DarkArchon,Reaver,Scout,Corsair,Arbiter,Carrier,Observer,Shuttleperiod1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+Timeperiod,Pylon,Gateway,Assimilator,CyberCore,CitadelOfAdun,Forge,PhotonCannon,Stargate,RoboticsFacility,RoboticsSupportBay,Observatory,ArbiterTribunal,TemplarArchives,FleetBeacon,ShieldBattery,Zealot,Dragoon,DarkTemplar,HighTemplar,Archon,DarkArchon,Reaver,Scout,Corsair,Arbiter,Carrier,Observer,Shuttle
+period1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 period2,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 period3,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 period4,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0

@@ -275,7 +275,7 @@ void ReplayModule::onEnd(bool isWinner)
 {
 	std::string filename = Broodwar->mapFileName();
 	std::string pathname = Broodwar->mapPathName();
-	std::string folder = pathname.substr(0, pathname.size()-filename.size());
+	std::string folder = "replaydatastuff/";
 
 	//Replay has ended. Save data to database here
 	if(!gameSeen)
@@ -300,6 +300,7 @@ void ReplayModule::onEnd(bool isWinner)
 			writeToFile((folder+"terran.txt").c_str(), terranUnits, terranUnitsAll);
 		}
 	}
+	folder = pathname.substr(0, pathname.size()-filename.size());
 
 	//Count seen replays
 	string line;

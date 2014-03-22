@@ -6,6 +6,9 @@
 
 class ScoutManager {
 
+	BWAPI::Position*	circling;
+	bool			circlingOpposite;
+	bool			circlingDone;
 	BWAPI::Unit *	workerScout;
 	int				numWorkerScouts;
 
@@ -29,7 +32,7 @@ class ScoutManager {
 public:
 
 	ScoutManager();
-	~ScoutManager() {};
+	~ScoutManager() { if(circling != NULL) delete circling; };
 
 	void update(const std::set<BWAPI::Unit *> & scoutUnits);
 	void moveScouts();

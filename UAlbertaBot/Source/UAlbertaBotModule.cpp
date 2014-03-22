@@ -20,6 +20,8 @@
 
 #include "Common.h"
 #include "UAlbertaBotModule.h"
+#include "DataModule.h"
+#include "BayesianNet.h"
 
 
 BWAPI::AIModule * __NewAIModule()
@@ -32,6 +34,7 @@ UAlbertaBotModule::~UAlbertaBotModule() {}
 
 void UAlbertaBotModule::onStart()
 {	
+	DataModule::init();
 
 	if(BWAPI::Broodwar->isReplay()){
 
@@ -46,9 +49,47 @@ void UAlbertaBotModule::onStart()
 		replayModule.onStart();
 
 	}else{
+		//Importing bayesian network
+		try {
+			ofstream myfile("bnet_debug.txt", ios::app);
+			myfile << "Starting to parse bayesian network" << endl;
+			BNetParser parser;
+			myfile << "parser created" << endl;
+			dlib::parse_xml("testNet.xdsl", parser);
+			myfile << "file parsed" << endl;
+			BayesianNet *bn = parser.getBayesianNet();
+			myfile << "bayesian network retreived" << endl;
+			bn->UpdateBeliefs();
+			std::string nodeName = "TimePeriod";
+			myfile << "p(TimePeriod5) = " << bn->ReadProbability(nodeName, 5) << endl;
+			bn->SetEvidence(nodeName, 5);
+			bn->UpdateBeliefs();
+			myfile << "p(TimePeriod5 | TimePeriod5) = " << bn->ReadProbability(nodeName, 5) << endl;
+			myfile << "p(TimePeriod3 | TimePeriod5) = " << bn->ReadProbability(nodeName, 3) << endl;
+			myfile << "Clearing the bayesian network" << endl;
+			bn->ClearEvidence();
+			bn->UpdateBeliefs();
+			myfile << "p(TimePeriod5) = " << bn->ReadProbability(nodeName, 5) << endl;
+			nodeName = "TimePeriod";
+			bn->SetEvidence(nodeName, 11);
+			bn->UpdateBeliefs();
+			nodeName = "Dragoon";
+			myfile << "p(Dragoon.present | TimePeriod12) = " << bn->ReadProbability(nodeName, 1) << endl;
+			nodeName = "Assimilator";
+			bn->SetEvidence(nodeName, 1);
+			bn->UpdateBeliefs();
+			nodeName = "Dragoon";
+			myfile << "p(Dragoon.present | TimePeriod12, Assimilator.present) = " << bn->ReadProbability(nodeName, 1) << endl;
+
+			myfile.close();
+
+		}
+		catch (std::exception& e) {
+			BWAPI::Broodwar->printf(e.what());
+		}
+
 
 		BWAPI::Broodwar->printf("Hello, my name is Odin!");
-
 		Logger::Instance().log("Hello, my name is Odin2!\n");
 
 		//BWAPI::Broodwar->setLocalSpeed(100);
@@ -124,6 +165,7 @@ void UAlbertaBotModule::onEnd(bool isWinner)
 			ProductionManager::Instance().onGameEnd();
 		}	
 	}
+	DataModule::destroy();
 }
 
 void UAlbertaBotModule::onFrame()

@@ -6,6 +6,9 @@
 
 class ScoutManager {
 
+	BWAPI::Position*	circling;
+	bool			circlingOpposite;
+	bool			circlingDone;
 	BWAPI::Unit *	workerScout;
 	int				numWorkerScouts;
 

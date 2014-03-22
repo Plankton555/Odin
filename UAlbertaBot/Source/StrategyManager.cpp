@@ -7,7 +7,7 @@ StrategyManager::StrategyManager()
 	, currentStrategy(0)
 	, selfRace(BWAPI::Broodwar->self()->getRace())
 	, enemyRace(BWAPI::Broodwar->enemy()->getRace())
-//	, bayesianNet(NULL)
+	, bayesianNet(NULL)
 {
 	loadBayesianNetwork();
 	addStrategies();
@@ -23,21 +23,24 @@ StrategyManager & StrategyManager::Instance()
 
 void StrategyManager::onUnitShow(BWAPI::Unit * unit)
 {
-	loadBayesianNetwork();
+	if (enemyRace == BWAPI::Races::Unknown || enemyRace == BWAPI::Races::Random) //Don't really know which one it is set as, but it doens't matter
+	{
+		enemyRace = BWAPI::Broodwar->enemy()->getRace();
+		loadBayesianNetwork();
+	}
 }
 
 void StrategyManager::loadBayesianNetwork()
 {
-	/*
 	if (!bayesianNet)
 	{
-		
 		if (enemyRace ==  BWAPI::Races::Protoss)
 		{
 			BNetParser parser;
 			dlib::parse_xml("odin/protoss.xdsl", parser);
 			BayesianNet *bn = parser.getBayesianNet();
 			bn->UpdateBeliefs();
+			BWAPI::Broodwar->printf("Enemy race identified as Protoss. Bayesian Network loaded.");
 		}
 		else if (enemyRace ==  BWAPI::Races::Terran)
 		{
@@ -45,20 +48,17 @@ void StrategyManager::loadBayesianNetwork()
 			dlib::parse_xml("odin/terran.xdsl", parser);
 			BayesianNet *bn = parser.getBayesianNet();
 			bn->UpdateBeliefs();
+			BWAPI::Broodwar->printf("Enemy race identified as Terran. Bayesian Network loaded.");
 		}
-		else if (enemyRace == BWAPI::Races::Zerg)
+			else if (enemyRace == BWAPI::Races::Zerg)
 		{
 			BNetParser parser;
 			dlib::parse_xml("odin/zerg.xdsl", parser);
 			BayesianNet *bn = parser.getBayesianNet();
 			bn->UpdateBeliefs();
-		}
-		else
-		{
-			BWAPI::Broodwar->printf("Enemy race is unknown: Bayesian Network not yet loaded");
+			BWAPI::Broodwar->printf("Enemy race identified as Zerg. Bayesian Network loaded.");
 		}
 	}
-	*/
 }
 
 void StrategyManager::addStrategies() 

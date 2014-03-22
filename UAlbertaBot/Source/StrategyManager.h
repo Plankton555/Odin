@@ -7,7 +7,7 @@
 #include "base/WorkerManager.h"
 #include "base/StarcraftBuildOrderSearchManager.h"
 #include "BayesianNet.h"
-#include "BNetParser.h"
+//#include "BNetParser.h"
 #include <sys/stat.h>
 #include <cstdlib>
 
@@ -22,7 +22,7 @@ class StrategyManager
 	StrategyManager();
 	~StrategyManager() {}
 
-	BayesianNet*				bayesianNet;
+	//BayesianNet*				bayesianNet;
 
 	std::vector<std::string>	protossOpeningBook;
 	std::vector<std::string>	terranOpeningBook;

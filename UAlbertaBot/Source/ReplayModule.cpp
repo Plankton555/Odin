@@ -1,4 +1,5 @@
 #include "ReplayModule.h"
+#include "FuzzyModule.h"
 #include <iostream>
 #include <fstream>
 #include <boost\filesystem.hpp>
@@ -10,7 +11,27 @@ Player* ReplayModule::player = NULL;
 Player* ReplayModule::enemy = NULL;
 
 ReplayModule::ReplayModule()  { ReplayModule::analyzePlayers(); }
-ReplayModule::~ReplayModule() {}
+ReplayModule::~ReplayModule()
+{
+	//Delete the lists in the maps
+	std::map<const char*,list<int>*>::iterator it;
+	for(it=zergUnits.begin(); it!=zergUnits.end(); it++)
+	{
+		delete it->second;
+	}
+	for(it=terranUnits.begin(); it!=terranUnits.end(); it++)
+	{
+		delete it->second;
+	}
+	for(it=protossUnitsp1.begin(); it!=protossUnitsp1.end(); it++)
+	{
+		delete it->second;
+	}
+	for(it=protossUnitsp2.begin(); it!=protossUnitsp2.end(); it++)
+	{
+		delete it->second;
+	}
+}
 
 
 void ReplayModule::createMaps()
@@ -107,6 +128,42 @@ void ReplayModule::createMaps()
 	zergUnitsAll["Queen"] = 24;
 	zergUnitsAll["Guardian"] = 25;
 	zergUnitsAll["Devourer"] = 26;
+	
+
+	//Player
+	std::map<const char*,int> *unitsAll;
+	std::map<const char*,std::list<int>*>* currentUnits;
+	std::map<const char*,int>::iterator it;
+	if (getPlayer()->getRace() == Races::Protoss && getEnemy()->getRace() == Races::Protoss)
+	{
+		unitsAll = &protossUnitsAll;
+		currentUnits = &protossUnitsp1;
+
+		for(it=unitsAll->begin(); it!=unitsAll->end(); it++)
+		{
+			(*currentUnits)[it->first] = new std::list<int>;
+		}
+	}
+
+	//Enemy
+	if (getEnemy()->getRace() == Races::Protoss)
+	{
+		unitsAll = &protossUnitsAll;
+		currentUnits = &protossUnitsp2;
+	} else if (getEnemy()->getRace() == Races::Terran)
+	{
+		unitsAll = &terranUnitsAll;
+		currentUnits = &terranUnits;
+	}else if (getEnemy()->getRace() == Races::Zerg)
+	{
+		unitsAll = &zergUnitsAll;
+		currentUnits = &zergUnits;
+	}
+
+	for(it=unitsAll->begin(); it!=unitsAll->end(); it++)
+	{
+		(*currentUnits)[it->first] = new std::list<int>;
+	}
 
 }
 
@@ -165,74 +222,84 @@ void ReplayModule::onFrame()
 		int y = 25;
 
 		ReplayModule::drawUnitInformation(x, y);
-	} 
+	}
 
-	//Check if any morphing buildigns is completed
-	std::list<Unit*>::iterator it;
-	for(it=morphingBuildings.begin(); it!=morphingBuildings.end();)
-	{	if((*it)->isCompleted())
+
+	//Update nr of units
+	if (Broodwar->getFrameCount()%1000 == 999) //Only update every 1000 frames
+	{
+		//Update player
+		std::string race;
+		std::map<const char*,std::list<int>*>* currentUnits;
+		std::map<const char*, std::list<int>*>::iterator it;
+		if (getPlayer()->getRace() == Races::Protoss && getEnemy()->getRace() == Races::Protoss)
 		{
-			//Broodwar->printf("%s was morphed at time (%d)", (*it)->getType().c_str(), Broodwar->getFrameCount()); //Used for debugging
-			
-			if(zergUnits.count((*it)->getType().c_str())==0)
+			currentUnits = &protossUnitsp1;
+			race = "Protoss ";
+
+			for (it=currentUnits->begin(); it!=currentUnits->end(); it++)
 			{
-				if((*it)->getType().getRace()==Races::Zerg)
-				{	
-					const char* temp = (*it)->getType().c_str() + 5;
-					zergUnits.insert(std::map<const char*,int>::value_type (temp,Broodwar->getFrameCount()));
-				}else if((*it)->getType().getRace()==Races::Protoss&&getEnemy()->getRace() == BWAPI::Races::Protoss)
-				{	
-					const char* temp = (*it)->getType().c_str() + 8;
-					if((*it)->getPlayer() == getPlayer())
-					{
-						protossUnitsp1.insert(std::map<const char*,int>::value_type (temp,Broodwar->getFrameCount()));
-					}else
-					{
-						protossUnitsp2.insert(std::map<const char*,int>::value_type (temp,Broodwar->getFrameCount()));
-					}
-				}else if((*it)->getType().getRace()==Races::Terran)
-				{	
-					const char* temp = (*it)->getType().c_str() + 7;
-					terranUnits.insert(std::map<const char*,int>::value_type (temp,Broodwar->getFrameCount()));
-				}		
+				std::string unitName = race;
+				unitName.append(it->first);
+				int nrUnits = player->completedUnitCount(BWAPI::UnitTypes::getUnitType(unitName));
+				it->second->push_back(nrUnits);
 			}
-			it = morphingBuildings.erase(it);
-		}else
+		}
+
+		//Update enemy
+		if (getEnemy()->getRace() == Races::Protoss)
 		{
-			 it++;
+			currentUnits = &protossUnitsp2;
+			race = "Protoss ";
+		} else if (getEnemy()->getRace() == Races::Terran)
+		{
+			currentUnits = &terranUnits;
+			race = "Terran ";
+		}else if (getEnemy()->getRace() == Races::Zerg)
+		{
+			currentUnits = &zergUnits;
+			race = "Zerg ";
+		}
+	
+		for (it=currentUnits->begin(); it!=currentUnits->end(); it++)
+		{
+			std::string unitName = race;
+			unitName.append(it->first);
+			int nrUnits = enemy->completedUnitCount(BWAPI::UnitTypes::getUnitType(unitName));
+			it->second->push_back(nrUnits);
 		}
 	}
 }
 
 void ReplayModule::onEnd(bool isWinner)
 {
+	std::string filename = Broodwar->mapFileName();
+	std::string pathname = Broodwar->mapPathName();
+	std::string folder = "replaydatastuff/";
+
 	//Replay has ended. Save data to database here
 	if(!gameSeen)
 	{
 		if(!zergUnits.empty())
 		{
-			writeToFile("replaydatastuff/zerg.txt", zergUnits, zergUnitsAll);
+			writeToFile((folder+"zerg.txt").c_str(), zergUnits, zergUnitsAll);
 		}
 	
 		if(!protossUnitsp1.empty())
 		{
-			writeToFile("replaydatastuff/protoss.txt", protossUnitsp1, protossUnitsAll);
+			writeToFile((folder+"protoss.txt").c_str(), protossUnitsp1, protossUnitsAll);
 		}
 
 		if(!protossUnitsp2.empty())
 		{
-			writeToFile("replaydatastuff/protoss.txt", protossUnitsp2, protossUnitsAll);
+			writeToFile((folder+"protoss.txt").c_str(), protossUnitsp2, protossUnitsAll);
 		}
 	
 		if(!terranUnits.empty())
 		{
-			writeToFile("replaydatastuff/terran.txt", terranUnits, terranUnitsAll);
+			writeToFile((folder+"terran.txt").c_str(), terranUnits, terranUnitsAll);
 		}
 	}
-
-		string filename = Broodwar->mapFileName();
-	string pathname = Broodwar->mapPathName();
-	string folder;
 	folder = pathname.substr(0, pathname.size()-filename.size());
 
 	//Count seen replays
@@ -263,58 +330,59 @@ void ReplayModule::onEnd(bool isWinner)
 
 }
 
-void ReplayModule::writeToFile(char* file, std::map<const char*,int> stuffToWrite, std::map<const char*,int> unitList)
+void ReplayModule::writeToFile(const char* file, std::map<const char*,std::list<int>*> stuffToWrite, std::map<const char*,int> unitList)
 {
 	myfile.open (file, std::ios::app);
 	
-	
-	std::vector<int> temp(unitList.size()+1);
-	std::map<const char*,int>::iterator it;
-	for(it=stuffToWrite.begin(); it!=stuffToWrite.end();)
-	{				 
-		
+	int timePeriod = 1;
+	std::vector<std::list<int>::iterator> temp(unitList.size());
+	std::vector<const char*> tempNames(unitList.size());
+	std::map<const char*,std::list<int>*>::iterator it;
+	std::list<int>::iterator lastElem;
+
+	//Put the units in the correct order
+	for(it=stuffToWrite.begin(); it!=stuffToWrite.end(); it++) //Every unit
+	{
+		//Find unitID and store an iterator to the list<int> in the vector
 		std::map<const char*,int>::iterator tempIt;
 		for(tempIt=unitList.begin(); tempIt!=unitList.end();)
 		{
 			if(strcmp(tempIt->first ,it->first)==0)
 			{
-				temp.at(tempIt->second) = it->second;
-				//myfile << " in if "<< tempIt->second << " " << it->second << " ";
+				tempNames.at(tempIt->second-1) = it->first;
+				temp.at(tempIt->second-1) = it->second->begin();
+				if (tempIt->second == 1)
+				{
+					lastElem = it->second->end();
+				}
+				break;
 			}
 			tempIt++;
 		}
-		
-		
-		//myfile << it->first <<" " << it->second << "\n";
-		it++;
 	}
 	
-	int nrOfPeriods = replayLength/1000;
-	if(nrOfPeriods>25)
-	{
-		nrOfPeriods = 25;
-	}
-	for(int timePeriod = 1; timePeriod <= nrOfPeriods; timePeriod++)
+	//Actually print units
+	for (std::list<int>::iterator itLoop = temp.at(0); itLoop != lastElem;) //For every timeperiod
 	{
 		myfile << "period" <<timePeriod << ",";
-		
-		for(int i = 1; i < temp.size(); i++)
-		{		
-			if(temp.at(i)>0&&(temp.at(i)/1000<timePeriod||timePeriod==nrOfPeriods))
-			{
-				myfile << 1;
-			}else
-			{
-				myfile << 0;
-			}
+
+		for (int i = 0; i < unitList.size(); i++) //For every unit
+		{
+			int nrEnemies = *(temp.at(i));
+			temp.at(i)++; //Increase iterator
+
+			myfile << FuzzyModule::getFuzzyNr(nrEnemies,tempNames.at(i));
 			if(i<temp.size()-1)
 			{
 				myfile << ",";
 			}
-
 		}
+
 		myfile << "\n";
+		itLoop++;
+		timePeriod++;
 	}
+
 	myfile.close();
 }
 
@@ -326,65 +394,21 @@ void ReplayModule::onUnitDestroy(BWAPI::Unit * unit)
 
 void ReplayModule::onUnitMorph(BWAPI::Unit * unit)
 {	
-	
-	if(unit->getType().isBuilding())
-	{
-		morphingBuildings.push_front(unit);
-
-	}else
-	{
-		//Broodwar->printf("%s was morphed at time (%d)", unit->getType().c_str(), Broodwar->getFrameCount()); //Used for debugging
-		if(unit->getType().getRace()==Races::Zerg)
-		{
-			if(zergUnits.count(unit->getType().c_str())==0)
-			{	
-				const char* temp = unit->getType().c_str() + 5;
-				zergUnits.insert(std::map<const char*,int>::value_type (temp,Broodwar->getFrameCount()));
-			}
-		}else if(unit->getType().getRace()==Races::Protoss&&getEnemy()->getRace() == BWAPI::Races::Protoss)
-		{	
-			const char* temp = unit->getType().c_str() + 8;
-			if(unit->getPlayer() == getPlayer())
-			{
-				protossUnitsp1.insert(std::map<const char*,int>::value_type (temp,Broodwar->getFrameCount()));
-			}else
-			{
-				protossUnitsp2.insert(std::map<const char*,int>::value_type (temp,Broodwar->getFrameCount()));
-			}
-		}	
-	}
+	//Not needed yet	
 }
 
 void ReplayModule::onUnitRenegade(BWAPI::Unit * unit)
 {
-	morphingBuildings.push_front(unit);
+	//Not needed yet
 }
 void ReplayModule::onUnitCreate(BWAPI::Unit * unit)
 {
-	
+	//Not needed yet
 }
 
 void ReplayModule::onUnitComplete(BWAPI::Unit * unit)
 {	
-
-	Player* enemy = getEnemy();
-	//Broodwar->printf("%s was created at time (%d)", unit->getType().c_str(), unit->getType().getID()); 
-	if(unit->getType().getRace()==Races::Protoss&&enemy->getRace() == BWAPI::Races::Protoss)
-	{	
-		const char* temp = unit->getType().c_str() + 8;
-		if(unit->getPlayer() == getPlayer())
-		{
-			protossUnitsp1.insert(std::map<const char*,int>::value_type (temp,Broodwar->getFrameCount()));
-		}else
-		{
-			protossUnitsp2.insert(std::map<const char*,int>::value_type (temp,Broodwar->getFrameCount()));
-		}
-	}else if (unit->getType().getRace()==Races::Terran)
-	{	
-		const char* temp = unit->getType().c_str() + 7;
-
-		terranUnits.insert(std::map<const char*,int>::value_type (temp,Broodwar->getFrameCount()));
-	}
+	//Not needed yet
 }
 
 /* Displays unit count and predictions during replays. */

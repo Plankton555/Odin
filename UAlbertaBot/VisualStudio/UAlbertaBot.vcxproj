@@ -117,6 +117,8 @@
     <ClCompile Include="..\Source\ParsedNode.cpp" />
     <ClCompile Include="..\Source\BNetParser.cpp" />
     <ClCompile Include="..\Source\CombatSimulation.cpp" />
+    <ClCompile Include="..\Source\DataModule.cpp" />
+    <ClCompile Include="..\Source\FuzzyModule.cpp" />
     <ClCompile Include="..\Source\MicroSearchManager.cpp" />
     <ClCompile Include="..\Source\base\BuildingData.cpp" />
     <ClCompile Include="..\Source\base\BuildingManager.cpp" />
@@ -162,6 +164,8 @@
     <ClInclude Include="..\Source\ParsedNode.h" />
     <ClInclude Include="..\Source\BNetParser.h" />
     <ClInclude Include="..\Source\CombatSimulation.h" />
+    <ClInclude Include="..\Source\DataModule.h" />
+    <ClInclude Include="..\Source\FuzzyModule.h" />
     <ClInclude Include="..\Source\MicroSearchManager.h" />
     <ClInclude Include="..\Source\base\BuildingData.h" />
     <ClInclude Include="..\Source\base\BuildingManager.h" />

@@ -20,6 +20,7 @@
 
 #include "Common.h"
 #include "UAlbertaBotModule.h"
+#include "DataModule.h"
 #include "BayesianNet.h"
 
 
@@ -32,7 +33,8 @@ UAlbertaBotModule::UAlbertaBotModule()  {}
 UAlbertaBotModule::~UAlbertaBotModule() {}
 
 void UAlbertaBotModule::onStart()
-{
+{	
+	DataModule::init();
 
 	if(BWAPI::Broodwar->isReplay()){
 
@@ -86,10 +88,8 @@ void UAlbertaBotModule::onStart()
 			BWAPI::Broodwar->printf(e.what());
 		}
 
-		// ***
 
 		BWAPI::Broodwar->printf("Hello, my name is Odin!");
-
 		Logger::Instance().log("Hello, my name is Odin2!\n");
 
 		//BWAPI::Broodwar->setLocalSpeed(100);
@@ -165,6 +165,7 @@ void UAlbertaBotModule::onEnd(bool isWinner)
 			ProductionManager::Instance().onGameEnd();
 		}	
 	}
+	DataModule::destroy();
 }
 
 void UAlbertaBotModule::onFrame()

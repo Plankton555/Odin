@@ -15,7 +15,17 @@ class DetectorManager : public MicroManager
 	BWAPI::Unit * unitClosestToEnemy;
 
 	bool detectorsInMain;
+	bool detectorsInNat;
 
+	bool scoutBase(BWAPI::Unit * obs, BWTA::Region * base);
+	bool baseRecentlyScouted(BWTA::Region * base);
+	void scoutOtherBases(BWAPI::Unit * obs);
+	void setDetectorsInBase(BWTA::Region * base);
+	bool detectorInBase(BWTA::Region * base);
+
+	BWTA::Region * getNatBase();
+	BWTA::Region * natBase;
+	BWTA::Region * getMainBase();
 
 public:
 

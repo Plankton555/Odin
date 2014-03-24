@@ -1,0 +1,1 @@
+These nets contain no data from data mining. Just empty networks ready to be filled with data.

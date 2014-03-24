@@ -281,7 +281,7 @@ class StarcraftData {
 	    	{
 	    		for (int h(0); h<NUM_HASHES; ++h)
 	    		{
-	    			hashData[a][n][h] = rand();
+	    			hashData[a][n][h] = std::rand();
 	    		}
 	    	}
 	    }

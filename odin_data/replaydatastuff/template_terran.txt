@@ -1,0 +1,1 @@
+Timeperiod,SupplyDepot,Barracks,Refinery,EngineeringBay,Bunker,Academy,MissileTurret,Factory,Starport,Armory,ScienceFacility,ComsatStation,NuclearSilo,MachineShop,ControlTower,PhysicsLab,CovertOps,Marine,Firebat,Medic,Ghost,Vulture,SpiderMine,SiegeTank,Goliath,Wraith,Dropship,ScienceVessel,Battlecruiser,Valkyrie

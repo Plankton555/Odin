@@ -2,13 +2,14 @@
 #include <iostream>
 #include <fstream>
 #include <stdlib.h>
+#include "Common.h"
 
 #define FUZZY_VALUES_START (1)
 #define FUZZY_VALUES_END (5)
 #define NR_FUZZY_VALUES  (FUZZY_VALUES_END - FUZZY_VALUES_START)
-#define FUZZY_VALUES_FILEPATH ("odin/fuzzy_units.txt")
-#define SPLIT_SYMBOL (",")
-#define COMMENT_CHAR (';')
+const std::string FUZZY_VALUES_FILEPATH = ODIN_DATA_FILEPATH + "fuzzy_units.txt";
+const std::string SPLIT_SYMBOL = ",";
+const char COMMENT_CHAR = ';';
 
 using namespace std;
 
@@ -21,7 +22,7 @@ void DataModule::init()
 	{
 		std::string line;
 		int nrFiles = 0;
-		std::ifstream unitfile (FUZZY_VALUES_FILEPATH);
+		std::ifstream unitfile (FUZZY_VALUES_FILEPATH.c_str());
 		if (unitfile.is_open())
 		{
 			units = new std::map<const char*, int*>;

@@ -27,6 +27,7 @@
 #include "Options.h"
 
 typedef std::vector<BWAPI::Unit*> UnitVector;
+const std::string ODIN_DATA_FILEPATH = "bwapi-data/Odin/odin_data/";
 
 BWAPI::AIModule * __NewAIModule();
 

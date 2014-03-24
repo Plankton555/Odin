@@ -3,9 +3,13 @@
 #include <iostream>
 #include <fstream>
 #include <boost\filesystem.hpp>
+#include "Common.h"
 
 using namespace BWAPI;
 using namespace std;
+
+const std::string SEEN_REPLAYS_PATH = ODIN_DATA_FILEPATH + "seen_replays.txt";
+const std::string REPLAY_DATA_PATH = ODIN_DATA_FILEPATH + "replaydatastuff/";
 
 Player* ReplayModule::player = NULL;
 Player* ReplayModule::enemy = NULL;
@@ -185,7 +189,7 @@ void ReplayModule::onStart()
 	string folder;
 	folder = pathname.substr(0, pathname.size()-filename.size());
 	string line;
-	ifstream myfile ((folder + "seen.txt").c_str());
+	ifstream myfile (SEEN_REPLAYS_PATH.c_str());
 	if (myfile.is_open()) {
 		while (getline(myfile,line)) {
 			if (line.compare(Broodwar->mapFileName()) == 0) {
@@ -201,7 +205,7 @@ void ReplayModule::onStart()
 	}
 
 	//Set this replay as checked if it wasn't already
-	ofstream myfile2 ((folder + "seen.txt").c_str(), ios::app);
+	ofstream myfile2 (SEEN_REPLAYS_PATH.c_str(), ios::app);
 	if (myfile2.is_open())
 	{
 		myfile2 << Broodwar->mapFileName().c_str() << endl;
@@ -273,39 +277,37 @@ void ReplayModule::onFrame()
 
 void ReplayModule::onEnd(bool isWinner)
 {
-	std::string filename = Broodwar->mapFileName();
-	std::string pathname = Broodwar->mapPathName();
-	std::string folder = "replaydatastuff/";
 
 	//Replay has ended. Save data to database here
 	if(!gameSeen)
 	{
 		if(!zergUnits.empty())
 		{
-			writeToFile((folder+"zerg.txt").c_str(), zergUnits, zergUnitsAll);
+			writeToFile((REPLAY_DATA_PATH+"zerg.txt").c_str(), zergUnits, zergUnitsAll);
 		}
 	
 		if(!protossUnitsp1.empty())
 		{
-			writeToFile((folder+"protoss.txt").c_str(), protossUnitsp1, protossUnitsAll);
+			// If PvP, protossUnitsp1 stores the units for player 1
+			writeToFile((REPLAY_DATA_PATH+"protoss.txt").c_str(), protossUnitsp1, protossUnitsAll);
 		}
 
 		if(!protossUnitsp2.empty())
 		{
-			writeToFile((folder+"protoss.txt").c_str(), protossUnitsp2, protossUnitsAll);
+			// If PvP, protossUnitsp2 stores the units for player 2
+			writeToFile((REPLAY_DATA_PATH+"protoss.txt").c_str(), protossUnitsp2, protossUnitsAll);
 		}
 	
 		if(!terranUnits.empty())
 		{
-			writeToFile((folder+"terran.txt").c_str(), terranUnits, terranUnitsAll);
+			writeToFile((REPLAY_DATA_PATH+"terran.txt").c_str(), terranUnits, terranUnitsAll);
 		}
 	}
-	folder = pathname.substr(0, pathname.size()-filename.size());
 
 	//Count seen replays
 	string line;
 	int nrFiles = 0;
-	ifstream myfile ((folder + "seen.txt").c_str());
+	ifstream myfile (SEEN_REPLAYS_PATH.c_str());
 	if (myfile.is_open()) {
 		while (getline(myfile,line)) {
 			nrFiles++;
@@ -317,13 +319,16 @@ void ReplayModule::onEnd(bool isWinner)
 
 	int nrFilesInFolder = 0;
 	//Get how many replays there are in total
-	for(boost::filesystem::directory_iterator it(folder); it != boost::filesystem::directory_iterator(); ++it)
+	std::string filename = Broodwar->mapFileName();
+	std::string pathname = Broodwar->mapPathName();
+	std::string replayFolder = pathname.substr(0, pathname.size()-filename.size()); // directory containing replays
+	for(boost::filesystem::directory_iterator it(replayFolder); it != boost::filesystem::directory_iterator(); ++it)
 	{
 		nrFilesInFolder++;
 	}
 
 	//If seen all, then exit
-	if (nrFiles == nrFilesInFolder-1)
+	if (nrFiles == nrFilesInFolder)
 	{
 		exit(0);
 	}

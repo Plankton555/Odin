@@ -1,6 +1,9 @@
 #include "Common.h"
 #include "StrategyManager.h"
 
+const std::string BAYESNET_FOLDER = ODIN_DATA_FILEPATH + "bayesian_networks/";
+const std::string OPENINGS_FOLDER = ODIN_DATA_FILEPATH + "openings/";
+
 // constructor
 StrategyManager::StrategyManager() 
 	: firstAttackSent(false)
@@ -37,7 +40,7 @@ void StrategyManager::loadBayesianNetwork()
 		if (enemyRace ==  BWAPI::Races::Protoss)
 		{
 			BNetParser parser;
-			dlib::parse_xml("odin/protoss.xdsl", parser);
+			dlib::parse_xml(BAYESNET_FOLDER + "protoss.xdsl", parser);
 			BayesianNet *bn = parser.getBayesianNet();
 			bn->UpdateBeliefs();
 			BWAPI::Broodwar->printf("Enemy race identified as Protoss. Bayesian Network loaded.");
@@ -45,7 +48,7 @@ void StrategyManager::loadBayesianNetwork()
 		else if (enemyRace ==  BWAPI::Races::Terran)
 		{
 			BNetParser parser;
-			dlib::parse_xml("odin/terran.xdsl", parser);
+			dlib::parse_xml(BAYESNET_FOLDER + "terran.xdsl", parser);
 			BayesianNet *bn = parser.getBayesianNet();
 			bn->UpdateBeliefs();
 			BWAPI::Broodwar->printf("Enemy race identified as Terran. Bayesian Network loaded.");
@@ -53,7 +56,7 @@ void StrategyManager::loadBayesianNetwork()
 			else if (enemyRace == BWAPI::Races::Zerg)
 		{
 			BNetParser parser;
-			dlib::parse_xml("odin/zerg.xdsl", parser);
+			dlib::parse_xml(BAYESNET_FOLDER + "zerg.xdsl", parser);
 			BayesianNet *bn = parser.getBayesianNet();
 			bn->UpdateBeliefs();
 			BWAPI::Broodwar->printf("Enemy race identified as Zerg. Bayesian Network loaded.");
@@ -134,8 +137,8 @@ void StrategyManager::readResults()
 	// if the file doesn't exist something is wrong so just set them to default settings
 	if (stat(Options::FileIO::FILE_SETTINGS, &buf) == -1)
 	{
-		readDir = "bwapi-data/testio/read/";
-		writeDir = "bwapi-data/testio/write/";
+		readDir = OPENINGS_FOLDER + "read/";
+		writeDir = OPENINGS_FOLDER + "write/";
 	}
 	else
 	{

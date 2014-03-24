@@ -114,7 +114,7 @@ MetaType BuildLearner::getRandomLegalAction()
 		}
 	}
 
-	return legalActions[rand() % legalActions.size()];
+	return legalActions[std::rand() % legalActions.size()];
 }
 
 // parses current BWAPI game state and turns it into a StarcraftState of given type

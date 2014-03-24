@@ -150,7 +150,7 @@ public:
             return s.popAction();
         }
         
-        int r = (rand() % (s.numActions() - 1));
+        int r = (std::rand() % (s.numActions() - 1));
         
         Action a = s.popAction();
         

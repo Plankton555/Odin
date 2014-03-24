@@ -6,6 +6,8 @@
 #include "InformationManager.h"
 #include "base/WorkerManager.h"
 #include "base/StarcraftBuildOrderSearchManager.h"
+#include "BayesianNet.h"
+#include "BNetParser.h"
 #include <sys/stat.h>
 #include <cstdlib>
 
@@ -19,6 +21,8 @@ class StrategyManager
 {
 	StrategyManager();
 	~StrategyManager() {}
+
+	BayesianNet*				bayesianNet;
 
 	std::vector<std::string>	protossOpeningBook;
 	std::vector<std::string>	terranOpeningBook;
@@ -35,6 +39,7 @@ class StrategyManager
 
 	bool						firstAttackSent;
 
+	void	loadBayesianNetwork();
 	void	addStrategies();
 	void	setStrategy();
 	void	readResults();
@@ -74,6 +79,8 @@ public:
 	enum { ZergZerglingRush=0, NumZergStrategies=1 };
 
 	static	StrategyManager &	Instance();
+
+			void				onUnitShow(BWAPI::Unit * unit);
 
 			void				onEnd(const bool isWinner);
 	

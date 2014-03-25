@@ -41,24 +41,24 @@ void StrategyManager::loadBayesianNetwork()
 		{
 			BNetParser parser;
 			dlib::parse_xml(BAYESNET_FOLDER + "protoss.xdsl", parser);
-			BayesianNet *bn = parser.getBayesianNet();
-			bn->UpdateBeliefs();
+			bayesianNet = parser.getBayesianNet();
+			bayesianNet->UpdateBeliefs();
 			BWAPI::Broodwar->printf("Enemy race identified as Protoss. Bayesian Network loaded.");
 		}
 		else if (enemyRace ==  BWAPI::Races::Terran)
 		{
 			BNetParser parser;
 			dlib::parse_xml(BAYESNET_FOLDER + "terran.xdsl", parser);
-			BayesianNet *bn = parser.getBayesianNet();
-			bn->UpdateBeliefs();
+			bayesianNet = parser.getBayesianNet();
+			bayesianNet->UpdateBeliefs();
 			BWAPI::Broodwar->printf("Enemy race identified as Terran. Bayesian Network loaded.");
 		}
 			else if (enemyRace == BWAPI::Races::Zerg)
 		{
 			BNetParser parser;
 			dlib::parse_xml(BAYESNET_FOLDER + "zerg.xdsl", parser);
-			BayesianNet *bn = parser.getBayesianNet();
-			bn->UpdateBeliefs();
+			bayesianNet = parser.getBayesianNet();
+			bayesianNet->UpdateBeliefs();
 			BWAPI::Broodwar->printf("Enemy race identified as Zerg. Bayesian Network loaded.");
 		}
 	}

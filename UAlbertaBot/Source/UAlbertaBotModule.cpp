@@ -53,7 +53,7 @@ void UAlbertaBotModule::onStart()
 		BWAPI::Broodwar->printf("Hello, my name is Odin!");
 		Logger::Instance().log("Hello, my name is Odin2!\n");
 
-		//BWAPI::Broodwar->setLocalSpeed(100);
+		BWAPI::Broodwar->setLocalSpeed(10);
 		//BWAPI::Broodwar->setFrameSkip(240);
 
 		SparCraft::init();

@@ -1,0 +1,1 @@
+This folder will contain accumulated data from openings and data mining and so on. Just copy them to the correct location and rename them to use them in game.

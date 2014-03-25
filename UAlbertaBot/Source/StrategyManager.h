@@ -31,6 +31,7 @@ class StrategyManager
 	std::string					readDir;
 	std::string					writeDir;
 	std::vector<IntPair>		results;
+	std::string					readFile;
 	std::vector<int>			usableStrategies;
 	int							currentStrategy;
 
@@ -38,12 +39,14 @@ class StrategyManager
 	BWAPI::Race					enemyRace;
 
 	bool						firstAttackSent;
+	bool						enemyIsRandom;
 
 	void	loadBayesianNetwork();
 	void	addStrategies();
 	void	setStrategy();
 	void	readResults();
 	void	writeResults();
+	void	loadStrategiesFromFile(std::string filename);
 
 	const	int					getScore(BWAPI::Player * player) const;
 	const	double				getUCBValue(const size_t & strategy) const;
@@ -74,7 +77,7 @@ class StrategyManager
 
 public:
 
-	enum { ProtossZealotRush=0, ProtossDarkTemplar=1, ProtossDragoons=2, ProtossObserver=3, NumProtossStrategies=4 };
+	enum { ProtossZealotRush=0, ProtossDarkTemplar=1, ProtossDragoons=2, ProtossObserver=3, ProtossZealotArchon=4, NumProtossStrategies=20 };
 	enum { TerranMarineRush=0, NumTerranStrategies=1 };
 	enum { ZergZerglingRush=0, NumZergStrategies=1 };
 

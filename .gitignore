@@ -1,3 +1,13 @@
+# Odin data files (locally updated files)
+odin_data/openings/random.txt
+odin_data/openings/protoss.txt
+odin_data/openings/terran.txt
+odin_data/openings/zerg.txt
+odin_data/replaydatastuff/protoss.txt
+odin_data/replaydatastuff/terran.txt
+odin_data/replaydatastuff/zerg.txt
+odin_data/replaydatastuff/seen_replays.txt
+
 # Compiled Object files
 *.slo
 *.lo

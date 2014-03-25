@@ -80,8 +80,8 @@ void StrategyManager::addStrategies()
 	// if the file doesn't exist something is wrong so just set them to default settings
 	if (stat(Options::FileIO::FILE_SETTINGS, &buf) == -1)
 	{
-		readDir = OPENINGS_FOLDER + "write/";
-		writeDir = OPENINGS_FOLDER + "write/";
+		readDir = OPENINGS_FOLDER;
+		writeDir = OPENINGS_FOLDER;
 	}
 	else
 	{

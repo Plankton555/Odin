@@ -162,6 +162,7 @@
   <ItemGroup>
     <ClInclude Include="..\Source\base\BuildLearner.h" />
     <ClInclude Include="..\Source\BayesianNet.h" />
+    <ClInclude Include="..\Source\CBR.h" />
     <ClInclude Include="..\Source\ParsedNode.h" />
     <ClInclude Include="..\Source\BNetParser.h" />
     <ClInclude Include="..\Source\CombatSimulation.h" />

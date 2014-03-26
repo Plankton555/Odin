@@ -347,5 +347,8 @@
     <ClInclude Include="..\Source\ParsedNode.h">
       <Filter>bayesian_network</Filter>
     </ClInclude>
+    <ClInclude Include="..\Source\CBR.h">
+      <Filter>case_based_reasoning</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

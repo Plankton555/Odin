@@ -44,6 +44,7 @@ void StrategyManager::loadBayesianNetwork()
 			BayesianNet *bn = parser.getBayesianNet();
 			bn->UpdateBeliefs();
 			BWAPI::Broodwar->printf("Enemy race identified as Protoss. Bayesian Network loaded.");
+			updateStrategy();
 		}
 		else if (enemyRace ==  BWAPI::Races::Terran)
 		{
@@ -52,6 +53,7 @@ void StrategyManager::loadBayesianNetwork()
 			BayesianNet *bn = parser.getBayesianNet();
 			bn->UpdateBeliefs();
 			BWAPI::Broodwar->printf("Enemy race identified as Terran. Bayesian Network loaded.");
+			updateStrategy();
 		}
 			else if (enemyRace == BWAPI::Races::Zerg)
 		{
@@ -60,6 +62,7 @@ void StrategyManager::loadBayesianNetwork()
 			BayesianNet *bn = parser.getBayesianNet();
 			bn->UpdateBeliefs();
 			BWAPI::Broodwar->printf("Enemy race identified as Zerg. Bayesian Network loaded.");
+			updateStrategy();
 		}
 	}
 }
@@ -249,6 +252,7 @@ void StrategyManager::setStrategy()
 
 void StrategyManager::onEnd(const bool isWinner)
 {
+	updateStrategy();
 	// write the win/loss data to file if we're using IO
 	if (Options::Modules::USING_STRATEGY_IO)
 	{

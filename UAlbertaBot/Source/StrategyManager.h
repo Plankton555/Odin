@@ -8,6 +8,7 @@
 #include "base/StarcraftBuildOrderSearchManager.h"
 #include "BayesianNet.h"
 #include "BNetParser.h"
+#include "CBR.h"
 #include <sys/stat.h>
 #include <cstdlib>
 
@@ -80,6 +81,7 @@ public:
 
 	static	StrategyManager &	Instance();
 
+			void				updateStrategy();
 			void				onUnitShow(BWAPI::Unit * unit);
 
 			void				onEnd(const bool isWinner);

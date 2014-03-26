@@ -24,6 +24,8 @@ public:
 	BayesianNet();
 	~BayesianNet();
 
+	std::map<std::string, std::vector<double> > getAllProbabilities();
+
 	void AddNode(ParsedNode* node);
 	void CreateNetwork();
 

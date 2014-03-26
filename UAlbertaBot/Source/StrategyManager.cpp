@@ -756,3 +756,8 @@ const MetaPairVector StrategyManager::getZergBuildOrderGoal() const
  {
 	 return currentStrategy;
  }
+
+ void StrategyManager::updateStrategy()
+ {
+	 CBR::getDecision(bayesianNet->getAllProbabilities());
+ }

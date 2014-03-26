@@ -52,6 +52,9 @@
     <Filter Include="bayesian_network">
       <UniqueIdentifier>{1135d670-cdde-4e4a-aba3-e937784aef83}</UniqueIdentifier>
     </Filter>
+    <Filter Include="case_based_reasoning">
+      <UniqueIdentifier>{23824d23-f72e-4141-b136-26801c3cac2c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Source\CombatCommander.cpp">
@@ -191,6 +194,9 @@
     </ClCompile>
     <ClCompile Include="..\Source\ParsedNode.cpp">
       <Filter>bayesian_network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\CBR.cpp">
+      <Filter>case_based_reasoning</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

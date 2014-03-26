@@ -127,3 +127,22 @@ void BayesianNet::UpdateBeliefs()
 	delete solution;
 	solution = new bayesian_network_join_tree(bn, join_tree);
 }
+
+std::map<std::string, std::vector<double> > BayesianNet::getAllProbabilities()
+{
+	std::map<std::string, std::vector<double> > BNData;
+	std::map<std::string, int>::iterator it;
+	for (it = nodeMap.begin(); it != nodeMap.end(); it++)
+	{
+		int nodeID = it->second;
+		int nrStates = bayes_node_utils::node_num_values(bn, nodeID);
+		std::vector<double> probabilities(nrStates);
+		for (int state = 0; state < nrStates; state++)
+		{
+			probabilities.at(state) = ReadProbability(it->first, state);
+		}
+
+		BNData[it->first] = probabilities;
+	}
+	return BNData;
+}

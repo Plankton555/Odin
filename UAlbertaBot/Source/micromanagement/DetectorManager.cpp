@@ -1,7 +1,7 @@
 #include "Common.h"
 #include "DetectorManager.h"
 
-DetectorManager::DetectorManager() : unitClosestToEnemy(NULL), detectorsInMain(false), detectorsInNat(false) { }
+DetectorManager::DetectorManager() : unitClosestToEnemy(NULL), detectorsInMain(false), detectorsInNat(false), natBase(NULL) { }
 
 void DetectorManager::executeMicro(const UnitVector & targets) 
 {
@@ -36,6 +36,7 @@ void DetectorManager::executeMicro(const UnitVector & targets)
 	bool detectorUnitInBattle = false;
 	bool scoutingMain = false;
 	bool scoutingNat = false;
+	bool exploringEnemy = false;
 
 	// for each detectorUnit
 	BOOST_FOREACH(BWAPI::Unit * detectorUnit, detectorUnits)
@@ -59,15 +60,23 @@ void DetectorManager::executeMicro(const UnitVector & targets)
 			//else scout the other bases
 			else
 			{
-				//if( !baseRecentlyScouted(getNatBase()) && !scoutingNat )
-				//{
-				//	scoutBase(detectorUnit, getNatBase());
-				//	scoutingNat = true;
-				//}
-				//else
-				//{
-					scoutOtherBases(detectorUnit);
-				//}
+				if( !baseRecentlyScouted(getNatBase()) && !scoutingNat )
+				{
+					scoutBase(detectorUnit, getNatBase());
+					scoutingNat = true;
+				}
+				else
+				{
+					if( !exploringEnemy )
+					{
+						scoutOtherBases(detectorUnit, true);
+						exploringEnemy = true;
+					}
+					else
+					{
+						scoutOtherBases(detectorUnit, false);
+					}
+				}
 			}
 			
 			
@@ -130,11 +139,19 @@ bool DetectorManager::scoutBase(BWAPI::Unit * obs, BWTA::Region * base)
 }
 
 
-void DetectorManager::scoutOtherBases(BWAPI::Unit * obs)
+void DetectorManager::scoutOtherBases(BWAPI::Unit * obs, bool enemy)
 {
-	//scout otherbases, which right now is whereever..
-	BWAPI::Position explorePosition = MapGrid::Instance().getLeastExplored();
-	smartMove(obs, explorePosition);
+	if(enemy)
+	{
+		BWAPI::Position explorePosition = MapGrid::Instance().getLeastExploredEnemy();
+		smartMove(obs, explorePosition);
+	}
+	else
+	{
+		BWAPI::Position explorePosition = MapGrid::Instance().getLeastExplored();
+		smartMove(obs, explorePosition);
+	}
+	
 }
 
 BWAPI::Unit * DetectorManager::closestCloakedUnit(const UnitVector & cloakedUnits, BWAPI::Unit * detectorUnit)
@@ -197,10 +214,28 @@ BWTA::Region * DetectorManager::getNatBase()
 {
 	if( !natBase ) 
 	{
-		//was going to put this code into mapgrid but visual studio didnt let me........................................
-		BWAPI::Position natPos = MapGrid::Instance().getNaturalExpansion();
-		BWTA::Region * natRegion = BWTA::getRegion(natPos);
-		natBase = natRegion;
+		BWTA::BaseLocation * closestBase = NULL;
+		double minDistance = 100000;
+		
+		BWAPI::TilePosition enemy = BWAPI::Broodwar->enemy()->getStartLocation();
+		// for each base location
+		BOOST_FOREACH(BWTA::BaseLocation * base, BWTA::getBaseLocations())
+		{
+			
+			if(!(base == BWTA::getStartLocation(BWAPI::Broodwar->enemy())))
+			{
+				// get the tile position of the base
+				BWAPI::TilePosition tile = base->getTilePosition();
+				// the base's distance from our main nexus
+				double distanceFromHome = MapTools::Instance().getEnemyBaseDistance(BWAPI::Position(tile));
+				if(!closestBase || distanceFromHome < minDistance)
+				{
+					closestBase = base;
+					minDistance = distanceFromHome;
+				}
+			}
+		}
+		natBase = closestBase->getRegion();
 	}
 		return natBase;
 }

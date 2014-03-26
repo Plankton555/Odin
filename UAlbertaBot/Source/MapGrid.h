@@ -38,6 +38,8 @@ class MapGrid {
 
 	BWAPI::Position				naturalExpansion;
 
+	BWAPI::Position				getLeastExploredBase(BWAPI::TilePosition base);
+
 public:
 
 	// yay for singletons!
@@ -46,6 +48,7 @@ public:
 	void				update();
 	void				GetUnits(UnitVector & units, BWAPI::Position center, int radius, bool ourUnits, bool oppUnits);
 	BWAPI::Position		getLeastExplored();
+	BWAPI::Position		getLeastExploredEnemy();
 	BWAPI::Position		getNaturalExpansion();
 	BWAPI::Position		getLeastExploredIn(std::vector <BWAPI::Position> region);
 

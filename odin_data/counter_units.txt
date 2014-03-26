@@ -1,0 +1,40 @@
+Zealot,Dragoon,
+Dragoon,Dragoon,
+Dark Templar,Observers,
+High Templar,Dark Archon,
+Archon,Carrier,
+Dark Archon,Dragoon,
+Reaver,Dragoon,
+Scout,Dragoon,
+Corsair,Dragoon,
+Arbiter,High Templar
+Carrier,Scout
+Observer,Observer
+Shuttle,Dragoon
+
+Marine,Dragoon
+Firebat,Dragoon
+Medic,Reaver
+Ghost,Observer
+Vulture,Dragoon
+Spider Mine,Zealot
+Siege Tank,Zealot
+Goliath,Zealot
+Wraith,Dragoon
+Dropship,Corsair
+Science Vessel,Dragoon
+Battlecruiser,Scout
+Valkyrie,Dragoon
+
+Zergling,Zealot
+Hydralisk,High Templar
+Lurker,High Templar
+Ultralisk,Carrier
+Defiler,Reaver
+Overlord,None
+Mutalisk,Corsair
+Scourge,Archon
+Queen,Reaver
+Guardian,Corsair
+Devourer,Archon
+Broodlings,Archon

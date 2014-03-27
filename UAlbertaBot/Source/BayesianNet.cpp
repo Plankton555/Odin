@@ -15,26 +15,6 @@ void BayesianNet::AddNode(ParsedNode* node)
 	parsedNodes.push_back(node);
 }
 
-void debug2(std::string str)
-{
-	ofstream file ("debug.txt", ios::app);
-	if (file.is_open())
-	{
-		file << str.c_str() << endl;
-		file.close();
-	}
-}
-
-void debug2(std::string str, int i)
-{
-	std::ostringstream stringStream;
-	stringStream << str;
-	stringStream << ": ";
-	stringStream << i;
-	std::string newStr = stringStream.str();
-	debug2(newStr);
-}
-
 void BayesianNet::CreateNetwork()
 {
 	using namespace bayes_node_utils;
@@ -118,9 +98,6 @@ void BayesianNet::ApplyProbabilities(std::vector<std::string> *parents, unsigned
 
 void BayesianNet::SetEvidence(const std::string &nodeName, int nodeState)
 {
-	debug2("GETTING SIZE IN SET EVIDENCE");
-	debug2("VALUE?",nodeMap.size());
-	debug2("DONE GETTING SIZE IN SET EVID");
 	int nodeID = nodeMap.find(nodeName)->second;
 	bayes_node_utils::set_node_value(bn, nodeID, nodeState);
 	bayes_node_utils::set_node_as_evidence(bn, nodeID);
@@ -155,40 +132,17 @@ std::map<std::string, std::vector<double> > BayesianNet::getAllProbabilities()
 {
 	std::map<std::string, std::vector<double > > BNData;
 	std::map<std::string, int>::iterator it;
-	debug2("START GETTING ALL");
-	
-	debug2("BEFORE ASKING NODEMAP");
-	debug2("Nodemap size", nodeMap.size());
-	debug2("AFTER ASKING NODEMAP");
-	/*
-	//int i = nodeMap.size();
-	//std::map<std::string, int>::size_type size;
-	int size;
-	size = nodeMap.size();
-	debug2("GOT VALUE");
-	std::ostringstream stringStream;
-	stringStream << "Value here: ";
-	stringStream << size;
-	std::string newStr = stringStream.str();
-	debug2("SAVING IT NOW!");
-	debug2(newStr);
-	//nodeMap.size();
-	debug2("AFTER ASKING NODEMAP");
-	*/
 	for (it = nodeMap.begin(); it != nodeMap.end(); it++)
 	{
-		debug2("ADDING ONE NODE");
 		int nodeID = it->second;
 		int nrStates = bayes_node_utils::node_num_values(bn, nodeID);
 		std::vector<double> probabilities(nrStates);
 		for (int state = 0; state < nrStates; state++)
 		{
-			debug2("ADDING ONE STATE");
 			probabilities.at(state) = ReadProbability(it->first, state);
 		}
 
 		BNData[it->first] = probabilities;
 	}
-	debug2("RETURNING ALL");
 	return BNData;
 }

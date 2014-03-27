@@ -33,6 +33,26 @@ void StrategyManager::onUnitShow(BWAPI::Unit * unit)
 	}
 }
 
+void debug3(std::string str)
+{
+	ofstream file ("debug.txt", ios::app);
+	if (file.is_open())
+	{
+		file << str.c_str() << endl;
+		file.close();
+	}
+}
+
+void debug3(std::string str, int i)
+{
+	std::ostringstream stringStream;
+	stringStream << str;
+	stringStream << ": ";
+	stringStream << i;
+	std::string newStr = stringStream.str();
+	debug3(newStr);
+}
+
 void StrategyManager::loadBayesianNetwork()
 {
 	if (!bayesianNet)
@@ -44,6 +64,7 @@ void StrategyManager::loadBayesianNetwork()
 			BayesianNet *bn = parser.getBayesianNet();
 			bn->UpdateBeliefs();
 			BWAPI::Broodwar->printf("Enemy race identified as Protoss. Bayesian Network loaded.");
+			debug3("Loaded Protoss");
 			updateStrategy();
 		}
 		else if (enemyRace ==  BWAPI::Races::Terran)
@@ -53,6 +74,13 @@ void StrategyManager::loadBayesianNetwork()
 			BayesianNet *bn = parser.getBayesianNet();
 			bn->UpdateBeliefs();
 			BWAPI::Broodwar->printf("Enemy race identified as Terran. Bayesian Network loaded.");
+			debug3("Loaded Terran");
+			bn->SetEvidence("Ghost", 0);
+			bn->UpdateBeliefs();
+			double d = bn->ReadProbability("Ghost",0);
+			std::ostringstream stringStream;
+			stringStream << d;
+			debug3(stringStream.str());
 			updateStrategy();
 		}
 			else if (enemyRace == BWAPI::Races::Zerg)
@@ -62,6 +90,7 @@ void StrategyManager::loadBayesianNetwork()
 			BayesianNet *bn = parser.getBayesianNet();
 			bn->UpdateBeliefs();
 			BWAPI::Broodwar->printf("Enemy race identified as Zerg. Bayesian Network loaded.");
+			debug3("Loaded Zerg");
 			updateStrategy();
 		}
 	}
@@ -252,7 +281,6 @@ void StrategyManager::setStrategy()
 
 void StrategyManager::onEnd(const bool isWinner)
 {
-	updateStrategy();
 	// write the win/loss data to file if we're using IO
 	if (Options::Modules::USING_STRATEGY_IO)
 	{

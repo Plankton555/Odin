@@ -22,10 +22,11 @@ public:
 	static BWAPI::Player* getPlayer(void);
 
 private:
-	std::map<const char*,std::list<int>*> zergUnits;
-	std::map<const char*,std::list<int>*> terranUnits;
-	std::map<const char*,std::list<int>*> protossUnitsp1;
-	std::map<const char*,std::list<int>*> protossUnitsp2;
+	std::list<BWAPI::Unit*> morphingBuildings;
+	std::map<const char*,int> zergUnits;
+	std::map<const char*,int> terranUnits;
+	std::map<const char*,int> protossUnitsp1;
+	std::map<const char*,int> protossUnitsp2;
 	std::map<const char*,int> zergUnitsAll;
 	std::map<const char*,int> terranUnitsAll;
 	std::map<const char*,int> protossUnitsAll;
@@ -33,7 +34,7 @@ private:
 	bool gameSeen;
 	int replayLength;
 
-	void writeToFile(const char* file, std::map<const char*,std::list<int>*> stuffToWrite, std::map<const char*,int> unitList);
+	void writeToFile(const char* file, std::map<const char*,int> stuffToWrite, std::map<const char*,int> unitList);
 	void createMaps();
 
 	static BWAPI::Player* ReplayModule::enemy;

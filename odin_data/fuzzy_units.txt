@@ -4,98 +4,98 @@
 ;
 ;Name.noUnits.fewUnits.someUnits.manyUnits
 ;Protoss buildings
-Pylon,0.3.6.10
-Gateway,0.1.3.5
-Assimilator,0.1.2.5
-Cybernetics Core,0
-Citadel of Adun,0
-Forge,0
-Photon Cannon,0.3.6.10
-Stargate,0.1.3.5
-Robotics Facility,0.1.3.5
-Robotics Support Bay,0
-Observatory,0
-Arbiter Tribunal,0
-Templar Archives,0
-Fleet Beacon,0
-Shield Battery,0
+Pylon,0.3.6.10,0
+Gateway,0.1.3.5,0
+Assimilator,0.1.2.5,0
+Cybernetics Core,0,0
+Citadel of Adun,0,0
+Forge,0,0
+Photon Cannon,0.3.6.10,0
+Stargate,0.1.3.5,0
+Robotics Facility,0.1.3.5,0
+Robotics Support Bay,0,0
+Observatory,0,0
+Arbiter Tribunal,0,0
+Templar Archives,0,0
+Fleet Beacon,0,0
+Shield Battery,0,0
 ;
 ;Protoss units
-Zealot,0.3.8.15
-Dragoon,0.3.7.12
-Dark Templar,0.3.5.7
-High Templar,0.3.5.10
-Archon,0.2.4.6
-Dark Archon,0.2.3.4
-Reaver,0.1.2.5
-Scout,0.2.4.8
-Corsair,0.3.5.10
-Arbiter,0.1.2.5
-Carrier,0.1.2.5
-Observer,0.1.2.5
-Shuttle,0.1.2.5
+Zealot,0.3.8.15,6.11
+Dragoon,0.3.7.12,6.11
+Dark Templar,0.3.5.7,10.25
+High Templar,0.3.5.10,24.30
+Archon,0.2.4.6,24.28
+Dark Archon,0.2.3.4,6.24
+Reaver,0.1.2.5,6.22
+Scout,0.2.4.8,6.26
+Corsair,0.3.5.10,6.30
+Arbiter,0.1.2.5,25.11
+Carrier,0.1.2.5,18.30
+Observer,0.1.2.5,10.25
+Shuttle,0.1.2.5,10.6
 ;
 ;Terran buildings
-Supply Depot,0.3.6.10
-Barracks,0.1.3.5
-Refinery,0.1.2.5
-Engineering Bay,0
-Bunker,0.1.3.5
-Academy,0
-Missile Turret,0.2.4.6
-Factory,0.1.3.5
-Starport,0.1.3.5
-Armory,0
-Science Facility,0
-Comsat Station,0.1.3
-Nuclear Silo,0.1.3
-Machine Shop,0
-Control Tower,0
-Physics Lab,0
-Covert Ops,0
+Supply Depot,0.3.6.10,0
+Barracks,0.1.3.5,0
+Refinery,0.1.2.5,0
+Engineering Bay,0,0
+Bunker,0.1.3.5,0
+Academy,0,0
+Missile Turret,0.2.4.6,0
+Factory,0.1.3.5,0
+Starport,0.1.3.5,0
+Armory,0,0
+Science Facility,0,0
+Comsat Station,0.1.3,0
+Nuclear Silo,0.1.3,0
+Machine Shop,0,0
+Control Tower,0,0
+Physics Lab,0,0
+Covert Ops,0,0
 ;
 ;Terran units
-Marine,0.3.8.15
-Firebat,0.3.7.12
-Medic,0.3.5.10
-Ghost,0.3.5.10
-Vulture,0.3.5.10
-Spider Mine,0.3.6.12
-Siege Tank,0.2.4.6
-Goliath,0.2.5.8
-Wraith,0.2.4.6
-Dropship,0.1.2.5
-Science Vessel,0.1.2.5
-Battlecruiser,0.1.2.3
-Valkyrie,0.1.2.5
+Marine,0.3.8.15,6.11
+Firebat,0.3.7.12,6.11
+Medic,0.3.5.10,24.30
+Ghost,0.3.5.10,10.25
+Vulture,0.3.5.10,6.18
+Spider Mine,0.3.6.12,4.25
+Siege Tank,0.2.4.6,4.22
+Goliath,0.2.5.8,4.24
+Wraith,0.2.4.6,6.25
+Dropship,0.1.2.5,10.26
+Science Vessel,0.1.2.5,6.30
+Battlecruiser,0.1.2.3,18.20
+Valkyrie,0.1.2.5,6.18
 ;
 ;Zerg buildings
-;SAVE HATCHERIES,0.1.2.5
-Creep Colony,0.1.3.6
-Sunken Colony,0.1.3.6
-Spore Colony,0.1.3.6
-Extractor,0.1.2.5
-Spawning Pool,0
-Evolution Chamber,0
-Hydralisk Den,0
-Lair,0.1.2.5
-Spire,0
-Queen's Nest,0
-Hive,0.1.2.5
-Greater Spire,0
-Nydus Canal,0.2.4
-Ultralisk Cavern,0
-Defiler Mound,0
+;SAVE HATCHERIES,0.1.2.5,0
+Creep Colony,0.1.3.6,0
+Sunken Colony,0.1.3.6,0
+Spore Colony,0.1.3.6,0
+Extractor,0.1.2.5,0
+Spawning Pool,0,0
+Evolution Chamber,0,0
+Hydralisk Den,0,0
+Lair,0.1.2.5,0
+Spire,0,0
+Queen's Nest,0,0
+Hive,0.1.2.5,0
+Greater Spire,0,0
+Nydus Canal,0.2.4,0
+Ultralisk Cavern,0,0
+Defiler Mound,0,0
 ;
 ;Zerg units
-Zergling,0.5.10.20
-Hydralisk,0.3.5.10
-Lurker,0.3.5.10
-Ultralisk,0.1.2.4
-Defiler,0.3.5.8
-Overlord,0.2.4.8
-Mutalisk,0.1.2.5
-Scourge,0.3.6.10
-Queen,0.2.4.6
-Guardian,0.3.5.8
-Devourer,0.1.2.5
+Zergling,0.5.10.20,4.11
+Hydralisk,0.3.5.10,4.1
+Lurker,0.3.5.10,11.31
+Ultralisk,0.1.2.4,31.28
+Defiler,0.3.5.8,10.24
+Overlord,0.2.4.8,0.6
+Mutalisk,0.1.2.5,26.20
+Scourge,0.3.6.10,6.31
+Queen,0.2.4.6,24.31
+Guardian,0.3.5.8,26.31
+Devourer,0.1.2.5,6.31

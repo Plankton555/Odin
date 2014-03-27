@@ -5,6 +5,7 @@
 #include "Common.h"
 
 #define FUZZY_VALUES_POSITION (1)
+#define COUNTER_NAMES_POSITION (2)
 #define NR_FUZZY_VALUES  (FUZZY_VALUES_END - FUZZY_VALUES_START)
 const std::string FUZZY_VALUES_FILEPATH = ODIN_DATA_FILEPATH + "fuzzy_units.txt";
 const std::string SPLIT_SYMBOL = ",";
@@ -14,6 +15,7 @@ const char COMMENT_CHAR = ';';
 using namespace std;
 
 std::map<const char*,std::vector<int>*> *DataModule::units = NULL;
+std::map<std::string,vector<string>*> *DataModule::counters = NULL;
 int DataModule::loaded = 0;
 
 void DataModule::init()
@@ -42,6 +44,14 @@ void DataModule::init()
 					}
 					(*units)[sub->at(0).c_str()] = fuzzyValues;
 
+					//Save the counters
+					std::vector<std::string>* readCounters = splitDelim(sub->at(COUNTER_NAMES_POSITION), SUB_SPLIT_SYMBOL);
+					std::vector<string>* counterNames = new std::vector<string>(readCounters->size());
+					for (int i = 0; i < readCounters->size(); i++)
+					{
+						counterNames->at(i) = readCounters->at(i);
+					}
+					(*counters)[sub->at(0).c_str()] = counterNames;
 					//Save other data here {Henrik? :)}
 				}
 			}
@@ -74,6 +84,11 @@ void DataModule::destroy()
 std::map<const char*,std::vector<int>*>* DataModule::getFuzzyValues()
 {
 	return units;
+}
+
+std::vector<string> * DataModule::getCounter(std::string unit)
+{
+	return (*counters)[unit];
 }
 
 std::vector<std::string>* DataModule::splitDelim(const std::string& str, const std::string& delim)

@@ -208,6 +208,8 @@ BWAPI::Position ScoutManager::calcFleePosition(const std::vector<GroundThreat> &
 	//fleeVector.rotate(mult*30);
 	double2 newFleeVector;
 
+	double fleeDistance = 24;
+
 	int r = 0;
 	int sign = 1;
 	int iterations = 0;
@@ -225,7 +227,7 @@ BWAPI::Position ScoutManager::calcFleePosition(const std::vector<GroundThreat> &
 		newFleeVector = fleeVector * 2 + targetVector;
 
 		// the position we will attempt to go to
-		BWAPI::Position test(workerScout->getPosition() + newFleeVector * 24);
+		BWAPI::Position test(workerScout->getPosition() + newFleeVector * fleeDistance);
 
 		// draw the debug vector
 		//if (drawDebugVectors) 
@@ -249,7 +251,7 @@ BWAPI::Position ScoutManager::calcFleePosition(const std::vector<GroundThreat> &
 	}
 
 	// go to the calculated 'good' position
-	BWAPI::Position fleeTo(workerScout->getPosition() + newFleeVector * 24);
+	BWAPI::Position fleeTo(workerScout->getPosition() + newFleeVector * fleeDistance);
 	
 	
 	if (Options::Debug::DRAW_UALBERTABOT_DEBUG) BWAPI::Broodwar->drawLineMap(workerScout->getPosition().x(), workerScout->getPosition().y(), fleeTo.x(), fleeTo.y(), BWAPI::Colors::Orange);

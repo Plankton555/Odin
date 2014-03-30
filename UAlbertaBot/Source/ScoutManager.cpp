@@ -43,27 +43,11 @@ void ScoutManager::update(const std::set<BWAPI::Unit *> & scoutUnits)
 			{
 				mainObserver = obs;
 				hasMainObserver = true;
-				BWAPI::Broodwar->printf("main");
-				BWAPI::Broodwar->printf("main");
-				BWAPI::Broodwar->printf("main");
-				BWAPI::Broodwar->printf("main");
-				BWAPI::Broodwar->printf("main");
-				BWAPI::Broodwar->printf("main");
-				BWAPI::Broodwar->printf("main");
-				BWAPI::Broodwar->printf("main");
 			}
 			else if( hasMainObserver && !hasSecObserver && obs != mainObserver )
 			{
 				secObserver = obs;
 				hasSecObserver = true;
-				BWAPI::Broodwar->printf("sec");
-				BWAPI::Broodwar->printf("sec");
-				BWAPI::Broodwar->printf("sec");
-				BWAPI::Broodwar->printf("sec");
-				BWAPI::Broodwar->printf("sec");
-				BWAPI::Broodwar->printf("sec");
-				BWAPI::Broodwar->printf("sec");
-				BWAPI::Broodwar->printf("sec");
 			}
 		}
 	}

@@ -1,8 +1,9 @@
 #include "Common.h"
 #include "ScoutManager.h"
 #include "InformationManager.h"
+#include <boost/lexical_cast.hpp>
 
-ScoutManager::ScoutManager() : workerScout(NULL), numWorkerScouts(0), scoutUnderAttack(false)
+ScoutManager::ScoutManager() : workerScout(NULL), numWorkerScouts(0), scoutUnderAttack(false), mainObserver(NULL), secObserver(NULL), nextExp(NULL)
 {
 }
 
@@ -21,8 +22,84 @@ void ScoutManager::update(const std::set<BWAPI::Unit *> & scoutUnits)
 			}
 		}
 	}
+	//Set the main and sec observers if any.
+	bool hasMainObserver = mainObserver && (scoutUnits.find(mainObserver) != scoutUnits.end());
+	bool hasSecObserver = secObserver && (scoutUnits.find(secObserver) != scoutUnits.end());
+
+	//if for some reason our mainobserver is no more then transfer the sec to main. 
+	if( !hasMainObserver && hasSecObserver )
+	{
+		mainObserver = secObserver;
+		secObserver = NULL;
+		hasMainObserver = true;
+		hasSecObserver = false;
+	}
+
+	BOOST_FOREACH(BWAPI::Unit * obs, scoutUnits)
+	{
+		if( obs->getType().getID() == BWAPI::UnitTypes::Protoss_Observer.getID() )
+		{
+			if( !hasMainObserver )
+			{
+				mainObserver = obs;
+				hasMainObserver = true;
+				BWAPI::Broodwar->printf("main");
+				BWAPI::Broodwar->printf("main");
+				BWAPI::Broodwar->printf("main");
+				BWAPI::Broodwar->printf("main");
+				BWAPI::Broodwar->printf("main");
+				BWAPI::Broodwar->printf("main");
+				BWAPI::Broodwar->printf("main");
+				BWAPI::Broodwar->printf("main");
+			}
+			else if( hasMainObserver && !hasSecObserver && obs != mainObserver )
+			{
+				secObserver = obs;
+				hasSecObserver = true;
+				BWAPI::Broodwar->printf("sec");
+				BWAPI::Broodwar->printf("sec");
+				BWAPI::Broodwar->printf("sec");
+				BWAPI::Broodwar->printf("sec");
+				BWAPI::Broodwar->printf("sec");
+				BWAPI::Broodwar->printf("sec");
+				BWAPI::Broodwar->printf("sec");
+				BWAPI::Broodwar->printf("sec");
+			}
+		}
+	}
+
+	
 
 	moveScouts();
+	moveObservers();
+}
+
+void ScoutManager::moveObservers()
+{
+	if( mainObserver )
+	{
+		BWTA::BaseLocation * enemyBaseLocation = InformationManager::Instance().getMainBaseLocation(BWAPI::Broodwar->enemy());
+		smartMove(mainObserver, enemyBaseLocation->getPosition());
+	}
+	if( secObserver )
+	{
+		BWAPI::Position explorePosition = MapGrid::Instance().getLeastExplored();
+		smartMove(secObserver, explorePosition);
+	}
+}
+
+BWTA::Region * ScoutManager::nextExpansion()
+{
+	if( !nextExp )
+	{
+		//init
+		return NULL;
+	}
+	//else if( isOccupied(nextExp) )
+	else
+	{
+		return nextExp;
+	}
 }
 
 void ScoutManager::moveScouts()

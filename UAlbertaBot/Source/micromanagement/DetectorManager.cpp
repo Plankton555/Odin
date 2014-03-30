@@ -19,6 +19,7 @@ void DetectorManager::executeMicro(const UnitVector & targets)
 
 	cloakedUnitMap.clear();
 	UnitVector cloakedUnits;
+	bool enemyHasCloak = false;
 	// figure out targets
 	BOOST_FOREACH (BWAPI::Unit * unit, BWAPI::Broodwar->enemy()->getUnits())
 	{
@@ -29,129 +30,57 @@ void DetectorManager::executeMicro(const UnitVector & targets)
 		{
 			cloakedUnits.push_back(unit);
 			cloakedUnitMap[unit] = false;
+			enemyHasCloak = true;
 		}
 	}
 
-	//These bools will help us decide when there is more than one observer
-	bool detectorUnitInBattle = false;
-	bool scoutingMain = false;
-	bool scoutingNat = false;
-	bool exploringEnemy = false;
+	bool observerInBattle = false;
 
-	// for each detectorUnit
-	BOOST_FOREACH(BWAPI::Unit * detectorUnit, detectorUnits)
+	// for each observer
+	BOOST_FOREACH(BWAPI::Unit * detector, detectorUnits)
 	{
-		// if we need to regroup, move the detectorUnit to that location
-		if (!detectorUnitInBattle && unitClosestToEnemy && unitClosestToEnemy->getPosition().isValid() && InformationManager::Instance().enemyHasCloakedUnits())
+		// if we need to regroup, move the observer to that location
+		if (!observerInBattle && unitClosestToEnemy && unitClosestToEnemy->getPosition().isValid() && enemyHasCloak)
 		{
-			smartMove(detectorUnit, unitClosestToEnemy->getPosition());
-			detectorUnitInBattle = true;
+			smartMove(detector, unitClosestToEnemy->getPosition());
+			observerInBattle = true;
 		}
-		// otherwise there is no battle or no closest to enemy so we don't want our detectorUnit to die
+		// otherwise there is no battle or no closest to enemy so we don't want our observer to die
 		// send him to scout around the map
 		else
 		{
-			//start off by scouting main base
-			if( !baseRecentlyScouted(getMainBase()) && !scoutingMain )
+			// get the enemy base location, if we have one
+			BWTA::BaseLocation * enemyBaseLocation = InformationManager::Instance().getMainBaseLocation(BWAPI::Broodwar->enemy());
+
+			// determine the region that the enemy is in
+			BWTA::Region * enemyRegion = enemyBaseLocation ? enemyBaseLocation->getRegion() : NULL;
+			// determine the region the observer is in
+			BWAPI::TilePosition scoutTile(detector->getPosition());
+			BWTA::Region * observerRegion = scoutTile.isValid() ? BWTA::getRegion(scoutTile) : NULL;
+			//if we know where the enemy is
+			if(enemyRegion)
 			{
-				scoutBase(detectorUnit, getMainBase());
-				scoutingMain = true;
-			}
-			//else scout the other bases
-			else
-			{
-				if( !baseRecentlyScouted(getNatBase()) && !scoutingNat )
+				if(enemyRegion == observerRegion)
 				{
-					scoutBase(detectorUnit, getNatBase());
-					scoutingNat = true;
+					//if we are in the enemyregion go to the place in the region we visited last
+					//should probably check timeframe here, no need to go around and around
+					BWAPI::Position explorePosition = MapGrid::Instance().getLeastExploredIn(enemyRegion->getPolygon());
+					smartMove(detector, explorePosition);
 				}
 				else
 				{
-					if( !exploringEnemy )
-					{
-						scoutOtherBases(detectorUnit, true);
-						exploringEnemy = true;
-					}
-					else
-					{
-						scoutOtherBases(detectorUnit, false);
-					}
+					//else go there
+					smartMove(detector, enemyBaseLocation->getPosition());
 				}
-			}
-			
-			
-
-			
-		}
-	}
-}
-
-//Returns if the given base has a cell which havent been seen in 2 minutes.
-bool DetectorManager::baseRecentlyScouted(BWTA::Region * base)
-{
-	//gets the longest time since a place in the natural expansion was scouted
-	BWAPI::Position leastExplored = MapGrid::Instance().getLeastExploredIn(base->getPolygon());
-	int seen = MapGrid::Instance().getCell(leastExplored).timeLastVisited;
-
-	//compare to 2 min ingame (2500 frames)
-	int currTime = BWAPI::Broodwar->getFrameCount();
-	int recentAmountOfFrames = 2500;
-
-	return (currTime - seen) < recentAmountOfFrames;
-}
-
-
-bool DetectorManager::scoutBase(BWAPI::Unit * obs, BWTA::Region * base)
-{
-	// determine the region the observer is in
-	BWAPI::TilePosition scoutTile(obs->getPosition());
-	BWTA::Region * observerRegion = scoutTile.isValid() ? BWTA::getRegion(scoutTile) : NULL;
-	//if we know where the base is
-	if( base && !detectorInBase(base) )
-	{
-		if(base == observerRegion)
-		{
-			//if we are in the enemyregion go to the place in the region we visited last
-			BWAPI::Position explorePosition = MapGrid::Instance().getLeastExploredIn(base->getPolygon());
-			//if we are under attack try to go around it
-			if(obs->isUnderAttack())
-			{
-				setDetectorsInBase(base);
-				return false;
 			}
 			else
 			{
-				smartMove(obs, explorePosition);
-				return true;
+				//Just scout were we havnt been if we cant find the enemy
+				BWAPI::Position explorePosition = MapGrid::Instance().getLeastExplored();
+				smartMove(detector, explorePosition);
 			}
 		}
-		else
-		{
-			//go to base if not there
-			smartMove(obs, base->getCenter());
-			return true;
-		}
 	}
-	else
-	{
-		return false;
-	}
-}
-
-
-void DetectorManager::scoutOtherBases(BWAPI::Unit * obs, bool enemy)
-{
-	if(enemy)
-	{
-		BWAPI::Position explorePosition = MapGrid::Instance().getLeastExploredEnemy();
-		smartMove(obs, explorePosition);
-	}
-	else
-	{
-		BWAPI::Position explorePosition = MapGrid::Instance().getLeastExplored();
-		smartMove(obs, explorePosition);
-	}
-	
 }
 
 BWAPI::Unit * DetectorManager::closestCloakedUnit(const UnitVector & cloakedUnits, BWAPI::Unit * detectorUnit)
@@ -175,76 +104,4 @@ BWAPI::Unit * DetectorManager::closestCloakedUnit(const UnitVector & cloakedUnit
 	}
 
 	return closestCloaked;
-}
-
-bool DetectorManager::detectorInBase(BWTA::Region * base)
-{
-	if( base == getMainBase() )
-	{
-		return detectorsInMain;
-	}
-	else if (base == getNatBase() )
-	{
-		return detectorsInNat;
-	}
-	else
-	{
-		return false;
-	}
-}
-
-void DetectorManager::setDetectorsInBase(BWTA::Region * base)
-{
-	if( base == getMainBase() )
-	{
-		detectorsInMain = true;
-	}
-	else if (base == getNatBase() )
-	{
-		detectorsInNat = true;
-	}
-	else
-	{
-		return;
-	}
-}
-
-//Returns the region of the natural expansion
-BWTA::Region * DetectorManager::getNatBase()
-{
-	if( !natBase ) 
-	{
-		BWTA::BaseLocation * closestBase = NULL;
-		double minDistance = 100000;
-		
-		BWAPI::TilePosition enemy = BWAPI::Broodwar->enemy()->getStartLocation();
-		// for each base location
-		BOOST_FOREACH(BWTA::BaseLocation * base, BWTA::getBaseLocations())
-		{
-			
-			if(!(base == BWTA::getStartLocation(BWAPI::Broodwar->enemy())))
-			{
-				// get the tile position of the base
-				BWAPI::TilePosition tile = base->getTilePosition();
-				// the base's distance from our main nexus
-				double distanceFromHome = MapTools::Instance().getEnemyBaseDistance(BWAPI::Position(tile));
-				if(!closestBase || distanceFromHome < minDistance)
-				{
-					closestBase = base;
-					minDistance = distanceFromHome;
-				}
-			}
-		}
-		natBase = closestBase->getRegion();
-	}
-		return natBase;
-}
-
-//Returns the region of the mainbase
-BWTA::Region * DetectorManager::getMainBase()
-{
-	// get the enemy base location, if we have one
-	BWTA::BaseLocation * enemyBaseLocation = InformationManager::Instance().getMainBaseLocation(BWAPI::Broodwar->enemy());
-	BWTA::Region * mainRegion = enemyBaseLocation ? enemyBaseLocation->getRegion() : NULL;
-	return mainRegion;
 }

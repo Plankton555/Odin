@@ -1,7 +1,7 @@
 #include "Common.h"
 #include "DetectorManager.h"
 
-DetectorManager::DetectorManager() : unitClosestToEnemy(NULL), detectorsInMain(false), detectorsInNat(false), natBase(NULL) { }
+DetectorManager::DetectorManager() : unitClosestToEnemy(NULL), detectorsInMain(false) { }
 
 void DetectorManager::executeMicro(const UnitVector & targets) 
 {
@@ -19,7 +19,6 @@ void DetectorManager::executeMicro(const UnitVector & targets)
 
 	cloakedUnitMap.clear();
 	UnitVector cloakedUnits;
-	bool enemyHasCloak = false;
 	// figure out targets
 	BOOST_FOREACH (BWAPI::Unit * unit, BWAPI::Broodwar->enemy()->getUnits())
 	{
@@ -30,20 +29,19 @@ void DetectorManager::executeMicro(const UnitVector & targets)
 		{
 			cloakedUnits.push_back(unit);
 			cloakedUnitMap[unit] = false;
-			enemyHasCloak = true;
 		}
 	}
 
-	bool observerInBattle = false;
+	bool detectorsInBattle = false;
 
 	// for each observer
 	BOOST_FOREACH(BWAPI::Unit * detector, detectorUnits)
 	{
 		// if we need to regroup, move the observer to that location
-		if (!observerInBattle && unitClosestToEnemy && unitClosestToEnemy->getPosition().isValid() && enemyHasCloak)
+		if (!detectorsInBattle && unitClosestToEnemy && unitClosestToEnemy->getPosition().isValid())
 		{
 			smartMove(detector, unitClosestToEnemy->getPosition());
-			observerInBattle = true;
+			detectorsInBattle = true;
 		}
 		// otherwise there is no battle or no closest to enemy so we don't want our observer to die
 		// send him to scout around the map
@@ -58,14 +56,27 @@ void DetectorManager::executeMicro(const UnitVector & targets)
 			BWAPI::TilePosition scoutTile(detector->getPosition());
 			BWTA::Region * observerRegion = scoutTile.isValid() ? BWTA::getRegion(scoutTile) : NULL;
 			//if we know where the enemy is
-			if(enemyRegion)
+			if(enemyRegion && !detectorsInMain)
 			{
 				if(enemyRegion == observerRegion)
 				{
 					//if we are in the enemyregion go to the place in the region we visited last
 					//should probably check timeframe here, no need to go around and around
 					BWAPI::Position explorePosition = MapGrid::Instance().getLeastExploredIn(enemyRegion->getPolygon());
-					smartMove(detector, explorePosition);
+					//if we are under attack try to go around it
+					if(detector->isUnderAttack())
+					{
+						detectorsInMain = true;
+						//just scout wherever
+						BWAPI::Position explorePosition = MapGrid::Instance().getLeastExplored();
+						smartMove(detector, explorePosition);
+					}
+					else
+					{
+
+						//should probably check timeframe here, no need to go around and around
+						smartMove(detector, explorePosition);
+					}
 				}
 				else
 				{

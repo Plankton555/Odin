@@ -32,6 +32,11 @@ class ScoutManager {
 	BWTA::Region *		nextExp;
 	void				moveObservers();
 
+	std::map<BWTA::Region *, bool> baseDetectors;
+	bool				baseRecentlyScouted(BWTA::Region * base);
+	void				scoutBase(BWAPI::Unit * obs, BWTA::Region * base);
+	bool				detectorsInBase(BWTA::Region * base);
+
 public:
 
 	ScoutManager();

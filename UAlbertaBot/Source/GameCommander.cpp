@@ -146,6 +146,27 @@ void GameCommander::setScoutUnits()
 			}
 		}
 	}
+	//Here we assign observers to the scoutmanager, only if they are not needed in the army. 
+	//currently only one observer max in army.
+	bool obsWithArmyNeeded = InformationManager::Instance().enemyHasCloakedUnits();
+
+	//get the observers
+	BOOST_FOREACH (BWAPI::Unit * unit, validUnits)
+	{
+		if( unit->getType().getID() == BWAPI::UnitTypes::Protoss_Observer.getID() )
+		{
+			if( obsWithArmyNeeded )
+			{
+				//This observer will later be sent to army
+				obsWithArmyNeeded = false;
+			}
+			else
+			{
+				scoutUnits.insert(unit);
+				assignedUnits.insert(unit);
+			}
+		}
+	}
 }
 
 // sets combat units to be passed to CombatCommander

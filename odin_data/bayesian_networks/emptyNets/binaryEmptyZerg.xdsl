@@ -293,7 +293,7 @@
 			<parents>SpawningPool TimePeriod</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
-		<cpt id="Lurker_Morph">
+		<cpt id="LurkerAspect">
 			<state id="Absent" />
 			<state id="Present" />
 			<parents>HydraliskDen TimePeriod</parents>
@@ -689,8 +689,8 @@
 				<font color="000000" name="Arial" size="8" />
 				<position>1185 375 1269 427</position>
 			</node>
-			<node id="Lurker_Morph">
-				<name>Lurker Morph</name>
+			<node id="LurkerAspect">
+				<name>LurkerAspect</name>
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
@@ -701,7 +701,7 @@
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>1274 522 1377 586</position>
+				<position>1274 522 1383 586</position>
 			</node>
 			<node id="GroovedSpines">
 				<name>GroovedSpines</name>

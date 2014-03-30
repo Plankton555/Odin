@@ -51,6 +51,34 @@ void ReplayModule::createMaps()
 	protossUnitsAll["Observer"] = 27;
 	protossUnitsAll["Shuttle"] = 28;
 
+	protossTechAll["Hallucination"] = 29;
+	protossTechAll["Maelstrom"] = 30;
+	protossTechAll["Mind_Control"] = 31;
+	protossTechAll["Recall"] = 32;
+	protossTechAll["Psionic_Storm"] = 33;
+	protossTechAll["Stasis_Field"] = 34;
+	protossTechAll["Disruption_Web"] = 35;
+
+	protossUpgradesAll["Protoss_Air_Weapons"] = 36;
+	protossUpgradesAll["Protoss_Ground_Armor"] = 37;
+	protossUpgradesAll["Protoss_Ground_Weapons"] = 38;
+	protossUpgradesAll["Protoss_Plasma_Shields"] = 39;
+	protossUpgradesAll["Protoss_Air_Armor"] = 40;
+	protossUpgradesAll["Apial_Sensors"] = 41;
+	protossUpgradesAll["Argus_Jewel"] = 42;
+	protossUpgradesAll["Argus_Talisman"] = 43;
+	protossUpgradesAll["Carrier_Capacity"] = 44;
+	protossUpgradesAll["Gravitic_Boosters"] = 45;
+	protossUpgradesAll["Gravitic_Drive"] = 46;
+	protossUpgradesAll["Gravitic_Thrusters"] = 47;
+	protossUpgradesAll["Khaydarin_Amulet"] = 48;
+	protossUpgradesAll["Khaydarin_Core"] = 49;
+	protossUpgradesAll["Leg_Enhancements"] = 50;
+	protossUpgradesAll["Reaver_Capacity"] = 51;
+	protossUpgradesAll["Scarab_Damage"] = 52;
+	protossUpgradesAll["Sensor_Array"] = 53;
+	protossUpgradesAll["Singularity_Charge"] = 54;
+	
 
 	terranUnitsAll["Supply Depot"] = 1;
 	terranUnitsAll["Barracks"] = 2;
@@ -84,6 +112,32 @@ void ReplayModule::createMaps()
 	terranUnitsAll["Battlecruiser"] = 29;
 	terranUnitsAll["Valkyrie"] = 30;
 
+	terranTechAll["Tank_Siege_Mode"] = 31;
+	terranTechAll["Cloaking_Field"] = 32;
+	terranTechAll["Yamato_Gun"] = 33;
+	terranTechAll["EMP_Shockwave"] = 34;
+	terranTechAll["Irradiate"] = 35;
+	terranTechAll["Personnel_Cloaking"] = 36;
+	terranTechAll["Lockdown"] = 37;
+	terranTechAll["Stim_Packs"] = 38;
+	terranTechAll["Restoration"] = 39;
+	terranTechAll["Optical_Flare"] = 40;
+
+	terranUpgradesAll["Terran_Infantry_Armor"] = 41;
+	terranUpgradesAll["Terran_Infantry_Weapons"] = 42;
+	terranUpgradesAll["Terran_Ship_Plating"] = 43;
+	terranUpgradesAll["Terran_Ship_Weapons"] = 44;
+	terranUpgradesAll["Terran_Vehicle_Plating"] = 45;
+	terranUpgradesAll["Terran_Vehicle_Weapons"] = 46;
+	terranUpgradesAll["Ion_Thrusters"] = 47;
+	terranUpgradesAll["Charon_Boosters"] = 48;
+	terranUpgradesAll["Apollo_Reactor"] = 49;
+	terranUpgradesAll["Colossus_Reactor"] = 50;
+	terranUpgradesAll["Titan_Reactor"] = 51;
+	terranUpgradesAll["Moebius_Reactor"] = 52;
+	terranUpgradesAll["Ocular_Implants"] = 53;
+	terranUpgradesAll["U_238_Shells"] = 54;
+	terranUpgradesAll["Caduceus_Reactor"] = 55;
 
 	zergUnitsAll["Creep Colony"] = 1;
 	zergUnitsAll["Sunken Colony"] = 2;
@@ -112,6 +166,30 @@ void ReplayModule::createMaps()
 	zergUnitsAll["Queen"] = 24;
 	zergUnitsAll["Guardian"] = 25;
 	zergUnitsAll["Devourer"] = 26;
+
+	zergTechAll["Spawn_Broodlings"] = 27;
+	zergTechAll["Ensnare"] = 28;
+	zergTechAll["Plague"] = 29;
+	zergTechAll["Consume"] = 30;
+	zergTechAll["Lurker_Aspect"] = 31;
+	zergTechAll["Burrowing"] = 32;
+
+	zergUpgradesAll["Zerg_Carapace"] = 33;
+	zergUpgradesAll["Zerg_Flyer_Attacks"] = 34;
+	zergUpgradesAll["Zerg_Flyer_Carapace"] = 35;
+	zergUpgradesAll["Zerg_Melee_Attacks"] = 36;
+	zergUpgradesAll["Zerg_Missile_Attacks"] = 37;
+	zergUpgradesAll["Gamete_Meiosis"] = 38;
+	zergUpgradesAll["Metasynaptic_Node"] = 39;
+	zergUpgradesAll["Chitinous_Plating"] = 40;
+	zergUpgradesAll["Anabolic_Synthesis"] = 41;
+	zergUpgradesAll["Muscular_Augments"] = 42;
+	zergUpgradesAll["Grooved_Spines"] = 43;
+	zergUpgradesAll["Adrenal_Glands"] = 44;
+	zergUpgradesAll["Metabolic_Boost"] = 45;
+	zergUpgradesAll["Antennae"] = 46;
+	zergUpgradesAll["Pneumatized_Carapace"] = 47;
+	zergUpgradesAll["Ventral_Sacs"] = 48;
 
 }
 

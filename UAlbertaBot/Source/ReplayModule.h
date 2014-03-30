@@ -30,6 +30,12 @@ private:
 	std::map<const char*,int> zergUnitsAll;
 	std::map<const char*,int> terranUnitsAll;
 	std::map<const char*,int> protossUnitsAll;
+	std::map<const char*,int> zergTechAll;
+	std::map<const char*,int> zergUpgradesAll;
+	std::map<const char*,int> terranTechAll;
+	std::map<const char*,int> terranUpgradesAll;
+	std::map<const char*,int> protossTechAll;
+	std::map<const char*,int> protossUpgradesAll;
 	std::ofstream myfile;
 	bool gameSeen;
 	int replayLength;

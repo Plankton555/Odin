@@ -198,6 +198,16 @@ void UAlbertaBotModule::onSendText(std::string text)
 	{
 		//Do nothing
 	}else{
+		if (text.compare("l") == 0)
+		{
+			BWAPI::Broodwar->leaveGame();
+		} else if (text.compare("i") == 0)
+		{
+			BWAPI::Broodwar->setLocalSpeed(0);
+		} else if (text.compare("s") == 0)
+		{
+			BWAPI::Broodwar->setLocalSpeed(100);
+		}
 
 		BWAPI::Broodwar->sendText(text.c_str());
 

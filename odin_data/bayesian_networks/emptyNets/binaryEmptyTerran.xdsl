@@ -233,7 +233,7 @@
 			<parents>Academy TimePeriod</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
-		<cpt id="OpticFlare">
+		<cpt id="OpticalFlare">
 			<state id="Absent" />
 			<state id="Present" />
 			<parents>Academy TimePeriod</parents>
@@ -245,7 +245,7 @@
 			<parents>Academy TimePeriod</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
-		<cpt id="StimPackTech">
+		<cpt id="StimPacks">
 			<state id="Absent" />
 			<state id="Present" />
 			<parents>Academy TimePeriod</parents>
@@ -269,7 +269,7 @@
 			<parents>MachineShop TimePeriod</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
-		<cpt id="SiegeTech">
+		<cpt id="SiegeTankTankMode">
 			<state id="Absent" />
 			<state id="Present" />
 			<parents>MachineShop TimePeriod</parents>
@@ -323,7 +323,7 @@
 			<parents>PhysicsLab TimePeriod</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
-		<cpt id="EMPShockWave">
+		<cpt id="EMPShockwave">
 			<state id="Absent" />
 			<state id="Present" />
 			<parents>ScienceFacility TimePeriod</parents>
@@ -359,7 +359,7 @@
 			<parents>CovertOps TimePeriod</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
-		<cpt id="PersonalCloaking">
+		<cpt id="PersonnelCloaking">
 			<state id="Absent" />
 			<state id="Present" />
 			<parents>CovertOps TimePeriod</parents>
@@ -536,7 +536,7 @@
 				<interior color="e5f6f7" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>715 689 781 730</position>
+				<position>696 689 781 730</position>
 			</node>
 			<node id="CovertOps">
 				<name>CovertOps</name>
@@ -685,8 +685,8 @@
 				<font color="000000" name="Arial" size="8" />
 				<position>1036 238 1140 296</position>
 			</node>
-			<node id="OpticFlare">
-				<name>OpticFlare</name>
+			<node id="OpticalFlare">
+				<name>OpticalFlare</name>
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
@@ -699,8 +699,8 @@
 				<font color="000000" name="Arial" size="8" />
 				<position>1093 311 1161 353</position>
 			</node>
-			<node id="StimPackTech">
-				<name>StimPackTech</name>
+			<node id="StimPacks">
+				<name>StimPacks</name>
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
@@ -718,21 +718,21 @@
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>203 527 281 575</position>
+				<position>198 505 276 553</position>
 			</node>
 			<node id="CharonBoosters">
 				<name>CharonBoosters</name>
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>136 578 242 633</position>
+				<position>107 559 213 614</position>
 			</node>
-			<node id="SiegeTech">
-				<name>SiegeTech</name>
+			<node id="SiegeTankTankMode">
+				<name>SiegeTankTankMode</name>
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>245 592 309 632</position>
+				<position>227 580 351 625</position>
 			</node>
 			<node id="VehicleWeapons1">
 				<name>VehicleWeapons1</name>
@@ -790,8 +790,8 @@
 				<font color="000000" name="Arial" size="8" />
 				<position>695 940 781 983</position>
 			</node>
-			<node id="EMPShockWave">
-				<name>EMPShockWave</name>
+			<node id="EMPShockwave">
+				<name>EMPShockwave</name>
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
@@ -832,8 +832,8 @@
 				<font color="000000" name="Arial" size="8" />
 				<position>1172 739 1236 779</position>
 			</node>
-			<node id="PersonalCloaking">
-				<name>PersonalCloaking</name>
+			<node id="PersonnelCloaking">
+				<name>PersonnelCloaking</name>
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />

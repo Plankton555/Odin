@@ -197,7 +197,7 @@
 			<parents>EvolutionChamber TimePeriod</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
-		<cpt id="SpawnBroodling">
+		<cpt id="SpawnBroodlings">
 			<state id="Absent" />
 			<state id="Present" />
 			<parents>QueensNest TimePeriod</parents>
@@ -245,7 +245,7 @@
 			<parents>UltraliskCavern TimePeriod</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
-		<cpt id="Burrow">
+		<cpt id="Burrowing">
 			<state id="Absent" />
 			<state id="Present" />
 			<parents>TimePeriod</parents>
@@ -577,12 +577,12 @@
 				<font color="000000" name="Arial" size="8" />
 				<position>308 285 389 323</position>
 			</node>
-			<node id="SpawnBroodling">
-				<name>SpawnBroodling</name>
+			<node id="SpawnBroodlings">
+				<name>SpawnBroodlings</name>
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>257 493 348 549</position>
+				<position>249 493 348 549</position>
 			</node>
 			<node id="Ensnare">
 				<name>Ensnare</name>
@@ -633,12 +633,12 @@
 				<font color="000000" name="Arial" size="8" />
 				<position>826 863 912 916</position>
 			</node>
-			<node id="Burrow">
-				<name>Burrow</name>
+			<node id="Burrowing">
+				<name>Burrowing</name>
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>737 122 789 154</position>
+				<position>711 122 789 154</position>
 			</node>
 			<node id="VentralSacs">
 				<name>VentralSacs</name>

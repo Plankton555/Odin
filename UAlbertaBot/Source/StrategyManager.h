@@ -83,8 +83,8 @@ public:
 
 	static	StrategyManager &	Instance();
 
+			BayesianNet*		getBayesianNet() { return bayesianNet; }
 			void				onUnitShow(BWAPI::Unit * unit);
-
 			void				onEnd(const bool isWinner);
 	
 	const	bool				regroup(int numInRadius);

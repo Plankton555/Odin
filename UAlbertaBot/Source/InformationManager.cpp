@@ -22,6 +22,7 @@ InformationManager & InformationManager::Instance()
 
 void InformationManager::update() 
 {
+	updateEnemyResearchInfo();
 	updateUnitInfo();
 	updateBaseLocationInfo();
 	map.setUnitData(BWAPI::Broodwar);
@@ -263,11 +264,39 @@ void InformationManager::drawUnitInformation(int x, int y) {
 
 void InformationManager::onStart() {}
 
+void debug(std::string str)
+{
+	ofstream file ("debug.txt", ios::app);
+	if (file.is_open())
+	{
+		file << str.c_str() << endl;
+		file.close();
+	}
+}
+
+void debug(std::string str, int i)
+{
+	std::ostringstream stringStream;
+	stringStream << str;
+	stringStream << ": ";
+	stringStream << i;
+	std::string newStr = stringStream.str();
+	debug(newStr);
+}
+
 void InformationManager::updateUnit(BWAPI::Unit * unit)
 {
 	if (unit->getPlayer() == BWAPI::Broodwar->enemy())
 	{
 		enemyUnitData.updateUnit(unit);
+
+		//Update the bayesian net
+		BayesianNet* bn = StrategyManager::Instance().getBayesianNet();
+		if (bn)
+		{
+			//Update the unit
+			updateIfNotExists(unit->getType().c_str());
+		}
 	}
 	else if (unit->getPlayer() == BWAPI::Broodwar->self())
 	{
@@ -450,4 +479,99 @@ bool InformationManager::enemyHasDetector()
 bool InformationManager::tileContainsUnit(BWAPI::TilePosition tile)
 {
 	return map.canBuildHere(tile);
+}
+
+bool InformationManager::replaceString(std::string &str, const std::string &from, const std::string &to)
+{
+	int fromPos = str.find(from);
+	if (fromPos == std::string::npos)
+	{
+		return false;
+	} else
+	{
+		str.replace(fromPos, from.length(), to);
+		return true;
+	}
+}
+
+void InformationManager::replaceAllString(std::string &str, const std::string &from, const std::string &to)
+{
+	while (replaceString(str, from, to)) ;
+}
+
+void InformationManager::updateEnemyResearchInfo()
+{
+
+	//Update upgrades
+	std::set<BWAPI::UpgradeType> allUpgrades = BWAPI::UpgradeTypes::allUpgradeTypes();
+	std::set<BWAPI::UpgradeType>::iterator itUpg;
+	for (itUpg = allUpgrades.begin(); itUpg != allUpgrades.end(); itUpg++)
+	{
+		int level;
+		if ((level = BWAPI::Broodwar->enemy()->getUpgradeLevel(*itUpg)) > 0) //Has the upgrade
+		{
+
+			//Append the level to the name if there is more than 1
+			std::string name;
+			if ((*itUpg).maxRepeats() > 1)
+			{
+				std::ostringstream stringStream;
+				stringStream << (*itUpg).c_str();
+				stringStream << level;
+				name = stringStream.str();
+			} else {
+				name = (*itUpg).c_str();
+			}
+
+			updateIfNotExists(name);
+		}
+	}
+	
+	//Update techs
+	std::set<BWAPI::TechType> allTechs = BWAPI::TechTypes::allTechTypes();
+	std::set<BWAPI::TechType>::iterator itTech;
+	for (itTech = allTechs.begin(); itTech != allTechs.end(); itTech++)
+	{
+
+		if (BWAPI::Broodwar->enemy()->hasResearched(*itTech))
+		{
+			updateIfNotExists((*itTech).c_str());
+		}
+	}
+
+	//bn->UpdateBeliefs(); //TODO: How often should this be run? does it require lots of cpu time? Only do this when actually using the data?
+	//BWAPI::Broodwar->printf("Applying updates");
+}
+
+void InformationManager::updateIfNotExists(const std::string &name)
+{
+	std::string shortName = name;
+	replaceAllString(shortName, "Protoss", "");
+	replaceAllString(shortName, "Terran", "");
+	replaceAllString(shortName, "Zerg", "");
+	replaceAllString(shortName," ",""); //Remove all spaces
+	replaceAllString(shortName,"-",""); //remove '-' for u-238 shells
+
+	BayesianNet* bn = StrategyManager::Instance().getBayesianNet();
+	bool exists = false;
+	for (int i = 0; i < seenUnits.size(); i++)
+	{
+		if (strcmp(seenUnits.at(i).c_str(), shortName.c_str()) == 0)
+		{
+			exists = true;
+			break;
+		}
+	}
+
+	if (!exists)
+	{
+		seenUnits.push_back(shortName);
+		if (!bn->exists(shortName))
+		{
+			debug(shortName);
+			debug("^DIDN*T EXIST IN BN^");
+			return;
+		}
+		bn->SetEvidence(shortName, 1);
+	}
 }

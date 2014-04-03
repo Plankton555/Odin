@@ -27,6 +27,7 @@ public:
 	void AddNode(ParsedNode* node);
 	void CreateNetwork();
 
+	bool exists(const std::string &nodeName);
 	void SetEvidence(const std::string &, int nodeState);
 	void ClearEvidence();
 	double ReadProbability(const std::string &nodeName, int nodeState);

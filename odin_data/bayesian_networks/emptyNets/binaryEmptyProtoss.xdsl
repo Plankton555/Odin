@@ -239,7 +239,7 @@
 			<parents>CyberCore TimePeriod</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
-		<cpt id="Mindcontrol">
+		<cpt id="MindControl">
 			<state id="Absent" />
 			<state id="Present" />
 			<parents>TemplarArchives TimePeriod</parents>
@@ -281,7 +281,7 @@
 			<parents>ArbiterTribunal TimePeriod</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
-		<cpt id="StatisField">
+		<cpt id="StasisField">
 			<state id="Absent" />
 			<state id="Present" />
 			<parents>ArbiterTribunal TimePeriod</parents>
@@ -299,7 +299,7 @@
 			<parents>FleetBeacon TimePeriod</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
-		<cpt id="ApialSensor">
+		<cpt id="ApialSensors">
 			<state id="Absent" />
 			<state id="Present" />
 			<parents>FleetBeacon TimePeriod</parents>
@@ -329,7 +329,7 @@
 			<parents>Observatory TimePeriod</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
-		<cpt id="GraviticBooster">
+		<cpt id="GraviticBoosters">
 			<state id="Absent" />
 			<state id="Present" />
 			<parents>Observatory TimePeriod</parents>
@@ -347,7 +347,7 @@
 			<parents>RoboticsSupportBay TimePeriod</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
-		<cpt id="IncreaseReaverCapacity">
+		<cpt id="ReaverCapacity">
 			<state id="Absent" />
 			<state id="Present" />
 			<parents>RoboticsSupportBay TimePeriod</parents>
@@ -668,8 +668,8 @@
 				<font color="000000" name="Arial" size="8" />
 				<position>147 365 260 417</position>
 			</node>
-			<node id="Mindcontrol">
-				<name>Mindcontrol</name>
+			<node id="MindControl">
+				<name>MindControl</name>
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
@@ -717,12 +717,12 @@
 				<font color="000000" name="Arial" size="8" />
 				<position>562 750 608 778</position>
 			</node>
-			<node id="StatisField">
-				<name>StatisField</name>
+			<node id="StasisField">
+				<name>StasisField</name>
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>581 784 643 822</position>
+				<position>569 784 643 822</position>
 			</node>
 			<node id="KhaydarinCore">
 				<name>KhaydarinCore</name>
@@ -738,8 +738,8 @@
 				<font color="000000" name="Arial" size="8" />
 				<position>762 819 866 863</position>
 			</node>
-			<node id="ApialSensor">
-				<name>ApialSensor</name>
+			<node id="ApialSensors">
+				<name>ApialSensors</name>
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
@@ -773,12 +773,12 @@
 				<font color="000000" name="Arial" size="8" />
 				<position>1231 417 1313 468</position>
 			</node>
-			<node id="GraviticBooster">
-				<name>GraviticBooster</name>
+			<node id="GraviticBoosters">
+				<name>GraviticBoosters</name>
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>1176 364 1264 419</position>
+				<position>1169 364 1264 419</position>
 			</node>
 			<node id="GraviticDrive">
 				<name>GraviticDrive</name>
@@ -794,8 +794,8 @@
 				<font color="000000" name="Arial" size="8" />
 				<position>1279 718 1390 770</position>
 			</node>
-			<node id="IncreaseReaverCapacity">
-				<name>IncreaseReaverCapacity</name>
+			<node id="ReaverCapacity">
+				<name>ReaverCapacity</name>
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />

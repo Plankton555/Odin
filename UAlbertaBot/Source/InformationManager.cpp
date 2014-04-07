@@ -264,26 +264,6 @@ void InformationManager::drawUnitInformation(int x, int y) {
 
 void InformationManager::onStart() {}
 
-void debug(std::string str)
-{
-	ofstream file ("debug.txt", ios::app);
-	if (file.is_open())
-	{
-		file << str.c_str() << endl;
-		file.close();
-	}
-}
-
-void debug(std::string str, int i)
-{
-	std::ostringstream stringStream;
-	stringStream << str;
-	stringStream << ": ";
-	stringStream << i;
-	std::string newStr = stringStream.str();
-	debug(newStr);
-}
-
 void InformationManager::updateUnit(BWAPI::Unit * unit)
 {
 	if (unit->getPlayer() == BWAPI::Broodwar->enemy())
@@ -568,8 +548,6 @@ void InformationManager::updateIfNotExists(const std::string &name)
 		seenUnits.push_back(shortName);
 		if (!bn->exists(shortName))
 		{
-			debug(shortName);
-			debug("^DIDN*T EXIST IN BN^");
 			return;
 		}
 		bn->SetEvidence(shortName, 1);

@@ -239,6 +239,30 @@
 			<parents>CyberCore TimePeriod</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
+		<cpt id="Mindcontrol">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>TemplarArchives TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="Maelstrom">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>TemplarArchives TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="ArgusTalisman">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>TemplarArchives TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="KhaydarinAmulet">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>TemplarArchives TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
 		<cpt id="PsionicStorm">
 			<state id="Absent" />
 			<state id="Present" />
@@ -249,6 +273,84 @@
 			<state id="Absent" />
 			<state id="Present" />
 			<parents>TemplarArchives TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="Recall">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>ArbiterTribunal TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="StatisField">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>ArbiterTribunal TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="KhaydarinCore">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>ArbiterTribunal TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="GraviticThrusters">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>FleetBeacon TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="ApialSensor">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>FleetBeacon TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="ArgusJewel">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>FleetBeacon TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="DisruptionWeb">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>FleetBeacon TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="CarrierCapacity">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>FleetBeacon TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="SensorArray">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>Observatory TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="GraviticBooster">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>Observatory TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="GraviticDrive">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>RoboticsSupportBay TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="ScarabDamage">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>RoboticsSupportBay TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="IncreaseReaverCapacity">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>RoboticsSupportBay TimePeriod</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
 		<cpt id="PlasmaShields2">
@@ -566,6 +668,34 @@
 				<font color="000000" name="Arial" size="8" />
 				<position>147 365 260 417</position>
 			</node>
+			<node id="Mindcontrol">
+				<name>Mindcontrol</name>
+				<interior color="ff99cc" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>163 673 243 723</position>
+			</node>
+			<node id="Maelstrom">
+				<name>Maelstrom</name>
+				<interior color="ff99cc" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>258 680 333 726</position>
+			</node>
+			<node id="ArgusTalisman">
+				<name>ArgusTalisman</name>
+				<interior color="ff99cc" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>227 739 329 787</position>
+			</node>
+			<node id="KhaydarinAmulet">
+				<name>KhaydarinAmulet</name>
+				<interior color="ff99cc" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>327 721 424 767</position>
+			</node>
 			<node id="PsionicStorm">
 				<name>PsionicStorm</name>
 				<interior color="ff99cc" />
@@ -579,6 +709,97 @@
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
 				<position>338 790 411 835</position>
+			</node>
+			<node id="Recall">
+				<name>Recall</name>
+				<interior color="ff99cc" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>562 750 608 778</position>
+			</node>
+			<node id="StatisField">
+				<name>StatisField</name>
+				<interior color="ff99cc" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>581 784 643 822</position>
+			</node>
+			<node id="KhaydarinCore">
+				<name>KhaydarinCore</name>
+				<interior color="ff99cc" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>603 831 704 891</position>
+			</node>
+			<node id="GraviticThrusters">
+				<name>GraviticThrusters</name>
+				<interior color="ff99cc" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>762 819 866 863</position>
+			</node>
+			<node id="ApialSensor">
+				<name>ApialSensor</name>
+				<interior color="ff99cc" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>872 809 955 852</position>
+			</node>
+			<node id="ArgusJewel">
+				<name>ArgusJewel</name>
+				<interior color="ff99cc" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>847 868 929 910</position>
+			</node>
+			<node id="DisruptionWeb">
+				<name>DisruptionWeb</name>
+				<interior color="ff99cc" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>936 851 1018 902</position>
+			</node>
+			<node id="CarrierCapacity">
+				<name>CarrierCapacity</name>
+				<interior color="ff99cc" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>1025 890 1119 937</position>
+			</node>
+			<node id="SensorArray">
+				<name>SensorArray</name>
+				<interior color="ff99cc" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>1231 417 1313 468</position>
+			</node>
+			<node id="GraviticBooster">
+				<name>GraviticBooster</name>
+				<interior color="ff99cc" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>1176 364 1264 419</position>
+			</node>
+			<node id="GraviticDrive">
+				<name>GraviticDrive</name>
+				<interior color="ff99cc" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>1182 730 1258 777</position>
+			</node>
+			<node id="ScarabDamage">
+				<name>ScarabDamage</name>
+				<interior color="ff99cc" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>1279 718 1390 770</position>
+			</node>
+			<node id="IncreaseReaverCapacity">
+				<name>IncreaseReaverCapacity</name>
+				<interior color="ff99cc" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>1174 793 1310 865</position>
 			</node>
 			<node id="PlasmaShields2">
 				<name>PlasmaShields2</name>

@@ -227,24 +227,6 @@
 			<parents>TimePeriod EngineeringBay</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
-		<cpt id="CaduceusReactor">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>Academy TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="OpticalFlare">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>Academy TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="Restoration">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>Academy TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
 		<cpt id="StimPacks">
 			<state id="Absent" />
 			<state id="Present" />
@@ -255,12 +237,6 @@
 			<state id="Absent" />
 			<state id="Present" />
 			<parents>Academy TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="IonThrusters">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>MachineShop TimePeriod</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
 		<cpt id="CharonBoosters">
@@ -299,22 +275,10 @@
 			<parents>Armory TimePeriod</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
-		<cpt id="ApolloReactor">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>ControlTower TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
 		<cpt id="CloakingField">
 			<state id="Absent" />
 			<state id="Present" />
 			<parents>ControlTower TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="ColossusReactor">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>PhysicsLab TimePeriod</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
 		<cpt id="YamatoGun">
@@ -333,24 +297,6 @@
 			<state id="Absent" />
 			<state id="Present" />
 			<parents>ScienceFacility TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="TitanReactor">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>ScienceFacility TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="OcularImplants">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>CovertOps TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="MoebiusReactor">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>CovertOps TimePeriod</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
 		<cpt id="Lockdown">
@@ -678,27 +624,6 @@
 				<font color="000000" name="Arial" size="8" />
 				<position>852 165 943 213</position>
 			</node>
-			<node id="CaduceusReactor">
-				<name>CaduceusReactor</name>
-				<interior color="ff99cc" />
-				<outline color="000080" />
-				<font color="000000" name="Arial" size="8" />
-				<position>1036 238 1140 296</position>
-			</node>
-			<node id="OpticalFlare">
-				<name>OpticalFlare</name>
-				<interior color="ff99cc" />
-				<outline color="000080" />
-				<font color="000000" name="Arial" size="8" />
-				<position>1145 269 1238 312</position>
-			</node>
-			<node id="Restoration">
-				<name>Restoration</name>
-				<interior color="ff99cc" />
-				<outline color="000080" />
-				<font color="000000" name="Arial" size="8" />
-				<position>1093 311 1161 353</position>
-			</node>
 			<node id="StimPacks">
 				<name>StimPacks</name>
 				<interior color="ff99cc" />
@@ -712,13 +637,6 @@
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
 				<position>1117 367 1192 413</position>
-			</node>
-			<node id="IonThrusters">
-				<name>IonThrusters</name>
-				<interior color="ff99cc" />
-				<outline color="000080" />
-				<font color="000000" name="Arial" size="8" />
-				<position>198 505 276 553</position>
 			</node>
 			<node id="CharonBoosters">
 				<name>CharonBoosters</name>
@@ -762,26 +680,12 @@
 				<font color="000000" name="Arial" size="8" />
 				<position>416 713 506 754</position>
 			</node>
-			<node id="ApolloReactor">
-				<name>ApolloReactor</name>
-				<interior color="ff99cc" />
-				<outline color="000080" />
-				<font color="000000" name="Arial" size="8" />
-				<position>553 756 633 806</position>
-			</node>
 			<node id="CloakingField">
 				<name>CloakingField</name>
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
 				<position>600 812 675 858</position>
-			</node>
-			<node id="ColossusReactor">
-				<name>ColossusReactor</name>
-				<interior color="ff99cc" />
-				<outline color="000080" />
-				<font color="000000" name="Arial" size="8" />
-				<position>739 881 848 939</position>
 			</node>
 			<node id="YamatoGun">
 				<name>YamatoGun</name>
@@ -803,27 +707,6 @@
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
 				<position>976 878 1030 911</position>
-			</node>
-			<node id="TitanReactor">
-				<name>TitanReactor</name>
-				<interior color="ff99cc" />
-				<outline color="000080" />
-				<font color="000000" name="Arial" size="8" />
-				<position>979 826 1052 871</position>
-			</node>
-			<node id="OcularImplants">
-				<name>OcularImplants</name>
-				<interior color="ff99cc" />
-				<outline color="000080" />
-				<font color="000000" name="Arial" size="8" />
-				<position>1196 673 1278 724</position>
-			</node>
-			<node id="MoebiusReactor">
-				<name>MoebiusReactor</name>
-				<interior color="ff99cc" />
-				<outline color="000080" />
-				<font color="000000" name="Arial" size="8" />
-				<position>1240 725 1329 780</position>
 			</node>
 			<node id="Lockdown">
 				<name>Lockdown</name>

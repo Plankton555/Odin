@@ -29,782 +29,847 @@
 			<state id="Period25" />
 			<probabilities>0.04 0.04 0.04 0.04 0.04 0.04 0.04 0.04 0.04 0.04 0.04 0.04 0.04 0.04 0.04 0.04 0.04 0.04 0.04 0.04 0.04 0.04 0.04 0.04 0.04</probabilities>
 		</cpt>
-		<cpt id="Barracks">
+		<cpt id="Assimilator">
 			<state id="Absent" />
 			<state id="Present" />
 			<parents>TimePeriod</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
-		<cpt id="Bunker">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>Barracks TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="SupplyDepot">
+		<cpt id="Pylon">
 			<state id="Absent" />
 			<state id="Present" />
 			<parents>TimePeriod</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
-		<cpt id="EngineeringBay">
+		<cpt id="Gateway">
 			<state id="Absent" />
 			<state id="Present" />
-			<parents>TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="MissileTurret">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>EngineeringBay TimePeriod</parents>
+			<parents>Pylon TimePeriod</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
-		<cpt id="Refinery">
+		<cpt id="Zealot">
 			<state id="Absent" />
 			<state id="Present" />
-			<parents>TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="Academy">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>Barracks TimePeriod</parents>
+			<parents>Gateway TimePeriod</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
-		<cpt id="Factory">
+		<cpt id="CyberCore">
 			<state id="Absent" />
 			<state id="Present" />
-			<parents>Barracks Refinery TimePeriod</parents>
+			<parents>Gateway TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="CitadelOfAdun">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>CyberCore Assimilator TimePeriod</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
-		<cpt id="ComsatStation">
+		<cpt id="TemplarArchives">
 			<state id="Absent" />
 			<state id="Present" />
-			<parents>Academy Refinery TimePeriod</parents>
+			<parents>CitadelOfAdun TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="DarkTemplar">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>TemplarArchives TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="RoboticsFacility">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>CyberCore Assimilator TimePeriod</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
-		<cpt id="MachineShop">
+		<cpt id="RoboticsSupportBay">
 			<state id="Absent" />
 			<state id="Present" />
-			<parents>Factory TimePeriod</parents>
+			<parents>RoboticsFacility TimePeriod</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
-		<cpt id="Armory">
+		<cpt id="Forge">
 			<state id="Absent" />
 			<state id="Present" />
-			<parents>Factory TimePeriod</parents>
+			<parents>Pylon TimePeriod</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
-		<cpt id="Starport">
+		<cpt id="PhotonCannon">
 			<state id="Absent" />
 			<state id="Present" />
-			<parents>Factory TimePeriod</parents>
+			<parents>Forge TimePeriod</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
-		<cpt id="ControlTower">
+		<cpt id="Stargate">
 			<state id="Absent" />
 			<state id="Present" />
-			<parents>Starport TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="ScienceFacility">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>Starport TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="PhysicsLab">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>ScienceFacility TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="CovertOps">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>ScienceFacility TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="NuclearSilo">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>CovertOps TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="Marine">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>Barracks TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="Firebat">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>Academy TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="Medic">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>Academy TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="Vulture">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>Factory TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="SpiderMine">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>MachineShop Vulture TimePeriod</parents>
+			<parents>CyberCore Assimilator TimePeriod</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
-		<cpt id="SiegeTank">
+		<cpt id="Observatory">
 			<state id="Absent" />
 			<state id="Present" />
-			<parents>MachineShop TimePeriod</parents>
+			<parents>RoboticsFacility TimePeriod</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
-		<cpt id="Goliath">
+		<cpt id="ArbiterTribunal">
 			<state id="Absent" />
 			<state id="Present" />
-			<parents>Armory TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="Valkyrie">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>Armory ControlTower TimePeriod</parents>
+			<parents>TemplarArchives Stargate TimePeriod</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
-		<cpt id="Dropship">
+		<cpt id="FleetBeacon">
 			<state id="Absent" />
 			<state id="Present" />
-			<parents>ControlTower TimePeriod</parents>
+			<parents>Stargate TimePeriod</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
-		<cpt id="Wraith">
+		<cpt id="ShieldBattery">
 			<state id="Absent" />
 			<state id="Present" />
-			<parents>Starport TimePeriod</parents>
+			<parents>Gateway TimePeriod</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
-		<cpt id="ScienceVessel">
+		<cpt id="Dragoon">
 			<state id="Absent" />
 			<state id="Present" />
-			<parents>ControlTower ScienceFacility TimePeriod</parents>
+			<parents>CyberCore Assimilator TimePeriod</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
-		<cpt id="Battlecruiser">
+		<cpt id="HighTemplar">
 			<state id="Absent" />
 			<state id="Present" />
-			<parents>PhysicsLab TimePeriod</parents>
+			<parents>TemplarArchives TimePeriod</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
-		<cpt id="Ghost">
+		<cpt id="Shuttle">
 			<state id="Absent" />
 			<state id="Present" />
-			<parents>CovertOps TimePeriod</parents>
+			<parents>RoboticsFacility TimePeriod</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
-		<cpt id="NuclearMissile">
+		<cpt id="Reaver">
 			<state id="Absent" />
 			<state id="Present" />
-			<parents>NuclearSilo Ghost TimePeriod</parents>
+			<parents>RoboticsSupportBay TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="Observer">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>Observatory TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="Carrier">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>FleetBeacon TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="Scout">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>Stargate TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="Corsair">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>Stargate TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="Arbiter">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>ArbiterTribunal TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="DarkArchon">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>DarkTemplar TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="Archon">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>HighTemplar TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="GroundWeapons1">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>TimePeriod Forge</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="GroundArmor1">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>TimePeriod Forge</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="PlasmaShields1">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>TimePeriod Forge</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="AirWeapons1">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>CyberCore TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="AirArmor1">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>CyberCore TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="LegEnhancements">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>TimePeriod CitadelOfAdun</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="SingularityCharge">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>CyberCore TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="MindControl">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>TemplarArchives TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="Maelstrom">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>TemplarArchives TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="ArgusTalisman">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>TemplarArchives TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="KhaydarinAmulet">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>TemplarArchives TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="PsionicStorm">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>TemplarArchives TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="Hallucination">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>TemplarArchives TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="Recall">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>ArbiterTribunal TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="StasisField">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>ArbiterTribunal TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="KhaydarinCore">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>ArbiterTribunal TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="GraviticThrusters">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>FleetBeacon TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="ApialSensors">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>FleetBeacon TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="ArgusJewel">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>FleetBeacon TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="DisruptionWeb">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>FleetBeacon TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="CarrierCapacity">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>FleetBeacon TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="SensorArray">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>Observatory TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="GraviticBoosters">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>Observatory TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="GraviticDrive">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>RoboticsSupportBay TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="ScarabDamage">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>RoboticsSupportBay TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="ReaverCapacity">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>RoboticsSupportBay TimePeriod</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="PlasmaShields2">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>TimePeriod PlasmaShields1</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="PlasmaShields3">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>TimePeriod PlasmaShields2</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="GroundArmor2">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>TimePeriod GroundArmor1</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="GroundArmor3">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>TimePeriod GroundArmor2</parents>
+			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
+		</cpt>
+		<cpt id="GroundWeapons2">
+			<state id="Absent" />
+			<state id="Present" />
+			<parents>TimePeriod Forge GroundWeapons1</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
-		<cpt id="InfantryWeapons1">
+		<cpt id="GroundWeapons3">
 			<state id="Absent" />
 			<state id="Present" />
-			<parents>EngineeringBay TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="InfantryArmor1">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>TimePeriod EngineeringBay</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="StimPacks">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>Academy TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="U238Shells">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>Academy TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="CharonBoosters">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>MachineShop TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="SiegeTankTankMode">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>MachineShop TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="VehicleWeapons1">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>Armory TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="VehiclePlating1">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>Armory TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="ShipWeapons1">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>Armory TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="ShipPlating1">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>Armory TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="CloakingField">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>ControlTower TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="YamatoGun">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>PhysicsLab TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="EMPShockwave">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>ScienceFacility TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="Irradiate">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>ScienceFacility TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="Lockdown">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>CovertOps TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="PersonnelCloaking">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>CovertOps TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="InfantryArmor2">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>TimePeriod InfantryArmor1 ScienceFacility</parents>
+			<parents>TimePeriod Forge GroundWeapons2</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
-		<cpt id="InfantryArmor3">
+		<cpt id="AirArmor2">
 			<state id="Absent" />
 			<state id="Present" />
-			<parents>TimePeriod InfantryArmor2</parents>
+			<parents>TimePeriod AirArmor1</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
-		<cpt id="InfantryWeapons2">
+		<cpt id="AirArmor3">
 			<state id="Absent" />
 			<state id="Present" />
-			<parents>TimePeriod InfantryWeapons1 ScienceFacility</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="InfantryWeapons3">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>TimePeriod InfantryWeapons2</parents>
+			<parents>TimePeriod AirArmor2</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
-		<cpt id="VehicleWeapons2">
+		<cpt id="AirWeapons2">
 			<state id="Absent" />
 			<state id="Present" />
-			<parents>TimePeriod VehicleWeapons1 ScienceFacility</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="VehicleWeapons3">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>TimePeriod VehicleWeapons2</parents>
+			<parents>TimePeriod AirWeapons1</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
-		<cpt id="VehiclePlating2">
+		<cpt id="AirWeapons3">
 			<state id="Absent" />
 			<state id="Present" />
-			<parents>TimePeriod VehiclePlating1 ScienceFacility</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="VehiclePlating3">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>TimePeriod VehiclePlating2</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="ShipWeapons2">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>TimePeriod ShipWeapons1 ScienceFacility</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="ShipWeapons3">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>TimePeriod ShipWeapons2</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="ShipPlating2">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>TimePeriod ShipPlating1 ScienceFacility</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="ShipPlating3">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>TimePeriod ShipPlating2</parents>
+			<parents>TimePeriod AirWeapons2</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
 	</nodes>
 	<extensions>
 		<genie version="1.0" app="GeNIe 2.0.5079.0" name="Network1" faultnameformat="nodestate">
-			<node id="SupplyDepot">
-				<name>SupplyDepot</name>
+			<node id="Assimilator">
+				<name>Assimilator</name>
 				<interior color="e5f6f7" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>468 263 541 308</position>
+				<position>510 340 576 381</position>
 			</node>
-			<node id="Barracks">
-				<name>Barracks</name>
+			<node id="Pylon">
+				<name>Pylon</name>
 				<interior color="e5f6f7" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>588 338 647 374</position>
+				<position>760 247 805 275</position>
 			</node>
-			<node id="EngineeringBay">
-				<name>EngineeringBay</name>
+			<node id="Gateway">
+				<name>Gateway</name>
 				<interior color="e5f6f7" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>752 251 838 304</position>
+				<position>736 329 793 364</position>
 			</node>
-			<node id="MissileTurret">
-				<name>MissileTurret</name>
-				<interior color="e5f6f7" />
-				<outline color="000080" />
-				<font color="000000" name="Arial" size="8" />
-				<position>869 267 942 312</position>
-			</node>
-			<node id="Refinery">
-				<name>Refinery</name>
-				<interior color="e5f6f7" />
-				<outline color="000080" />
-				<font color="000000" name="Arial" size="8" />
-				<position>681 409 737 444</position>
-			</node>
-			<node id="Academy">
-				<name>Academy</name>
-				<interior color="e5f6f7" />
-				<outline color="000080" />
-				<font color="000000" name="Arial" size="8" />
-				<position>791 368 852 406</position>
-			</node>
-			<node id="Factory">
-				<name>Factory</name>
-				<interior color="e5f6f7" />
-				<outline color="000080" />
-				<font color="000000" name="Arial" size="8" />
-				<position>582 418 634 450</position>
-			</node>
-			<node id="ComsatStation">
-				<name>ComsatStation</name>
-				<interior color="e5f6f7" />
-				<outline color="000080" />
-				<font color="000000" name="Arial" size="8" />
-				<position>794 457 874 507</position>
-			</node>
-			<node id="MachineShop">
-				<name>MachineShop</name>
-				<interior color="e5f6f7" />
-				<outline color="000080" />
-				<font color="000000" name="Arial" size="8" />
-				<position>470 486 546 533</position>
-			</node>
-			<node id="Armory">
-				<name>Armory</name>
-				<interior color="e5f6f7" />
-				<outline color="000080" />
-				<font color="000000" name="Arial" size="8" />
-				<position>589 518 641 550</position>
-			</node>
-			<node id="Starport">
-				<name>Starport</name>
-				<interior color="e5f6f7" />
-				<outline color="000080" />
-				<font color="000000" name="Arial" size="8" />
-				<position>682 520 736 553</position>
-			</node>
-			<node id="ControlTower">
-				<name>ControlTower</name>
-				<interior color="e5f6f7" />
-				<outline color="000080" />
-				<font color="000000" name="Arial" size="8" />
-				<position>654 593 732 641</position>
-			</node>
-			<node id="ScienceFacility">
-				<name>ScienceFacility</name>
-				<interior color="e5f6f7" />
-				<outline color="000080" />
-				<font color="000000" name="Arial" size="8" />
-				<position>795 660 879 712</position>
-			</node>
-			<node id="PhysicsLab">
-				<name>PhysicsLab</name>
-				<interior color="e5f6f7" />
-				<outline color="000080" />
-				<font color="000000" name="Arial" size="8" />
-				<position>696 689 781 730</position>
-			</node>
-			<node id="CovertOps">
-				<name>CovertOps</name>
-				<interior color="e5f6f7" />
-				<outline color="000080" />
-				<font color="000000" name="Arial" size="8" />
-				<position>908 649 974 690</position>
-			</node>
-			<node id="NuclearSilo">
-				<name>NuclearSilo</name>
-				<interior color="e5f6f7" />
-				<outline color="000080" />
-				<font color="000000" name="Arial" size="8" />
-				<position>878 590 946 632</position>
-			</node>
-			<node id="Bunker">
-				<name>Bunker</name>
-				<interior color="e5f6f7" />
-				<outline color="000080" />
-				<font color="000000" name="Arial" size="8" />
-				<position>421 322 472 353</position>
-			</node>
-			<node id="Marine">
-				<name>Marine</name>
+			<node id="Zealot">
+				<name>Zealot</name>
 				<interior color="99cc00" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>441 375 490 405</position>
+				<position>634 275 682 305</position>
 			</node>
-			<node id="Firebat">
-				<name>Firebat</name>
+			<node id="CyberCore">
+				<name>CyberCore</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>617 390 683 431</position>
+			</node>
+			<node id="CitadelOfAdun">
+				<name>CitadelOfAdun</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>541 449 623 500</position>
+			</node>
+			<node id="Forge">
+				<name>Forge</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>877 299 923 327</position>
+			</node>
+			<node id="PhotonCannon">
+				<name>PhotonCannon</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>977 366 1059 417</position>
+			</node>
+			<node id="Stargate">
+				<name>Stargate</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>709 520 765 555</position>
+			</node>
+			<node id="RoboticsFacility">
+				<name>RoboticsFacility</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>834 477 920 530</position>
+			</node>
+			<node id="RoboticsSupportBay">
+				<name>RoboticsSupportBay</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>903 586 1022 653</position>
+			</node>
+			<node id="Observatory">
+				<name>Observatory</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>961 527 1034 572</position>
+			</node>
+			<node id="ArbiterTribunal">
+				<name>ArbiterTribunal</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>607 627 689 678</position>
+			</node>
+			<node id="TemplarArchives">
+				<name>TemplarArchives</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>569 531 662 589</position>
+			</node>
+			<node id="FleetBeacon">
+				<name>FleetBeacon</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>797 565 870 610</position>
+			</node>
+			<node id="ShieldBattery">
+				<name>ShieldBattery</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>838 393 914 440</position>
+			</node>
+			<node id="Dragoon">
+				<name>Dragoon</name>
 				<interior color="99cc00" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>889 448 938 478</position>
+				<position>456 427 512 462</position>
 			</node>
-			<node id="Medic">
-				<name>Medic</name>
+			<node id="DarkTemplar">
+				<name>DarkTemplar</name>
 				<interior color="99cc00" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>915 403 961 431</position>
+				<position>436 491 509 536</position>
 			</node>
-			<node id="Vulture">
-				<name>Vulture</name>
+			<node id="HighTemplar">
+				<name>HighTemplar</name>
 				<interior color="99cc00" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>461 429 512 460</position>
+				<position>412 561 483 605</position>
 			</node>
-			<node id="SpiderMine">
-				<name>SpiderMine</name>
+			<node id="Shuttle">
+				<name>Shuttle</name>
 				<interior color="99cc00" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>367 466 433 507</position>
+				<position>982 461 1031 491</position>
 			</node>
-			<node id="SiegeTank">
-				<name>SiegeTank</name>
+			<node id="Reaver">
+				<name>Reaver</name>
 				<interior color="99cc00" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>395 569 459 609</position>
+				<position>1051 607 1102 638</position>
 			</node>
-			<node id="Goliath">
-				<name>Goliath</name>
+			<node id="Observer">
+				<name>Observer</name>
 				<interior color="99cc00" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>483 568 532 598</position>
+				<position>1075 543 1136 581</position>
 			</node>
-			<node id="Valkyrie">
-				<name>Valkyrie</name>
+			<node id="Carrier">
+				<name>Carrier</name>
 				<interior color="99cc00" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>516 643 570 676</position>
+				<position>784 656 833 686</position>
 			</node>
-			<node id="Dropship">
-				<name>Dropship</name>
+			<node id="Scout">
+				<name>Scout</name>
 				<interior color="99cc00" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>577 632 636 668</position>
+				<position>716 691 762 719</position>
 			</node>
-			<node id="Wraith">
-				<name>Wraith</name>
+			<node id="Corsair">
+				<name>Corsair</name>
 				<interior color="99cc00" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>854 539 902 569</position>
+				<position>757 690 808 721</position>
 			</node>
-			<node id="ScienceVessel">
-				<name>ScienceVessel</name>
+			<node id="Arbiter">
+				<name>Arbiter</name>
 				<interior color="99cc00" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>532 679 616 731</position>
+				<position>504 691 553 721</position>
 			</node>
-			<node id="Battlecruiser">
-				<name>Battlecruiser</name>
+			<node id="DarkArchon">
+				<name>DarkArchon</name>
 				<interior color="99cc00" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>664 736 737 781</position>
+				<position>339 483 410 527</position>
 			</node>
-			<node id="Ghost">
-				<name>Ghost</name>
+			<node id="Archon">
+				<name>Archon</name>
 				<interior color="99cc00" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>978 610 1024 638</position>
-			</node>
-			<node id="NuclearMissile">
-				<name>NuclearMissile</name>
-				<interior color="99cc00" />
-				<outline color="000080" />
-				<font color="000000" name="Arial" size="8" />
-				<position>951 541 1031 591</position>
+				<position>327 580 379 612</position>
 			</node>
 			<node id="TimePeriod">
 				<name>TimePeriod</name>
 				<interior color="ffcc00" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>631 226 702 270</position>
+				<position>420 252 491 296</position>
 			</node>
-			<node id="InfantryWeapons1">
-				<name>InfantryWeapons1</name>
+			<node id="GroundWeapons1">
+				<name>GroundWeapons1</name>
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>682 153 798 208</position>
+				<position>662 147 766 202</position>
 			</node>
-			<node id="InfantryArmor1">
-				<name>InfantryArmor1</name>
+			<node id="GroundArmor1">
+				<name>GroundArmor1</name>
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>852 165 943 213</position>
+				<position>899 141 988 189</position>
 			</node>
-			<node id="StimPacks">
-				<name>StimPacks</name>
+			<node id="PlasmaShields1">
+				<name>PlasmaShields1</name>
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>1183 347 1282 382</position>
+				<position>783 154 880 185</position>
 			</node>
-			<node id="U238Shells">
-				<name>U238Shells</name>
+			<node id="AirWeapons1">
+				<name>AirWeapons1</name>
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>1117 367 1192 413</position>
+				<position>244 242 340 284</position>
 			</node>
-			<node id="CharonBoosters">
-				<name>CharonBoosters</name>
+			<node id="AirArmor1">
+				<name>AirArmor1</name>
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>107 559 213 614</position>
+				<position>241 296 310 332</position>
 			</node>
-			<node id="SiegeTankTankMode">
-				<name>SiegeTankTankMode</name>
+			<node id="LegEnhancements">
+				<name>LegEnhancements</name>
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>227 580 351 625</position>
+				<position>212 445 324 490</position>
 			</node>
-			<node id="VehicleWeapons1">
-				<name>VehicleWeapons1</name>
+			<node id="SingularityCharge">
+				<name>SingularityCharge</name>
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>73 700 187 758</position>
+				<position>147 365 260 417</position>
 			</node>
-			<node id="VehiclePlating1">
-				<name>VehiclePlating1</name>
+			<node id="MindControl">
+				<name>MindControl</name>
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>192 709 291 757</position>
+				<position>163 673 243 723</position>
 			</node>
-			<node id="ShipWeapons1">
-				<name>ShipWeapons1</name>
+			<node id="Maelstrom">
+				<name>Maelstrom</name>
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>307 718 409 766</position>
+				<position>258 680 333 726</position>
 			</node>
-			<node id="ShipPlating1">
-				<name>ShipPlating1</name>
+			<node id="ArgusTalisman">
+				<name>ArgusTalisman</name>
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>416 713 506 754</position>
+				<position>227 739 329 787</position>
 			</node>
-			<node id="CloakingField">
-				<name>CloakingField</name>
+			<node id="KhaydarinAmulet">
+				<name>KhaydarinAmulet</name>
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>600 812 675 858</position>
+				<position>327 721 424 767</position>
 			</node>
-			<node id="YamatoGun">
-				<name>YamatoGun</name>
+			<node id="PsionicStorm">
+				<name>PsionicStorm</name>
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>695 940 781 983</position>
+				<position>415 766 500 802</position>
 			</node>
-			<node id="EMPShockwave">
-				<name>EMPShockwave</name>
+			<node id="Hallucination">
+				<name>Hallucination</name>
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>880 833 969 888</position>
+				<position>338 790 411 835</position>
 			</node>
-			<node id="Irradiate">
-				<name>Irradiate</name>
+			<node id="Recall">
+				<name>Recall</name>
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>976 878 1030 911</position>
+				<position>562 750 608 778</position>
 			</node>
-			<node id="Lockdown">
-				<name>Lockdown</name>
+			<node id="StasisField">
+				<name>StasisField</name>
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>1172 739 1236 779</position>
+				<position>569 784 643 822</position>
 			</node>
-			<node id="PersonnelCloaking">
-				<name>PersonnelCloaking</name>
+			<node id="KhaydarinCore">
+				<name>KhaydarinCore</name>
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>1198 788 1291 846</position>
+				<position>603 831 704 891</position>
 			</node>
-			<node id="InfantryArmor2">
-				<name>InfantryArmor2</name>
+			<node id="GraviticThrusters">
+				<name>GraviticThrusters</name>
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>871 104 962 152</position>
+				<position>762 819 866 863</position>
 			</node>
-			<node id="InfantryArmor3">
-				<name>InfantryArmor3</name>
+			<node id="ApialSensors">
+				<name>ApialSensors</name>
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>886 41 977 89</position>
+				<position>872 809 955 852</position>
 			</node>
-			<node id="InfantryWeapons2">
-				<name>InfantryWeapons2</name>
+			<node id="ArgusJewel">
+				<name>ArgusJewel</name>
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>657 79 773 134</position>
+				<position>847 868 929 910</position>
 			</node>
-			<node id="InfantryWeapons3">
-				<name>InfantryWeapons3</name>
+			<node id="DisruptionWeb">
+				<name>DisruptionWeb</name>
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>736 19 852 74</position>
+				<position>936 851 1018 902</position>
 			</node>
-			<node id="VehicleWeapons2">
-				<name>VehicleWeapons2</name>
+			<node id="CarrierCapacity">
+				<name>CarrierCapacity</name>
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>58 767 172 825</position>
+				<position>1025 890 1119 937</position>
 			</node>
-			<node id="VehicleWeapons3">
-				<name>VehicleWeapons3</name>
+			<node id="SensorArray">
+				<name>SensorArray</name>
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>50 838 164 896</position>
+				<position>1231 417 1313 468</position>
 			</node>
-			<node id="VehiclePlating2">
-				<name>VehiclePlating2</name>
+			<node id="GraviticBoosters">
+				<name>GraviticBoosters</name>
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>183 766 282 814</position>
+				<position>1169 364 1264 419</position>
 			</node>
-			<node id="VehiclePlating3">
-				<name>VehiclePlating3</name>
+			<node id="GraviticDrive">
+				<name>GraviticDrive</name>
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>176 833 275 881</position>
+				<position>1182 730 1258 777</position>
 			</node>
-			<node id="ShipWeapons2">
-				<name>ShipWeapons2</name>
+			<node id="ScarabDamage">
+				<name>ScarabDamage</name>
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>303 776 405 824</position>
+				<position>1279 718 1390 770</position>
 			</node>
-			<node id="ShipWeapons3">
-				<name>ShipWeapons3</name>
+			<node id="ReaverCapacity">
+				<name>ReaverCapacity</name>
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>296 835 398 883</position>
+				<position>1174 793 1310 865</position>
 			</node>
-			<node id="ShipPlating2">
-				<name>ShipPlating2</name>
+			<node id="PlasmaShields2">
+				<name>PlasmaShields2</name>
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>415 780 505 821</position>
+				<position>782 86 879 117</position>
 			</node>
-			<node id="ShipPlating3">
-				<name>ShipPlating3</name>
+			<node id="PlasmaShields3">
+				<name>PlasmaShields3</name>
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>420 852 510 893</position>
+				<position>794 33 891 64</position>
+			</node>
+			<node id="GroundArmor2">
+				<name>GroundArmor2</name>
+				<interior color="ff99cc" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>922 76 1011 124</position>
+			</node>
+			<node id="GroundArmor3">
+				<name>GroundArmor3</name>
+				<interior color="ff99cc" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>967 19 1056 67</position>
+			</node>
+			<node id="GroundWeapons2">
+				<name>GroundWeapons2</name>
+				<interior color="ff99cc" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>657 74 761 129</position>
+			</node>
+			<node id="GroundWeapons3">
+				<name>GroundWeapons3</name>
+				<interior color="ff99cc" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>636 0 740 55</position>
+			</node>
+			<node id="AirArmor3">
+				<name>AirArmor3</name>
+				<interior color="ff99cc" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>18 312 87 348</position>
+			</node>
+			<node id="AirArmor2">
+				<name>AirArmor2</name>
+				<interior color="ff99cc" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>133 299 198 335</position>
+			</node>
+			<node id="AirWeapons2">
+				<name>AirWeapons2</name>
+				<interior color="ff99cc" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>136 206 232 248</position>
+			</node>
+			<node id="AirWeapons3">
+				<name>AirWeapons3</name>
+				<interior color="ff99cc" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>23 213 119 255</position>
 			</node>
 		</genie>
 	</extensions>

@@ -209,40 +209,10 @@
 			<parents>QueensNest TimePeriod</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
-		<cpt id="GameteMeiosis">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>QueensNest TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
 		<cpt id="Plague">
 			<state id="Absent" />
 			<state id="Present" />
 			<parents>DefilerMound TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="Consume">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>DefilerMound TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="MetasynapticNode">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>DefilerMound TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="AnabolicSynthesis">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>UltraliskCavern TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="ChitinousPlating">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>UltraliskCavern TimePeriod</parents>
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
 		<cpt id="Burrowing">
@@ -252,18 +222,6 @@
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
 		<cpt id="VentralSacs">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>Lair TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="Antennae">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>Lair TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="PneumatizedCarapace">
 			<state id="Absent" />
 			<state id="Present" />
 			<parents>Lair TimePeriod</parents>
@@ -294,12 +252,6 @@
 			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
 		</cpt>
 		<cpt id="LurkerAspect">
-			<state id="Absent" />
-			<state id="Present" />
-			<parents>HydraliskDen TimePeriod</parents>
-			<probabilities>1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0</probabilities>
-		</cpt>
-		<cpt id="MuscularAugments">
 			<state id="Absent" />
 			<state id="Present" />
 			<parents>HydraliskDen TimePeriod</parents>
@@ -591,47 +543,12 @@
 				<font color="000000" name="Arial" size="8" />
 				<position>244 559 300 594</position>
 			</node>
-			<node id="GameteMeiosis">
-				<name>GameteMeiosis</name>
-				<interior color="ff99cc" />
-				<outline color="000080" />
-				<font color="000000" name="Arial" size="8" />
-				<position>268 597 352 649</position>
-			</node>
 			<node id="Plague">
 				<name>Plague</name>
 				<interior color="ff99cc" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
 				<position>499 812 548 842</position>
-			</node>
-			<node id="Consume">
-				<name>Consume</name>
-				<interior color="ff99cc" />
-				<outline color="000080" />
-				<font color="000000" name="Arial" size="8" />
-				<position>589 823 648 859</position>
-			</node>
-			<node id="MetasynapticNode">
-				<name>MetasynapticNode</name>
-				<interior color="ff99cc" />
-				<outline color="000080" />
-				<font color="000000" name="Arial" size="8" />
-				<position>476 857 609 922</position>
-			</node>
-			<node id="AnabolicSynthesis">
-				<name>AnabolicSynthesis</name>
-				<interior color="ff99cc" />
-				<outline color="000080" />
-				<font color="000000" name="Arial" size="8" />
-				<position>901 900 1002 963</position>
-			</node>
-			<node id="ChitinousPlating">
-				<name>ChitinousPlating</name>
-				<interior color="ff99cc" />
-				<outline color="000080" />
-				<font color="000000" name="Arial" size="8" />
-				<position>826 863 912 916</position>
 			</node>
 			<node id="Burrowing">
 				<name>Burrowing</name>
@@ -646,20 +563,6 @@
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
 				<position>962 77 1035 122</position>
-			</node>
-			<node id="Antennae">
-				<name>Antennae</name>
-				<interior color="ff99cc" />
-				<outline color="000080" />
-				<font color="000000" name="Arial" size="8" />
-				<position>1054 126 1115 164</position>
-			</node>
-			<node id="PneumatizedCarapace">
-				<name>PneumatizedCarapace</name>
-				<interior color="ff99cc" />
-				<outline color="000080" />
-				<font color="000000" name="Arial" size="8" />
-				<position>1047 44 1165 117</position>
 			</node>
 			<node id="FlyerAttacks1">
 				<name>FlyerAttacks1</name>
@@ -695,13 +598,6 @@
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
 				<position>1191 543 1267 590</position>
-			</node>
-			<node id="MuscularAugments">
-				<name>MuscularAugments</name>
-				<interior color="ff99cc" />
-				<outline color="000080" />
-				<font color="000000" name="Arial" size="8" />
-				<position>1274 522 1383 586</position>
 			</node>
 			<node id="GroovedSpines">
 				<name>GroovedSpines</name>

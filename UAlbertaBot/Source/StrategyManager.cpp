@@ -803,12 +803,15 @@ void debug(std::string str, int i)
  void StrategyManager::updateArmyComposition()
 {
 	debug("=====BeliefsUpdates=====");
+	bayesianNet->SetEvidence("Zealot",1);
 	bayesianNet->UpdateBeliefs();
 	stringstream ss;
-	ss << "Prob zealot";
+	ss << "Prob zealot ";
 	ss << bayesianNet->ReadProbability("Zealot",1);
 	debug(ss.str());
 	debug("=====START=====");
+
+
 	std::set<BWAPI::UnitType> allUnits = BWAPI::UnitTypes::allUnitTypes();
 	std::set<BWAPI::UnitType>::iterator it;
 	for (it = allUnits.begin(); it != allUnits.end(); it++)
@@ -821,19 +824,33 @@ void debug(std::string str, int i)
 		{
 			//Set initial value
 			armyComposition[name] = ARMY_COMP_START_VAL;
-			debug(name);
+			debug(name, BWAPI::Broodwar->enemy()->completedUnitCount(*it));
 			debug("^CAN MOVE AND HIGH PROB IN BNET^");
 
 			//Add value depending on the percentage of the seen units
-			std::set<BWAPI::Unit*> enemyUnits = BWAPI::Broodwar->enemy()->getUnits();
-			std::set<BWAPI::Unit*>::iterator enemyUnitIt;
-			for (enemyUnitIt = enemyUnits.begin(); enemyUnitIt != enemyUnits.end(); enemyUnitIt++)
-			{
-
-				//BWAPI::Broodwar->enemy()->completedUnitCount((*enemyUnitIt));
-			}
+			int totalNrUnits = BWAPI::Broodwar->enemy()->getUnits().size();
+			int nrUnits = BWAPI::Broodwar->enemy()->completedUnitCount((*it));
+			armyComposition[name] = armyComposition[name] + nrUnits/totalNrUnits;
 		}
 	}
+
+	//Normalise the values
+	double totalSum = 0;
+	std::map<std::string, double>::iterator compIt;
+	for (compIt = armyComposition.begin(); compIt != armyComposition.end(); compIt++)
+	{
+		totalSum += compIt->second;
+	}
+
+	for (compIt = armyComposition.begin(); compIt != armyComposition.end(); compIt++)
+	{
+		compIt->second = compIt->second/totalSum;
+	}
+
+	//Get counters
+
+	//Save for later
+
 	debug("======END======");
  }
 

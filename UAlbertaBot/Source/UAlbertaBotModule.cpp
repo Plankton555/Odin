@@ -50,8 +50,9 @@ void UAlbertaBotModule::onStart()
 
 	}else{
 
-		BWAPI::Broodwar->printf("Hello, my name is Odin!");
-		Logger::Instance().log("Hello, my name is Odin2!\n");
+		//BWAPI::Broodwar->sendText("Hello, my name is Odin!");
+		//Logger::Instance().log("Hello, my name is Odin2!\n");
+		BWAPI::Broodwar->sendText("glhf");
 
 		BWAPI::Broodwar->setLocalSpeed(10);
 		//BWAPI::Broodwar->setFrameSkip(240);
@@ -88,7 +89,8 @@ void UAlbertaBotModule::onStart()
 }
 
 void UAlbertaBotModule::onEnd(bool isWinner) 
-{	
+{
+	BWAPI::Broodwar->sendText("gg");
 	if(BWAPI::Broodwar->isReplay())
 	{
 		replayModule.onEnd(isWinner);

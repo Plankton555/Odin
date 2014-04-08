@@ -157,7 +157,8 @@ void ScoutManager::scoutBase(BWAPI::Unit * obs, BWTA::Region * base)
 		else
 		{
 			//go to base if not there
-			smartMove(obs, base->getCenter());
+			BWAPI::Position explorePosition = MapGrid::Instance().getLeastExploredIn(base->getPolygon());
+			smartMove(obs, explorePosition);
 		}
 	}
 }

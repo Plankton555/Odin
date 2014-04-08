@@ -80,6 +80,7 @@ public:
 	enum { ProtossZealotRush=0, ProtossDarkTemplar=1, ProtossDragoons=2, ProtossObserver=3, ProtossZealotArchon=4, NumProtossStrategies=20 };
 	enum { TerranMarineRush=0, NumTerranStrategies=1 };
 	enum { ZergZerglingRush=0, NumZergStrategies=1 };
+	enum State { BUILD_ORDER, ATTACK, DEFEND, EXPAND };
 
 	static	StrategyManager &	Instance();
 
@@ -96,4 +97,7 @@ public:
 
 	const	MetaPairVector		getBuildOrderGoal();
 	const	std::string			getOpeningBook() const;
+
+	void						update();
+	State						state;
 };

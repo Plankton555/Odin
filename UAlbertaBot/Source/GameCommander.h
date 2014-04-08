@@ -22,13 +22,14 @@ class TimerManager
 
 public:
 
-	enum Type { All, Worker, Production, Building, Combat, Scout, InformationManager, MapGrid, MapTools, Search, NumTypes };
+	enum Type { All, Worker, Strategy, Production, Building, Combat, Scout, InformationManager, MapGrid, MapTools, Search, NumTypes };
 
 
 	TimerManager() : timers(std::vector<BuildOrderSearch::Timer>(NumTypes)), barWidth(40)
 	{
 		timerNames.push_back("Total");
 		timerNames.push_back("Worker");
+		timerNames.push_back("Strategy");
 		timerNames.push_back("Production");
 		timerNames.push_back("Building");
 		timerNames.push_back("Combat");

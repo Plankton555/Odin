@@ -11,6 +11,7 @@ StrategyManager::StrategyManager()
 	, selfRace(BWAPI::Broodwar->self()->getRace())
 	, enemyRace(BWAPI::Broodwar->enemy()->getRace())
 	, bayesianNet(NULL)
+	, state(BUILD_ORDER)
 {
 	loadBayesianNetwork();
 	addStrategies();
@@ -23,6 +24,31 @@ StrategyManager & StrategyManager::Instance()
 	static StrategyManager instance;
 	return instance;
 }
+
+ void StrategyManager::update()
+ {
+    if (false)//(shouldUpdateState)
+	{
+        //updateState();
+	}
+
+    switch (state)
+	{
+		case BUILD_ORDER:
+			;// follow build order
+
+		case ATTACK:
+			;// do attack
+
+		case DEFEND:
+			;// do defend
+
+		case EXPAND:
+			;// do expand
+		default:
+			;
+	}
+ }
 
 void StrategyManager::onUnitShow(BWAPI::Unit * unit)
 {

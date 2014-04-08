@@ -19,7 +19,7 @@ void GameCommander::update()
 	WorkerManager::Instance().update();
 	timerManager.stopTimer(TimerManager::Worker);
 
-	timerManager.startTimer(TimerManager::Production);
+	timerManager.startTimer(TimerManager::Strategy);
 	StrategyManager::Instance().update();
 	timerManager.stopTimer(TimerManager::Strategy);
 

@@ -53,7 +53,7 @@ void UAlbertaBotModule::onStart()
 		BWAPI::Broodwar->printf("Hello, my name is Odin!");
 		Logger::Instance().log("Hello, my name is Odin2!\n");
 
-		//BWAPI::Broodwar->setLocalSpeed(100);
+		BWAPI::Broodwar->setLocalSpeed(10);
 		//BWAPI::Broodwar->setFrameSkip(240);
 
 		SparCraft::init();
@@ -61,7 +61,7 @@ void UAlbertaBotModule::onStart()
 		BWAPI::Broodwar->enableFlag(BWAPI::Flag::UserInput);
 		//BWAPI::Broodwar->enableFlag(BWAPI::Flag::CompleteMapInformation);
 
-		Options::BotModes::SetBotMode(Options::BotModes::AIIDE_TOURNAMENT);
+		//Options::BotModes::SetBotMode(Options::BotModes::AIIDE_TOURNAMENT);
 		Options::Modules::checkOptions();
 	
 		if (Options::Modules::USING_GAMECOMMANDER)
@@ -198,6 +198,16 @@ void UAlbertaBotModule::onSendText(std::string text)
 	{
 		//Do nothing
 	}else{
+		if (text.compare("l") == 0)
+		{
+			BWAPI::Broodwar->leaveGame();
+		} else if (text.compare("i") == 0)
+		{
+			BWAPI::Broodwar->setLocalSpeed(0);
+		} else if (text.compare("s") == 0)
+		{
+			BWAPI::Broodwar->setLocalSpeed(100);
+		}
 
 		BWAPI::Broodwar->sendText(text.c_str());
 

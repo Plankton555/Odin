@@ -127,3 +127,8 @@ void BayesianNet::UpdateBeliefs()
 	delete solution;
 	solution = new bayesian_network_join_tree(bn, join_tree);
 }
+
+bool BayesianNet::exists(const std::string &nodeName)
+{
+	return nodeMap.find(nodeName) != nodeMap.end();
+}

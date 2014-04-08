@@ -4,6 +4,8 @@
 #include "BWTA.h"
 
 #include "UnitData.h"
+#include "StrategyManager.h"
+#include "DataModule.h"
 
 #include "..\..\SparCraft\source\SparCraft.h"
 
@@ -14,6 +16,7 @@ class InformationManager {
 
 	InformationManager();
 
+	std::vector<std::string>			seenUnits;
 	SparCraft::Map					map;
 
 	UnitData							enemyUnitData;
@@ -22,6 +25,11 @@ class InformationManager {
 	//BaseInfoVector						allBases;
 	BWTA::BaseLocation *				mainBaseLocations[2];
 	std::set<BWTA::Region *>			occupiedRegions[2];
+
+	void								updateIfNotExists(const std::string &name);
+	void								updateEnemyResearchInfo();
+	bool								replaceString(std::string &str, const std::string &from, const std::string &to);
+	void								replaceAllString(std::string &str, const std::string &from, const std::string &to);
 
 	int									getIndex(BWAPI::Player * player);
 

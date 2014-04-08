@@ -10,7 +10,7 @@ namespace Options
 		bool USING_SCOUTMANAGER			= true;
 		bool USING_COMBATCOMMANDER		= true;
 		bool USING_MACRO_SEARCH			= true;	    // toggle use of Build Order Search, currently no backup
-		bool USING_STRATEGY_IO			= false;	// toggle the use of file io for strategy
+		bool USING_STRATEGY_IO			= true;	// toggle the use of file io for strategy
         bool USING_UNIT_COMMAND_MGR		= true;     // handles all unit commands
 		
         // extra things, don't enable unless you know what they are
@@ -135,7 +135,7 @@ namespace Options
 	namespace Debug								// debugging options
 	{
 		// was set to true /Plankton
-		bool DRAW_UALBERTABOT_DEBUG				= false;		// draws debug information for UAlbertaBot
+		bool DRAW_UALBERTABOT_DEBUG				= true;		// draws debug information for UAlbertaBot
 		bool DRAW_DEBUG_INTERFACE				= false;		// draws debug information for EnhancedUI
 
 		BWAPI::Color COLOR_LINE_TARGET			= BWAPI::Colors::White;

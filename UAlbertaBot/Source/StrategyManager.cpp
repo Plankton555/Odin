@@ -70,46 +70,48 @@ void StrategyManager::addStrategies()
 	terranOpeningBook  = std::vector<std::string>(NumTerranStrategies);
 	zergOpeningBook    = std::vector<std::string>(NumZergStrategies);
 
-	//protossOpeningBook[ProtossZealotRush]	= "0 0 0 0 1 0 0 3 0 0 3 0 1 3 0 4 4 4 4 4 1 0 4 4 4";
-    protossOpeningBook[ProtossZealotRush]	= "0 0 0 0 1 0 3 3 0 0 4 1 4 4 0 4 4 0 1 4 3 0 1 0 4 0 4 4 4 4 1 0 4 4 4";
-	//protossOpeningBook[ProtossZealotRush]	= "0";
-	//protossOpeningBook[ProtossDarkTemplar] = "0 0 0 0 1 3 0 7 5 0 0 12 3 13 0 22 22 22 22 0 1 0";
-    protossOpeningBook[ProtossDarkTemplar]	= "0 0 0 0 1 0 3 0 7 0 5 0 12 0 13 3 22 22 1 22 22 0 1 0";
-	protossOpeningBook[ProtossDragoons]		= "0 0 0 0 1 0 0 3 0 7 0 0 5 0 0 3 8 6 1 6 6 0 3 1 0 6 6 6";
-	protossOpeningBook[ProtossObserver]		= "0 0 0 0 1 0 0 3 0 0 7 0 0 5 0 0 1 0 0 8 6 0 0 1 6 0 14 6 3 6 1 16 25";
+	
 	terranOpeningBook[TerranMarineRush]		= "0 0 0 0 0 1 0 0 3 0 0 3 0 1 0 4 0 0 0 6";
 	zergOpeningBook[ZergZerglingRush]		= "0 0 0 0 0 1 0 0 0 2 3 5 0 0 0 0 0 0 1 6";
 
+	// read in the name of the read and write directories from settings file
+	struct stat buf;
+
+	// if the file doesn't exist something is wrong so just set them to default settings
+	if (stat(Options::FileIO::FILE_SETTINGS, &buf) == -1)
+	{
+		readDir = OPENINGS_FOLDER;
+		writeDir = OPENINGS_FOLDER;
+	}
+	else
+	{
+		std::ifstream f_in(Options::FileIO::FILE_SETTINGS);
+		getline(f_in, readDir);
+		getline(f_in, writeDir);
+		f_in.close();
+	}
+
 	if (selfRace == BWAPI::Races::Protoss)
 	{
-		results = std::vector<IntPair>(NumProtossStrategies);
-
+		
+		enemyIsRandom = false;
 		if (enemyRace == BWAPI::Races::Protoss)
-		{
-			usableStrategies.push_back(ProtossZealotRush);
-			usableStrategies.push_back(ProtossDarkTemplar);
-			usableStrategies.push_back(ProtossDragoons);
-			usableStrategies.push_back(ProtossObserver);
+		{	
+			loadStrategiesFromFile("protoss_strats.txt");
 		}
 		else if (enemyRace == BWAPI::Races::Terran)
 		{
-			usableStrategies.push_back(ProtossZealotRush);
-			usableStrategies.push_back(ProtossDarkTemplar);
-			usableStrategies.push_back(ProtossDragoons);
-			usableStrategies.push_back(ProtossObserver);
+			loadStrategiesFromFile("terran_strats.txt");
 		}
 		else if (enemyRace == BWAPI::Races::Zerg)
 		{
-			usableStrategies.push_back(ProtossZealotRush);
-			usableStrategies.push_back(ProtossDragoons);
-			usableStrategies.push_back(ProtossObserver);
+			loadStrategiesFromFile("zerg_strats.txt");
 		}
 		else
 		{
+			enemyIsRandom = true;
 			BWAPI::Broodwar->printf("Enemy Race Unknown");
-			usableStrategies.push_back(ProtossZealotRush);
-			usableStrategies.push_back(ProtossDragoons);
-			usableStrategies.push_back(ProtossObserver);
+			loadStrategiesFromFile("random_strats.txt");
 		}
 	}
 	else if (selfRace == BWAPI::Races::Terran)
@@ -129,69 +131,86 @@ void StrategyManager::addStrategies()
 	}
 }
 
+void StrategyManager::loadStrategiesFromFile(std::string filename)
+{
+	std::ifstream myfile ((readDir + filename).c_str());
+	std::string line;
+	int i = 0;
+	if (myfile.is_open())
+	{
+		while (getline(myfile,line)) 
+		{	
+			protossOpeningBook[i]=line;
+			usableStrategies.push_back(i);
+			i++;
+		}
+		myfile.close();
+		results = std::vector<IntPair>(i);
+	}else
+	{
+		BWAPI::Broodwar->printf(
+			"Unable to open file, some things may not be working or the entire program may crash glhf :).");
+	}
+}
+
 void StrategyManager::readResults()
 {
-	// read in the name of the read and write directories from settings file
+
 	struct stat buf;
 
-	// if the file doesn't exist something is wrong so just set them to default settings
-	if (stat(Options::FileIO::FILE_SETTINGS, &buf) == -1)
+	// the file corresponding to the enemy's previous results	
+	if(enemyIsRandom)
 	{
-		readDir = OPENINGS_FOLDER + "read/";
-		writeDir = OPENINGS_FOLDER + "write/";
-	}
-	else
+		readFile = readDir +  "random.txt";
+	}else
 	{
-		std::ifstream f_in(Options::FileIO::FILE_SETTINGS);
-		getline(f_in, readDir);
-		getline(f_in, writeDir);
-		f_in.close();
+		readFile= readDir + BWAPI::Broodwar->enemy()->getRace().c_str() + ".txt";	
 	}
 
-	// the file corresponding to the enemy's previous results
-	std::string readFile = readDir + BWAPI::Broodwar->enemy()->getName() + ".txt";
-
-	// if the file doesn't exist, set the results to zeros
-	if (stat(readFile.c_str(), &buf) == -1)
+	std::ifstream myfile ((readFile).c_str());
+	std::string line;
+	int i = 0;
+	int j = 0;
+	if (myfile.is_open())
+	{
+		while (getline(myfile,line)) 
+		{	
+			if(i%2==0)
+			{
+				results[i/2].first = atoi(line.c_str());
+			}else
+			{
+				results[i/2].second = atoi(line.c_str());			
+			}
+			i++;
+		}
+		myfile.close();
+	}else
 	{
 		std::fill(results.begin(), results.end(), IntPair(0,0));
+		BWAPI::Broodwar->printf(
+			"Unable to open file for recorded data, starting from scratch");
 	}
-	// otherwise read in the results
-	else
-	{
-		std::ifstream f_in(readFile.c_str());
-		std::string line;
-		getline(f_in, line);
-		results[ProtossZealotRush].first = atoi(line.c_str());
-		getline(f_in, line);
-		results[ProtossZealotRush].second = atoi(line.c_str());
-		getline(f_in, line);
-		results[ProtossDarkTemplar].first = atoi(line.c_str());
-		getline(f_in, line);
-		results[ProtossDarkTemplar].second = atoi(line.c_str());
-		getline(f_in, line);
-		results[ProtossDragoons].first = atoi(line.c_str());
-		getline(f_in, line);
-		results[ProtossDragoons].second = atoi(line.c_str());
-		f_in.close();
-	}
-
 	BWAPI::Broodwar->printf("Results (%s): (%d %d) (%d %d) (%d %d)", BWAPI::Broodwar->enemy()->getName().c_str(), 
 		results[0].first, results[0].second, results[1].first, results[1].second, results[2].first, results[2].second);
+	
 }
 
 void StrategyManager::writeResults()
 {
-	std::string writeFile = writeDir + BWAPI::Broodwar->enemy()->getName() + ".txt";
+	std::string writeFile = writeDir  + BWAPI::Broodwar->enemy()->getRace().c_str() + ".txt";
+
+	if(enemyIsRandom)
+	{
+		writeFile = writeDir +  "random.txt";
+	}
+
 	std::ofstream f_out(writeFile.c_str());
-
-	f_out << results[ProtossZealotRush].first   << "\n";
-	f_out << results[ProtossZealotRush].second  << "\n";
-	f_out << results[ProtossDarkTemplar].first  << "\n";
-	f_out << results[ProtossDarkTemplar].second << "\n";
-	f_out << results[ProtossDragoons].first     << "\n";
-	f_out << results[ProtossDragoons].second    << "\n";
-
+	for(int i = 0; i < results.size(); i++)
+	{
+		f_out << results[i].first   << "\n";
+		f_out << results[i].second  << "\n";	
+	}
 	f_out.close();
 }
 

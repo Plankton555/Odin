@@ -8,34 +8,14 @@
 using namespace BWAPI;
 using namespace std;
 
-const std::string SEEN_REPLAYS_PATH = ODIN_DATA_FILEPATH + "seen_replays.txt";
 const std::string REPLAY_DATA_PATH = ODIN_DATA_FILEPATH + "replaydatastuff/";
+const std::string SEEN_REPLAYS_PATH = REPLAY_DATA_PATH + "seen_replays.txt";
 
 Player* ReplayModule::player = NULL;
 Player* ReplayModule::enemy = NULL;
 
 ReplayModule::ReplayModule()  { ReplayModule::analyzePlayers(); }
-ReplayModule::~ReplayModule()
-{
-	//Delete the lists in the maps
-	std::map<const char*,list<int>*>::iterator it;
-	for(it=zergUnits.begin(); it!=zergUnits.end(); it++)
-	{
-		delete it->second;
-	}
-	for(it=terranUnits.begin(); it!=terranUnits.end(); it++)
-	{
-		delete it->second;
-	}
-	for(it=protossUnitsp1.begin(); it!=protossUnitsp1.end(); it++)
-	{
-		delete it->second;
-	}
-	for(it=protossUnitsp2.begin(); it!=protossUnitsp2.end(); it++)
-	{
-		delete it->second;
-	}
-}
+ReplayModule::~ReplayModule() { }
 
 
 void ReplayModule::createMaps()
@@ -71,6 +51,34 @@ void ReplayModule::createMaps()
 	protossUnitsAll["Observer"] = 27;
 	protossUnitsAll["Shuttle"] = 28;
 
+	protossTechAll["Hallucination"] = 29;
+	protossTechAll["Maelstrom"] = 30;
+	protossTechAll["Mind_Control"] = 31;
+	protossTechAll["Recall"] = 32;
+	protossTechAll["Psionic_Storm"] = 33;
+	protossTechAll["Stasis_Field"] = 34;
+	protossTechAll["Disruption_Web"] = 35;
+
+	protossUpgradesAll["Protoss_Air_Weapons"] = 36;
+	protossUpgradesAll["Protoss_Ground_Armor"] = 37;
+	protossUpgradesAll["Protoss_Ground_Weapons"] = 38;
+	protossUpgradesAll["Protoss_Plasma_Shields"] = 39;
+	protossUpgradesAll["Protoss_Air_Armor"] = 40;
+	protossUpgradesAll["Apial_Sensors"] = 41;
+	protossUpgradesAll["Argus_Jewel"] = 42;
+	protossUpgradesAll["Argus_Talisman"] = 43;
+	protossUpgradesAll["Carrier_Capacity"] = 44;
+	protossUpgradesAll["Gravitic_Boosters"] = 45;
+	protossUpgradesAll["Gravitic_Drive"] = 46;
+	protossUpgradesAll["Gravitic_Thrusters"] = 47;
+	protossUpgradesAll["Khaydarin_Amulet"] = 48;
+	protossUpgradesAll["Khaydarin_Core"] = 49;
+	protossUpgradesAll["Leg_Enhancements"] = 50;
+	protossUpgradesAll["Reaver_Capacity"] = 51;
+	protossUpgradesAll["Scarab_Damage"] = 52;
+	protossUpgradesAll["Sensor_Array"] = 53;
+	protossUpgradesAll["Singularity_Charge"] = 54;
+	
 
 	terranUnitsAll["Supply Depot"] = 1;
 	terranUnitsAll["Barracks"] = 2;
@@ -104,6 +112,32 @@ void ReplayModule::createMaps()
 	terranUnitsAll["Battlecruiser"] = 29;
 	terranUnitsAll["Valkyrie"] = 30;
 
+	terranTechAll["Tank_Siege_Mode"] = 31;
+	terranTechAll["Cloaking_Field"] = 32;
+	terranTechAll["Yamato_Gun"] = 33;
+	terranTechAll["EMP_Shockwave"] = 34;
+	terranTechAll["Irradiate"] = 35;
+	terranTechAll["Personnel_Cloaking"] = 36;
+	terranTechAll["Lockdown"] = 37;
+	terranTechAll["Stim_Packs"] = 38;
+	terranTechAll["Restoration"] = 39;
+	terranTechAll["Optical_Flare"] = 40;
+
+	terranUpgradesAll["Terran_Infantry_Armor"] = 41;
+	terranUpgradesAll["Terran_Infantry_Weapons"] = 42;
+	terranUpgradesAll["Terran_Ship_Plating"] = 43;
+	terranUpgradesAll["Terran_Ship_Weapons"] = 44;
+	terranUpgradesAll["Terran_Vehicle_Plating"] = 45;
+	terranUpgradesAll["Terran_Vehicle_Weapons"] = 46;
+	terranUpgradesAll["Ion_Thrusters"] = 47;
+	terranUpgradesAll["Charon_Boosters"] = 48;
+	terranUpgradesAll["Apollo_Reactor"] = 49;
+	terranUpgradesAll["Colossus_Reactor"] = 50;
+	terranUpgradesAll["Titan_Reactor"] = 51;
+	terranUpgradesAll["Moebius_Reactor"] = 52;
+	terranUpgradesAll["Ocular_Implants"] = 53;
+	terranUpgradesAll["U_238_Shells"] = 54;
+	terranUpgradesAll["Caduceus_Reactor"] = 55;
 
 	zergUnitsAll["Creep Colony"] = 1;
 	zergUnitsAll["Sunken Colony"] = 2;
@@ -132,42 +166,30 @@ void ReplayModule::createMaps()
 	zergUnitsAll["Queen"] = 24;
 	zergUnitsAll["Guardian"] = 25;
 	zergUnitsAll["Devourer"] = 26;
-	
 
-	//Player
-	std::map<const char*,int> *unitsAll;
-	std::map<const char*,std::list<int>*>* currentUnits;
-	std::map<const char*,int>::iterator it;
-	if (getPlayer()->getRace() == Races::Protoss && getEnemy()->getRace() == Races::Protoss)
-	{
-		unitsAll = &protossUnitsAll;
-		currentUnits = &protossUnitsp1;
+	zergTechAll["Spawn_Broodlings"] = 27;
+	zergTechAll["Ensnare"] = 28;
+	zergTechAll["Plague"] = 29;
+	zergTechAll["Consume"] = 30;
+	zergTechAll["Lurker_Aspect"] = 31;
+	zergTechAll["Burrowing"] = 32;
 
-		for(it=unitsAll->begin(); it!=unitsAll->end(); it++)
-		{
-			(*currentUnits)[it->first] = new std::list<int>;
-		}
-	}
-
-	//Enemy
-	if (getEnemy()->getRace() == Races::Protoss)
-	{
-		unitsAll = &protossUnitsAll;
-		currentUnits = &protossUnitsp2;
-	} else if (getEnemy()->getRace() == Races::Terran)
-	{
-		unitsAll = &terranUnitsAll;
-		currentUnits = &terranUnits;
-	}else if (getEnemy()->getRace() == Races::Zerg)
-	{
-		unitsAll = &zergUnitsAll;
-		currentUnits = &zergUnits;
-	}
-
-	for(it=unitsAll->begin(); it!=unitsAll->end(); it++)
-	{
-		(*currentUnits)[it->first] = new std::list<int>;
-	}
+	zergUpgradesAll["Zerg_Carapace"] = 33;
+	zergUpgradesAll["Zerg_Flyer_Attacks"] = 34;
+	zergUpgradesAll["Zerg_Flyer_Carapace"] = 35;
+	zergUpgradesAll["Zerg_Melee_Attacks"] = 36;
+	zergUpgradesAll["Zerg_Missile_Attacks"] = 37;
+	zergUpgradesAll["Gamete_Meiosis"] = 38;
+	zergUpgradesAll["Metasynaptic_Node"] = 39;
+	zergUpgradesAll["Chitinous_Plating"] = 40;
+	zergUpgradesAll["Anabolic_Synthesis"] = 41;
+	zergUpgradesAll["Muscular_Augments"] = 42;
+	zergUpgradesAll["Grooved_Spines"] = 43;
+	zergUpgradesAll["Adrenal_Glands"] = 44;
+	zergUpgradesAll["Metabolic_Boost"] = 45;
+	zergUpgradesAll["Antennae"] = 46;
+	zergUpgradesAll["Pneumatized_Carapace"] = 47;
+	zergUpgradesAll["Ventral_Sacs"] = 48;
 
 }
 
@@ -228,49 +250,39 @@ void ReplayModule::onFrame()
 		ReplayModule::drawUnitInformation(x, y);
 	}
 
-
-	//Update nr of units
-	if (Broodwar->getFrameCount()%1000 == 999) //Only update every 1000 frames
-	{
-		//Update player
-		std::string race;
-		std::map<const char*,std::list<int>*>* currentUnits;
-		std::map<const char*, std::list<int>*>::iterator it;
-		if (getPlayer()->getRace() == Races::Protoss && getEnemy()->getRace() == Races::Protoss)
+	//Check if any morphing buildigns is completed
+	std::list<Unit*>::iterator it;
+	for(it=morphingBuildings.begin(); it!=morphingBuildings.end();)
+	{	if((*it)->isCompleted())
 		{
-			currentUnits = &protossUnitsp1;
-			race = "Protoss ";
+			//Broodwar->printf("%s was morphed at time (%d)", (*it)->getType().c_str(), Broodwar->getFrameCount()); //Used for debugging
 
-			for (it=currentUnits->begin(); it!=currentUnits->end(); it++)
+			if(zergUnits.count((*it)->getType().c_str())==0)
 			{
-				std::string unitName = race;
-				unitName.append(it->first);
-				int nrUnits = player->completedUnitCount(BWAPI::UnitTypes::getUnitType(unitName));
-				it->second->push_back(nrUnits);
+				if((*it)->getType().getRace()==Races::Zerg)
+				{	
+					const char* temp = (*it)->getType().c_str() + 5;
+					zergUnits.insert(std::map<const char*,int>::value_type (temp,Broodwar->getFrameCount()));
+				}else if((*it)->getType().getRace()==Races::Protoss&&getEnemy()->getRace() == BWAPI::Races::Protoss)
+				{	
+					const char* temp = (*it)->getType().c_str() + 8;
+					if((*it)->getPlayer() == getPlayer())
+					{
+						protossUnitsp1.insert(std::map<const char*,int>::value_type (temp,Broodwar->getFrameCount()));
+					}else
+					{
+						protossUnitsp2.insert(std::map<const char*,int>::value_type (temp,Broodwar->getFrameCount()));
+					}
+				}else if((*it)->getType().getRace()==Races::Terran)
+				{	
+					const char* temp = (*it)->getType().c_str() + 7;
+					terranUnits.insert(std::map<const char*,int>::value_type (temp,Broodwar->getFrameCount()));
+				}	
 			}
-		}
-
-		//Update enemy
-		if (getEnemy()->getRace() == Races::Protoss)
+			it = morphingBuildings.erase(it);
+		}else
 		{
-			currentUnits = &protossUnitsp2;
-			race = "Protoss ";
-		} else if (getEnemy()->getRace() == Races::Terran)
-		{
-			currentUnits = &terranUnits;
-			race = "Terran ";
-		}else if (getEnemy()->getRace() == Races::Zerg)
-		{
-			currentUnits = &zergUnits;
-			race = "Zerg ";
-		}
-	
-		for (it=currentUnits->begin(); it!=currentUnits->end(); it++)
-		{
-			std::string unitName = race;
-			unitName.append(it->first);
-			int nrUnits = enemy->completedUnitCount(BWAPI::UnitTypes::getUnitType(unitName));
-			it->second->push_back(nrUnits);
+			it++;
 		}
 	}
 }
@@ -335,59 +347,58 @@ void ReplayModule::onEnd(bool isWinner)
 
 }
 
-void ReplayModule::writeToFile(const char* file, std::map<const char*,std::list<int>*> stuffToWrite, std::map<const char*,int> unitList)
+void ReplayModule::writeToFile(const char* file, std::map<const char*,int> stuffToWrite, std::map<const char*,int> unitList)
 {
 	myfile.open (file, std::ios::app);
-	
-	int timePeriod = 1;
-	std::vector<std::list<int>::iterator> temp(unitList.size());
-	std::vector<const char*> tempNames(unitList.size());
-	std::map<const char*,std::list<int>*>::iterator it;
-	std::list<int>::iterator lastElem;
 
-	//Put the units in the correct order
-	for(it=stuffToWrite.begin(); it!=stuffToWrite.end(); it++) //Every unit
-	{
-		//Find unitID and store an iterator to the list<int> in the vector
+
+	std::vector<int> temp(unitList.size()+1);
+	std::map<const char*,int>::iterator it;
+	for(it=stuffToWrite.begin(); it!=stuffToWrite.end();)
+	{	
+
 		std::map<const char*,int>::iterator tempIt;
 		for(tempIt=unitList.begin(); tempIt!=unitList.end();)
 		{
 			if(strcmp(tempIt->first ,it->first)==0)
 			{
-				tempNames.at(tempIt->second-1) = it->first;
-				temp.at(tempIt->second-1) = it->second->begin();
-				if (tempIt->second == 1)
-				{
-					lastElem = it->second->end();
-				}
-				break;
+				temp.at(tempIt->second) = it->second;
+				//myfile << " in if "<< tempIt->second << " " << it->second << " ";
 			}
 			tempIt++;
 		}
+
+
+		//myfile << it->first <<" " << it->second << "\n";
+		it++;
 	}
-	
-	//Actually print units
-	for (std::list<int>::iterator itLoop = temp.at(0); itLoop != lastElem;) //For every timeperiod
+
+	int nrOfPeriods = replayLength/1000;
+	if(nrOfPeriods>25)
+	{
+		nrOfPeriods = 25;
+	}
+	for(int timePeriod = 1; timePeriod <= nrOfPeriods; timePeriod++)
 	{
 		myfile << "period" <<timePeriod << ",";
 
-		for (int i = 0; i < unitList.size(); i++) //For every unit
-		{
-			int nrEnemies = *(temp.at(i));
-			temp.at(i)++; //Increase iterator
-
-			myfile << FuzzyModule::getFuzzyNr(nrEnemies,tempNames.at(i));
+		for(int i = 1; i < temp.size(); i++)
+		{	
+			if(temp.at(i)>0&&(temp.at(i)/1000<timePeriod||timePeriod==nrOfPeriods))
+			{
+				myfile << 1;
+			}else
+			{
+				myfile << 0;
+			}
 			if(i<temp.size()-1)
 			{
 				myfile << ",";
 			}
+
 		}
-
 		myfile << "\n";
-		itLoop++;
-		timePeriod++;
 	}
-
 	myfile.close();
 }
 
@@ -399,13 +410,40 @@ void ReplayModule::onUnitDestroy(BWAPI::Unit * unit)
 
 void ReplayModule::onUnitMorph(BWAPI::Unit * unit)
 {	
-	//Not needed yet	
+	
+	if(unit->getType().isBuilding())
+	{
+		morphingBuildings.push_front(unit);
+
+	}else
+	{
+		//Broodwar->printf("%s was morphed at time (%d)", unit->getType().c_str(), Broodwar->getFrameCount()); //Used for debugging
+		if(unit->getType().getRace()==Races::Zerg)
+		{
+			if(zergUnits.count(unit->getType().c_str())==0)
+			{	
+				const char* temp = unit->getType().c_str() + 5;
+				zergUnits.insert(std::map<const char*,int>::value_type (temp,Broodwar->getFrameCount()));
+			}
+		}else if(unit->getType().getRace()==Races::Protoss&&getEnemy()->getRace() == BWAPI::Races::Protoss)
+		{	
+			const char* temp = unit->getType().c_str() + 8;
+			if(unit->getPlayer() == getPlayer())
+			{
+				protossUnitsp1.insert(std::map<const char*,int>::value_type (temp,Broodwar->getFrameCount()));
+			}else
+			{
+				protossUnitsp2.insert(std::map<const char*,int>::value_type (temp,Broodwar->getFrameCount()));
+			}
+		}	
+	}
 }
 
 void ReplayModule::onUnitRenegade(BWAPI::Unit * unit)
 {
-	//Not needed yet
+	morphingBuildings.push_front(unit);
 }
+
 void ReplayModule::onUnitCreate(BWAPI::Unit * unit)
 {
 	//Not needed yet
@@ -413,7 +451,25 @@ void ReplayModule::onUnitCreate(BWAPI::Unit * unit)
 
 void ReplayModule::onUnitComplete(BWAPI::Unit * unit)
 {	
-	//Not needed yet
+
+	Player* enemy = getEnemy();
+	//Broodwar->printf("%s was created at time (%d)", unit->getType().c_str(), unit->getType().getID()); 
+	if(unit->getType().getRace()==Races::Protoss&&enemy->getRace() == BWAPI::Races::Protoss)
+	{	
+		const char* temp = unit->getType().c_str() + 8;
+		if(unit->getPlayer() == getPlayer())
+		{
+			protossUnitsp1.insert(std::map<const char*,int>::value_type (temp,Broodwar->getFrameCount()));
+		}else
+		{
+			protossUnitsp2.insert(std::map<const char*,int>::value_type (temp,Broodwar->getFrameCount()));
+		}
+	}else if (unit->getType().getRace()==Races::Terran)
+	{	
+		const char* temp = unit->getType().c_str() + 7;
+
+		terranUnits.insert(std::map<const char*,int>::value_type (temp,Broodwar->getFrameCount()));
+	}
 }
 
 /* Displays unit count and predictions during replays. */

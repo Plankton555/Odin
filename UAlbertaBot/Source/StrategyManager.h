@@ -10,6 +10,7 @@
 #include "BNetParser.h"
 #include <sys/stat.h>
 #include <cstdlib>
+#include "OdinUtils.h"
 
 #include "..\..\StarcraftBuildOrderSearch\Source\starcraftsearch\StarcraftData.hpp"
 
@@ -22,6 +23,7 @@ class StrategyManager
 	StrategyManager();
 	~StrategyManager() {}
 
+	std::map<std::string, double>	armyComposition;
 	BayesianNet*				bayesianNet;
 
 	std::vector<std::string>	protossOpeningBook;
@@ -83,6 +85,7 @@ public:
 
 	static	StrategyManager &	Instance();
 
+			void				updateArmyComposition();
 			BayesianNet*		getBayesianNet() { return bayesianNet; }
 			void				onUnitShow(BWAPI::Unit * unit);
 			void				onEnd(const bool isWinner);

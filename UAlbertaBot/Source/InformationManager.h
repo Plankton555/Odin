@@ -6,6 +6,7 @@
 #include "UnitData.h"
 #include "StrategyManager.h"
 #include "DataModule.h"
+#include "OdinUtils.h"
 
 #include "..\..\SparCraft\source\SparCraft.h"
 
@@ -28,8 +29,6 @@ class InformationManager {
 
 	void								updateIfNotExists(const std::string &name);
 	void								updateEnemyResearchInfo();
-	bool								replaceString(std::string &str, const std::string &from, const std::string &to);
-	void								replaceAllString(std::string &str, const std::string &from, const std::string &to);
 
 	int									getIndex(BWAPI::Player * player);
 

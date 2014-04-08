@@ -161,6 +161,7 @@
   <ItemGroup>
     <ClInclude Include="..\Source\base\BuildLearner.h" />
     <ClInclude Include="..\Source\BayesianNet.h" />
+    <ClInclude Include="..\Source\OdinUtils.h" />
     <ClInclude Include="..\Source\ParsedNode.h" />
     <ClInclude Include="..\Source\BNetParser.h" />
     <ClInclude Include="..\Source\CombatSimulation.h" />

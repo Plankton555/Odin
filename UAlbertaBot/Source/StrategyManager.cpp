@@ -1,6 +1,9 @@
 #include "Common.h"
 #include "StrategyManager.h"
 
+#define ARMY_COMP_START_VAL (0.1)
+#define ARMY_COMP_THRESHOLD (0.5)
+
 const std::string BAYESNET_FOLDER = ODIN_DATA_FILEPATH + "bayesian_networks/";
 const std::string OPENINGS_FOLDER = ODIN_DATA_FILEPATH + "openings/";
 
@@ -775,3 +778,63 @@ const MetaPairVector StrategyManager::getZergBuildOrderGoal() const
  {
 	 return currentStrategy;
  }
+
+
+void debug(std::string str)
+{
+	ofstream file ("debug.txt", ios::app);
+	if (file.is_open())
+	{
+		file << str.c_str() << endl;
+		file.close();
+	}
+}
+
+void debug(std::string str, int i)
+{
+	std::ostringstream stringStream;
+	stringStream << str;
+	stringStream << ": ";
+	stringStream << i;
+	std::string newStr = stringStream.str();
+	debug(newStr);
+}
+
+ void StrategyManager::updateArmyComposition()
+{
+	debug("=====BeliefsUpdates=====");
+	bayesianNet->UpdateBeliefs();
+	stringstream ss;
+	ss << "Prob zealot";
+	ss << bayesianNet->ReadProbability("Zealot",1);
+	debug(ss.str());
+	debug("=====START=====");
+	std::set<BWAPI::UnitType> allUnits = BWAPI::UnitTypes::allUnitTypes();
+	std::set<BWAPI::UnitType>::iterator it;
+	for (it = allUnits.begin(); it != allUnits.end(); it++)
+	{
+		std::string name = it->c_str();
+		odin_utils::shortenUnitName(name);
+
+
+		if (it->canMove() && bayesianNet->exists(name) && bayesianNet->ReadProbability(name, 1) > ARMY_COMP_THRESHOLD)
+		{
+			//Set initial value
+			armyComposition[name] = ARMY_COMP_START_VAL;
+			debug(name);
+			debug("^CAN MOVE AND HIGH PROB IN BNET^");
+
+			//Add value depending on the percentage of the seen units
+			std::set<BWAPI::Unit*> enemyUnits = BWAPI::Broodwar->enemy()->getUnits();
+			std::set<BWAPI::Unit*>::iterator enemyUnitIt;
+			for (enemyUnitIt = enemyUnits.begin(); enemyUnitIt != enemyUnits.end(); enemyUnitIt++)
+			{
+
+				//BWAPI::Broodwar->enemy()->completedUnitCount((*enemyUnitIt));
+			}
+		}
+	}
+	debug("======END======");
+ }
+
+

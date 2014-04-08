@@ -461,24 +461,6 @@ bool InformationManager::tileContainsUnit(BWAPI::TilePosition tile)
 	return map.canBuildHere(tile);
 }
 
-bool InformationManager::replaceString(std::string &str, const std::string &from, const std::string &to)
-{
-	int fromPos = str.find(from);
-	if (fromPos == std::string::npos)
-	{
-		return false;
-	} else
-	{
-		str.replace(fromPos, from.length(), to);
-		return true;
-	}
-}
-
-void InformationManager::replaceAllString(std::string &str, const std::string &from, const std::string &to)
-{
-	while (replaceString(str, from, to)) ;
-}
-
 void InformationManager::updateEnemyResearchInfo()
 {
 
@@ -526,11 +508,7 @@ void InformationManager::updateEnemyResearchInfo()
 void InformationManager::updateIfNotExists(const std::string &name)
 {
 	std::string shortName = name;
-	replaceAllString(shortName, "Protoss", "");
-	replaceAllString(shortName, "Terran", "");
-	replaceAllString(shortName, "Zerg", "");
-	replaceAllString(shortName," ",""); //Remove all spaces
-	replaceAllString(shortName,"-",""); //remove '-' for u-238 shells
+	odin_utils::shortenUnitName(shortName);
 
 	BayesianNet* bn = StrategyManager::Instance().getBayesianNet();
 	bool exists = false;

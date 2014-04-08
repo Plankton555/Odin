@@ -27,7 +27,10 @@ void CombatCommander::update(std::set<BWAPI::Unit *> unitsToAssign)
 		// Assign defense and attack squads
         assignScoutDefenseSquads();
 		assignDefenseSquads(unitsToAssign);
-		assignAttackSquads(unitsToAssign);
+		if (StrategyManager::Instance().state == StrategyManager::State::ATTACK)
+		{
+			assignAttackSquads(unitsToAssign);
+		}
 		assignIdleSquads(unitsToAssign);
 	}
 

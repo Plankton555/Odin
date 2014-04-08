@@ -33,6 +33,7 @@ class StrategyManager
 	std::vector<IntPair>		results;
 	std::string					readFile;
 	std::vector<int>			usableStrategies;
+	int							openingStrategy;
 	int							currentStrategy;
 
 	BWAPI::Race					selfRace;
@@ -47,6 +48,7 @@ class StrategyManager
 	void	readResults();
 	void	writeResults();
 	void	loadStrategiesFromFile(std::string filename);
+	void	updateState();
 
 	const	int					getScore(BWAPI::Player * player) const;
 	const	double				getUCBValue(const size_t & strategy) const;
@@ -80,7 +82,7 @@ public:
 	enum { ProtossZealotRush=0, ProtossDarkTemplar=1, ProtossDragoons=2, ProtossObserver=3, ProtossZealotArchon=4, NumProtossStrategies=20 };
 	enum { TerranMarineRush=0, NumTerranStrategies=1 };
 	enum { ZergZerglingRush=0, NumZergStrategies=1 };
-	enum State { BUILD_ORDER, ATTACK, DEFEND, EXPAND };
+	enum State { OPENING, ATTACK, DEFEND, EXPAND };
 
 	static	StrategyManager &	Instance();
 

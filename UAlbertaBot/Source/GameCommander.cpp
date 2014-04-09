@@ -19,6 +19,10 @@ void GameCommander::update()
 	WorkerManager::Instance().update();
 	timerManager.stopTimer(TimerManager::Worker);
 
+	timerManager.startTimer(TimerManager::Strategy);
+	StrategyManager::Instance().update();
+	timerManager.stopTimer(TimerManager::Strategy);
+
 	timerManager.startTimer(TimerManager::Production);
 	ProductionManager::Instance().update();
 	timerManager.stopTimer(TimerManager::Production);
@@ -66,7 +70,7 @@ void GameCommander::update()
 
 void GameCommander::drawDebugInterface()
 {
-	timerManager.displayTimers(490, 225);
+	timerManager.displayTimers(490, 215);
 	
 	StarcraftBuildOrderSearchManager::Instance().drawSearchInformation(10, 240);
 	//BuildingManager::Instance().drawBuildingInformation(200,50);

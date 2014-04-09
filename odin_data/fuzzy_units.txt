@@ -2,100 +2,100 @@
 ;
 ;HOW TO USE: Put it in the starcraft folder in /odin/
 ;
-;Name,noUnits,fewUnits,someUnits,manyUnits
+;Name.noUnits.fewUnits.someUnits.manyUnits
 ;Protoss buildings
-Pylon,0,1,2,5
-Gateway,0,1,2,5
-Assimilator,0,1,2,5
-Cybernetics Core,0,1,2,5
-Citadel of Adun,0,1,2,5
-Forge,0,1,2,5
-Photon Cannon,0,1,2,5
-Stargate,0,1,2,5
-Robotics Facility,0,1,2,5
-Robotics Support Bay,0,1,2,5
-Observatory,0,1,2,5
-Arbiter Tribunal,0,1,2,5
-Templar Archives,0,1,2,5
-Fleet Beacon,0,1,2,5
-Shield Battery,0,1,2,5
+Protoss Pylon,0.3.6.10,None
+Protoss Gateway,0.1.3.5,None
+Protoss Assimilator,0.1.2.5,None
+Protoss Cybernetics Core,0,None
+Protoss Citadel of Adun,0,None
+Protoss Forge,0,None
+Protoss Photon Cannon,0.3.6.10,None
+Protoss Stargate,0.1.3.5,None
+Protoss Robotics Facility,0.1.3.5,None
+Protoss Robotics Support Bay,0,None
+Protoss Observatory,0,None
+Protoss Arbiter Tribunal,0,None
+Protoss Templar ArcZerg Hives,0,None
+Protoss Fleet Beacon,0,None
+Protoss Shield Battery,0,None
 ;
 ;Protoss units
-Zealot,0,3,8,15
-Dragoon,0,3,7,12
-Dark Templar,0,3,5,7
-High Templar,0,3,5,10
-Archon,0,2,4,6
-Dark Archon,0,2,3,4
-Reaver,0,1,2,5
-Scout,0,2,4,8
-Corsair,0,3,5,10
-Arbiter,0,1,2,5
-Carrier,0,1,2,5
-Observer,0,1,2,5
-Shuttle,0,1,2,5
+Protoss Zealot,0.3.8.15,Protoss Dragoon.Protoss High Templar
+Protoss Dragoon,0.3.7.12,Protoss Dragoon.Protoss High Templar
+Protoss Dark Templar,0.3.5.7,Protoss Photon Cannon.Protoss Observers
+Protoss High Templar,0.3.5.10,Protoss Reaver.Protoss Dark Archon
+Protoss Archon,0.2.4.6,Protoss Reaver.Protoss Carrier
+Protoss Dark Archon,0.2.3.4,Protoss Dragoon.Protoss Reaver
+Protoss Reaver,0.1.2.5,Protoss Dragoon.Protoss Dark Templar
+Protoss Scout,0.2.4.8,Protoss Dragoon.Protoss Corsair
+Protoss Corsair,0.3.5.10,Protoss Dragoon.Protoss Dark Archon
+Protoss Arbiter,0.1.2.5,Protoss Observer.Protoss High Templar
+Protoss Carrier,0.1.2.5,Protoss Scout.Protoss Dark Archon
+Protoss Observer,0.1.2.5,Protoss Photon Cannon.Protoss Observer
+Protoss Shuttle,0.1.2.5,Protoss Photon Cannon.Protoss Dragoon
 ;
 ;Terran buildings
-Supply Depot,0,1,2,5
-Barracks,0,1,2,5
-Refinery,0,1,2,5
-Engineering Bay,0,1,2,5
-Bunker,0,1,2,5
-Academy,0,1,2,5
-Missile Turret,0,1,2,5
-Factory,0,1,2,5
-Starport,0,1,2,5
-Armory,0,1,2,5
-Science Facility,0,1,2,5
-Comsat Station,0,1,2,5
-Nuclear Silo,0,1,2,5
-Machine Shop,0,1,2,5
-Control Tower,0,1,2,5
-Physics Lab,0,1,2,5
-Covert Ops,0,1,2,5
+Terran Supply Depot,0.3.6.10,None
+Terran Barracks,0.1.3.5,None
+Terran Refinery,0.1.2.5,None
+Terran Engineering Bay,0,None
+Terran Bunker,0.1.3.5,None
+Terran Academy,0,None
+Terran Missile Turret,0.2.4.6,None
+Terran Factory,0.1.3.5,None
+Terran Starport,0.1.3.5,None
+Terran Armory,0,None
+Terran Science Facility,0,None
+Terran Comsat Station,0.1.3,None
+Terran Nuclear Silo,0.1.3,None
+Terran Machine Shop,0,None
+Terran Control Tower,0,None
+Terran Physics Lab,0,None
+Terran Covert Ops,0,None
 ;
 ;Terran units
-Marine,0,3,8,15
-Firebat,0,3,7,12
-Medic,0,3,5,10
-Ghost,0,3,5,10
-Vulture,0,3,5,10
-Spider Mine,0,3,6,12
-Siege Tank,0,2,4,6
-Goliath,0,2,5,8
-Wraith,0,2,4,6
-Dropship,0,1,2,5
-Science Vessel,0,1,2,5
-Battlecruiser,0,1,2,3
-Valkyrie,0,1,2,5
+Terran Marine,0.3.8.15,Protoss Dragoon.Protoss High Templar
+Terran Firebat,0.3.7.12,Protoss Dragoon.Protoss High Templar
+Terran Medic,0.3.5.10,Protoss Reaver.Protoss Dark Archon
+Terran Ghost,0.3.5.10,Protoss Photon Cannon.Protoss Observer
+Terran Vulture,0.3.5.10,Protoss Dragoon.Protoss Scout
+Terran Spider Mine,0.3.6.12,Protoss Zealot.Protoss Observer
+Terran Siege Tank,0.2.4.6,Protoss Zealot.Protoss Dark Templar
+Terran Goliath,0.2.5.8,Protoss Zealot.Protoss Reaver
+Terran Wraith,0.2.4.6,Protoss Dragoon.Protoss Observer
+Terran Dropship,0.1.2.5,Protoss Photon Cannon.Protoss Corsair
+Terran Science Vessel,0.1.2.5,Protoss Dragoon.Protoss Dark Archon
+Terran Battlecruiser,0.1.2.3,Protoss Scout.Protoss Arbiter
+Terran Valkyrie,0.1.2.5,Protoss Dragoon.Protoss Scout
 ;
 ;Zerg buildings
-Creep Colony,0,1,2,5
-Sunken Colony,0,1,2,5
-Spore Colony,0,1,2,5
-Extractor,0,1,2,5
-Spawning Pool,0,1,2,5
-Evolution Chamber,0,1,2,5
-Hydralisk Den,0,1,2,5
-Lair,0,1,2,5
-Spire,0,1,2,5
-Queen's Nest,0,1,2,5
-Hive,0,1,2,5
-Greater Spire,0,1,2,5
-Nydus Canal,0,1,2,5
-Ultralisk Cavern,0,1,2,5
-Defiler Mound,0,1,2,5
+;SAVE HATCHERIES,0.1.2.5,None
+Zerg Creep Colony,0.1.3.6,None
+Zerg Sunken Colony,0.1.3.6,None
+Zerg Spore Colony,0.1.3.6,None
+Zerg Extractor,0.1.2.5,None
+Zerg Spawning Pool,0,None
+Zerg Evolution Chamber,0,None
+Zerg Hydralisk Den,0,None
+Zerg Lair,0.1.2.5,None
+Zerg Spire,0,None
+Zerg Queen's Nest,0,None
+Zerg Hive,0.1.2.5,None
+Zerg Greater Spire,0,None
+Zerg Nydus Canal,0.2.4,None
+Zerg Ultralisk Cavern,0,None
+Zerg Defiler Mound,0,None
 ;
 ;Zerg units
-;Broodlings?
-Zergling,0,5,10,20
-Hydralisk,0,3,5,10
-Lurker,0,3,5,10
-Ultralisk,0,1,2,4
-Defiler,0,3,5,8
-Overlord,0,2,4,8
-Mutalisk,0,1,2,5
-Scourge,0,3,6,10
-Queen,0,2,4,6
-Guardian,0,3,5,8
-Devourer,0,1,2,5
+Zerg Zergling,0.5.10.20,Protoss Zealot.Protoss High Templar
+Zerg Hydralisk,0.3.5.10,Protoss Zealots.Protoss High Templar
+Zerg Lurker,0.3.5.10,Protoss High Templar.Protoss Archon
+Zerg Ultralisk,0.1.2.4,Protoss Archon.Protoss Carrier
+Zerg Defiler,0.3.5.8,Protoss Photon Cannon.Protoss Reaver
+Zerg Overlord,0.2.4.8,Protoss Dragoon
+Zerg Mutalisk,0.1.2.5,Protoss Corsair.Protoss Arbiter
+Zerg Scourge,0.3.6.10,Protoss Dragoon.Protoss Archon
+Zerg Queen,0.2.4.6,Protoss Reaver.Protoss Archon
+Zerg Guardian,0.3.5.8,Protoss Corsair.Protoss Archon
+Zerg Devourer,0.1.2.5,Protoss Dragoon.Protoss Archon

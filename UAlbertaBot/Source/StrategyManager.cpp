@@ -11,9 +11,13 @@ const std::string OPENINGS_FOLDER = ODIN_DATA_FILEPATH + "openings/";
 StrategyManager::StrategyManager() 
 	: firstAttackSent(false)
 	, currentStrategy(0)
+	, openingStrategy(0)
 	, selfRace(BWAPI::Broodwar->self()->getRace())
 	, enemyRace(BWAPI::Broodwar->enemy()->getRace())
 	, bayesianNet(NULL)
+	, state(OPENING)
+	, doStateUpdateNow(false)
+	, timeSinceLastStateUpdate(0)
 {
 	loadBayesianNetwork();
 	addStrategies();
@@ -27,9 +31,86 @@ StrategyManager & StrategyManager::Instance()
 	return instance;
 }
 
+ void StrategyManager::update()
+ {
+    if (doStateUpdate())
+	{
+        updateState();
+
+		timeSinceLastStateUpdate = 0;
+		doStateUpdateNow = false;
+	}
+
+    switch (state)
+	{
+		case OPENING:
+			break;// follow build order
+
+		case ATTACK:
+			break;// do attack
+
+		case DEFEND:
+			break;// do defend
+
+		case EXPAND:
+			break;// do expand
+
+		default:
+			break;
+	}
+ }
+
+ void StrategyManager::updateState()
+ {
+	// always attack
+	state = ATTACK;
+
+
+	std::string stateName = "";
+	switch (state)
+	{
+		case OPENING:
+			stateName = "OPENING";
+			break;
+
+		case ATTACK:
+			stateName = "ATTACK";
+			break;
+
+		case DEFEND:
+			stateName = "DEFEND";
+			break;
+
+		case EXPAND:
+			stateName = "EXPAND";
+			break;
+
+		default:
+			break;
+	}
+	BWAPI::Broodwar->printf(("Strategy state updated to " + stateName).c_str());
+ }
+
+ bool StrategyManager::doStateUpdate()
+ {
+	 int updateInterval = 500; //frames
+
+	 if (state == OPENING)
+	 {
+		 return false;
+	 }
+
+	 timeSinceLastStateUpdate++; //assumes this method is called every frame
+	 if (timeSinceLastStateUpdate > updateInterval)
+	 {
+		 doStateUpdateNow = true;
+	 }
+	 return doStateUpdateNow;
+ }
+
 void StrategyManager::onUnitShow(BWAPI::Unit * unit)
 {
-	if (enemyRace == BWAPI::Races::Unknown || enemyRace == BWAPI::Races::Random) //Don't really know which one it is set as, but it doens't matter
+	if (enemyRace == BWAPI::Races::Unknown || enemyRace == BWAPI::Races::Random) //Don't really know which one it is set as, but it doesn't matter
 	{
 		enemyRace = BWAPI::Broodwar->enemy()->getRace();
 		loadBayesianNetwork();
@@ -233,6 +314,7 @@ void StrategyManager::setStrategy()
 			if (sum == 0)
 			{
 				currentStrategy = usableStrategies[strategyIndex];
+				openingStrategy = currentStrategy; // since currentStrategy can change while openingStrategy should remain the same
 				return;
 			}
 		}
@@ -250,9 +332,11 @@ void StrategyManager::setStrategy()
 		}
 		
 		currentStrategy = usableStrategies[bestStrategyIndex];
+		openingStrategy = currentStrategy;
 	}
 	else
 	{
+		// Is this ever called / Plankton
 		// otherwise return a "random" strategy
 
         std::string enemyName(BWAPI::Broodwar->enemy()->getName());
@@ -279,11 +363,11 @@ void StrategyManager::onEnd(const bool isWinner)
 		{
 			if (isWinner)
 			{
-				results[getCurrentStrategy()].first = results[getCurrentStrategy()].first + 1;
+				results[openingStrategy].first = results[openingStrategy].first + 1;
 			}
 			else
 			{
-				results[getCurrentStrategy()].second = results[getCurrentStrategy()].second + 1;
+				results[openingStrategy].second = results[openingStrategy].second + 1;
 			}
 		}
 		// otherwise game timed out so use in-game score
@@ -291,11 +375,11 @@ void StrategyManager::onEnd(const bool isWinner)
 		{
 			if (getScore(BWAPI::Broodwar->self()) > getScore(BWAPI::Broodwar->enemy()))
 			{
-				results[getCurrentStrategy()].first = results[getCurrentStrategy()].first + 1;
+				results[openingStrategy].first = results[openingStrategy].first + 1;
 			}
 			else
 			{
-				results[getCurrentStrategy()].second = results[getCurrentStrategy()].second + 1;
+				results[openingStrategy].second = results[openingStrategy].second + 1;
 			}
 		}
 		
@@ -329,19 +413,19 @@ const std::string StrategyManager::getOpeningBook() const
 {
 	if (selfRace == BWAPI::Races::Protoss)
 	{
-		return protossOpeningBook[currentStrategy];
+		return protossOpeningBook[openingStrategy];
 	}
 	else if (selfRace == BWAPI::Races::Terran)
 	{
-		return terranOpeningBook[currentStrategy];
+		return terranOpeningBook[openingStrategy];
 	}
 	else if (selfRace == BWAPI::Races::Zerg)
 	{
-		return zergOpeningBook[currentStrategy];
+		return zergOpeningBook[openingStrategy];
 	} 
 
 	// something wrong, return the protoss one
-	return protossOpeningBook[currentStrategy];
+	return protossOpeningBook[openingStrategy];
 }
 
 // when do we want to defend with our workers?
@@ -394,8 +478,30 @@ const bool StrategyManager::doAttack(const std::set<BWAPI::Unit *> & freeUnits)
 	{
 		firstAttackSent = true;
 	}
+	switch (state)
+	{
+		case OPENING:
+			// atm the same as in ATTACK
+			return doAttack || firstAttackSent;
+			break;
 
-	return doAttack || firstAttackSent;
+		case ATTACK:
+			// do attack
+			return doAttack || firstAttackSent;
+			break;
+
+		case DEFEND:
+			return false;// do defend
+			break;
+
+		case EXPAND:
+			return firstAttackSent;// do expand
+			break;
+
+		default:
+			return false; // do not attack
+			break;
+	}
 }
 
 const bool StrategyManager::expandProtossZealotRush() const
@@ -472,23 +578,46 @@ const bool StrategyManager::expandProtossObserver() const
 
 const MetaPairVector StrategyManager::getBuildOrderGoal()
 {
+	if (state == OPENING) // opening has just finished
+	{
+		updateState();
+	}
 	if (BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Protoss)
 	{
-		if (getCurrentStrategy() == ProtossZealotRush)
+		switch (state)
 		{
-			return getProtossZealotRushBuildOrderGoal();
-		}
-		else if (getCurrentStrategy() == ProtossDarkTemplar)
-		{
-			return getProtossDarkTemplarBuildOrderGoal();
-		}
-		else if (getCurrentStrategy() == ProtossDragoons)
-		{
-			return getProtossDragoonsBuildOrderGoal();
-		}
-		else if (getCurrentStrategy() == ProtossObserver)
-		{
-			return getProtossObserverBuildOrderGoal();
+			case OPENING:
+				;// should never happen, since getBuildOrderGoal is only called when the opening has ended
+				break;
+
+			case ATTACK:
+				// do attack
+				if (getCurrentStrategy() == ProtossZealotRush)
+				{
+					return getProtossZealotRushBuildOrderGoal();
+				}
+				else if (getCurrentStrategy() == ProtossDarkTemplar)
+				{
+					return getProtossDarkTemplarBuildOrderGoal();
+				}
+				else if (getCurrentStrategy() == ProtossDragoons)
+				{
+					return getProtossDragoonsBuildOrderGoal();
+				}
+				else if (getCurrentStrategy() == ProtossObserver)
+				{
+					return getProtossObserverBuildOrderGoal();
+				}
+				break;
+
+			case DEFEND:
+				break;// do defend
+
+			case EXPAND:
+				break;// do expand
+
+			default:
+				break;
 		}
 
 		// if something goes wrong, use zealot goal

@@ -22,8 +22,8 @@ void ScoutManager::update(const std::set<BWAPI::Unit *> & scoutUnits)
 		}
 	}
 	//Set the main and sec observers if any.
-	bool hasMainObserver = mainObserver && (scoutUnits.find(mainObserver) != scoutUnits.end());
-	bool hasSecObserver = secObserver && (scoutUnits.find(secObserver) != scoutUnits.end());
+	bool hasMainObserver = mainObserver && (scoutUnits.find(mainObserver) != scoutUnits.end()) && mainObserver->getPosition().isValid();
+	bool hasSecObserver = secObserver && (scoutUnits.find(secObserver) != scoutUnits.end()) && secObserver->getPosition().isValid();
 
 	//if for some reason our mainobserver is no more then transfer the sec to main. 
 	if( !hasMainObserver && hasSecObserver )
@@ -36,7 +36,7 @@ void ScoutManager::update(const std::set<BWAPI::Unit *> & scoutUnits)
 
 	BOOST_FOREACH(BWAPI::Unit * obs, scoutUnits)
 	{
-		if( obs->getType().getID() == BWAPI::UnitTypes::Protoss_Observer.getID() )
+		if( obs->getType().getID() == BWAPI::UnitTypes::Protoss_Observer.getID() && obs->getPosition().isValid())
 		{
 			if( !hasMainObserver )
 			{
@@ -63,8 +63,6 @@ void ScoutManager::moveObservers()
 	{
 		//loop through enemy occupied bases check for not not recently scouted
 		//check for detectors
-		//go to one of them or check for next exp TODO YOLO
-		//DONT CHECK CORNERS YOU CANT REACH OUTSIDE OF THE BASE TODO YOLO
 		bool hasTarget = false;
 		std::set<BWTA::Region *> regions = InformationManager::Instance().getOccupiedRegions(BWAPI::Broodwar->enemy());
 		BOOST_FOREACH(BWTA::Region * base, regions)
@@ -85,6 +83,7 @@ void ScoutManager::moveObservers()
 			}
 			else
 			{
+				//If we have recently scouted all their bases and the next expansion we should probably just idle in main for now. 
 				BWTA::BaseLocation * mainBase = InformationManager::Instance().getMainBaseLocation(BWAPI::Broodwar->enemy());
 				scoutBase(mainObserver, mainBase->getRegion());
 			}
@@ -92,14 +91,44 @@ void ScoutManager::moveObservers()
 	}
 	if( secObserver )
 	{
-		//try to find enemy army and follow it TODO YOLO
-		BWAPI::Position explorePosition = MapGrid::Instance().getLeastExplored();
-		smartMove(secObserver, explorePosition);
-	}
-	if( nextExp )
-	{
-		BWAPI::Position exp = nextExp->getCenter();
-		BWAPI::Broodwar->drawBoxMap(exp.x(), exp.y(), exp.x()+4*32, exp.y()+3*32, BWAPI::Colors::Yellow, true);
+		//try to find enemy army and follow it
+		std::vector<UnitInfo> units;
+		int minDistance = 10000;
+		BWAPI::Position pos;
+		BWAPI::Position cmpPos;
+		BOOST_FOREACH (BWAPI::Unit * unit, BWAPI::Broodwar->enemy()->getUnits())
+		{
+			units.clear();
+			InformationManager::Instance().getNearbyForce(units, unit->getPosition(), BWAPI::Broodwar->enemy(), 900);
+			int dist = MapTools::Instance().getGroundDistance(secObserver->getPosition(), unit->getPosition());
+			if(units.size() > 4 && dist < minDistance)
+			{
+				//Dont get stuck at the bunkers.. or buildings in general :( TODO
+				bool hasBunker = false;
+				BOOST_FOREACH(UnitInfo inf, units)
+				{
+					if(inf.unitID == BWAPI::UnitTypes::Terran_Bunker.getID())
+					{
+						hasBunker = true;
+					}
+				}
+				if( !hasBunker )
+				{
+					minDistance = dist;
+					pos = unit->getPosition();
+				}
+			}
+		}
+		if( pos != cmpPos)
+		{
+			smartMove(secObserver, pos);
+		}
+		else
+		{
+			//BWAPI::Position explorePosition = MapGrid::Instance().getLeastExplored();
+			BWAPI::Position centerOfMainChokePoint = (*InformationManager::Instance().getMainBaseLocation(BWAPI::Broodwar->enemy())->getRegion()->getChokepoints().begin())->getCenter();
+			smartMove(secObserver, centerOfMainChokePoint);
+		}
 	}
 }
 
@@ -119,7 +148,7 @@ BWTA::Region * ScoutManager::nextExpansion()
 			if( (occReg.find(base->getRegion()) == occReg.end()) && MapTools::Instance().getGroundDistance(enemyMain, base->getPosition()) < minDistance )
 			{
 				//The distance is saved in a map so not too bad to just call it again
-				minDistance = MapTools::Instance().getEnemyBaseDistance(base->getPosition());
+				minDistance = MapTools::Instance().getGroundDistance(enemyMain, base->getPosition());
 				closestBase = base;
 			}
 		}

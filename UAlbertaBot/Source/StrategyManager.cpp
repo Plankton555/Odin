@@ -33,34 +33,59 @@ StrategyManager & StrategyManager::Instance()
     if (doStateUpdate())
 	{
         updateState();
+
+		timeSinceLastStateUpdate = 0;
+		doStateUpdateNow = false;
 	}
 
     switch (state)
 	{
 		case OPENING:
-			;// follow build order
+			break;// follow build order
 
 		case ATTACK:
-			;// do attack
+			break;// do attack
 
 		case DEFEND:
-			;// do defend
+			break;// do defend
 
 		case EXPAND:
-			;// do expand
+			break;// do expand
+
 		default:
-			;
+			break;
 	}
  }
 
  void StrategyManager::updateState()
  {
-	 // always attack
-	 state = ATTACK;
-	 BWAPI::Broodwar->printf("Strategy state updated");
+	// always attack
+	state = ATTACK;
 
-	 timeSinceLastStateUpdate = 0;
-	 doStateUpdateNow = false;
+
+	std::string stateName = "";
+	switch (state)
+	{
+		case OPENING:
+			stateName = "OPENING";
+			break;
+
+		case ATTACK:
+			stateName = "ATTACK";
+			break;
+
+		case DEFEND:
+			stateName = "DEFEND";
+			break;
+
+		case EXPAND:
+			stateName = "EXPAND";
+			break;
+
+		default:
+			break;
+	}
+	BWAPI::Broodwar->printf(("Strategy state updated to " + stateName).c_str());
  }
 
  bool StrategyManager::doStateUpdate()
@@ -455,19 +480,24 @@ const bool StrategyManager::doAttack(const std::set<BWAPI::Unit *> & freeUnits)
 		case OPENING:
 			// atm the same as in ATTACK
 			return doAttack || firstAttackSent;
+			break;
 
 		case ATTACK:
 			// do attack
 			return doAttack || firstAttackSent;
+			break;
 
 		case DEFEND:
 			return false;// do defend
+			break;
 
 		case EXPAND:
 			return firstAttackSent;// do expand
+			break;
 
 		default:
 			return false; // do not attack
+			break;
 	}
 }
 
@@ -555,6 +585,7 @@ const MetaPairVector StrategyManager::getBuildOrderGoal()
 		{
 			case OPENING:
 				;// should never happen, since getBuildOrderGoal is only called when the opening has ended
+				break;
 
 			case ATTACK:
 				// do attack
@@ -574,14 +605,16 @@ const MetaPairVector StrategyManager::getBuildOrderGoal()
 				{
 					return getProtossObserverBuildOrderGoal();
 				}
+				break;
 
 			case DEFEND:
-				;// do defend
+				break;// do defend
 
 			case EXPAND:
-				;// do expand
+				break;// do expand
+
 			default:
-				;
+				break;
 		}
 
 		// if something goes wrong, use zealot goal

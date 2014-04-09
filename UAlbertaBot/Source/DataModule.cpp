@@ -15,7 +15,7 @@ const char COMMENT_CHAR = ';';
 using namespace std;
 
 std::map<const char*,std::vector<int>*> *DataModule::units = NULL;
-std::map<const char*,std::vector<int>*> *DataModule::counters = NULL;
+std::map<const char*,std::vector<BWAPI::UnitType>* > *DataModule::counters = NULL;
 int DataModule::loaded = 0;
 
 void DataModule::init()
@@ -28,7 +28,7 @@ void DataModule::init()
 		if (unitfile.is_open())
 		{
 			units = new std::map<const char*, std::vector<int>*>;
-			counters = new std::map<const char*, std::vector<int>*>;
+			counters = new std::map<const char*, std::vector<BWAPI::UnitType>* >;
 
 			while (getline(unitfile,line)) {
 				if (*line.c_str() != COMMENT_CHAR) //Ignore comments
@@ -47,13 +47,19 @@ void DataModule::init()
 
 					//Save the counters
 					std::vector<std::string>* readCounters = splitDelim(sub->at(COUNTER_NAMES_POSITION), SUB_SPLIT_SYMBOL);
-					std::vector<int>* counterNames = new std::vector<int>(readCounters->size());
-					for (int i = 0; i < readCounters->size(); i++)
+					if (readCounters->size() == 1 && strcmp(readCounters->at(0).c_str(),"None") == 0) //There are no counters
 					{
-						counterNames->at(i) = atoi(readCounters->at(i).c_str());
+						(*counters)[sub->at(0).c_str()] = NULL;
+					} else
+					{
+						std::vector<BWAPI::UnitType>* counterNames = new std::vector<BWAPI::UnitType>(readCounters->size());
+
+						for (int i = 0; i < readCounters->size(); i++)
+						{
+							counterNames->at(i) = BWAPI::UnitTypes::getUnitType(readCounters->at(i).c_str());
+						}
+						(*counters)[sub->at(0).c_str()] = counterNames;
 					}
-					(*counters)[sub->at(0).c_str()] = counterNames;
-					//Save other data here {Henrik? :)}
 				}
 			}
 
@@ -87,9 +93,17 @@ std::map<const char*,std::vector<int>*>* DataModule::getFuzzyValues()
 	return units;
 }
 
-std::vector<int> * DataModule::getCounter(std::string unit)
+std::vector<BWAPI::UnitType> * DataModule::getCounter(std::string unit)
 {
-	return (*counters)[unit.c_str()];
+	std::map<const char*,std::vector<BWAPI::UnitType>* >::iterator it;
+	for (it = counters->begin(); it != counters->end(); it++)
+	{
+		if (strcmp(it->first, unit.c_str()) == 0)
+		{
+			return it->second;
+		}
+	}
+	return NULL;
 }
 
 std::vector<std::string>* DataModule::splitDelim(const std::string& str, const std::string& delim)

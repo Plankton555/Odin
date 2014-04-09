@@ -13,6 +13,8 @@ StrategyManager::StrategyManager()
 	, enemyRace(BWAPI::Broodwar->enemy()->getRace())
 	, bayesianNet(NULL)
 	, state(OPENING)
+	, doStateUpdateNow(false)
+	, timeSinceLastStateUpdate(0)
 {
 	loadBayesianNetwork();
 	addStrategies();
@@ -28,7 +30,7 @@ StrategyManager & StrategyManager::Instance()
 
  void StrategyManager::update()
  {
-    if (false)//(shouldUpdateState)
+    if (doStateUpdate())
 	{
         updateState();
 	}
@@ -55,6 +57,27 @@ StrategyManager & StrategyManager::Instance()
  {
 	 // always attack
 	 state = ATTACK;
+	 BWAPI::Broodwar->printf("Strategy state updated");
+
+	 timeSinceLastStateUpdate = 0;
+	 doStateUpdateNow = false;
+ }
+
+ bool StrategyManager::doStateUpdate()
+ {
+	 int updateInterval = 500; //frames
+
+	 if (state == OPENING)
+	 {
+		 return false;
+	 }
+
+	 timeSinceLastStateUpdate++; //assumes this method is called every frame
+	 if (timeSinceLastStateUpdate > updateInterval)
+	 {
+		 doStateUpdateNow = true;
+	 }
+	 return doStateUpdateNow;
  }
 
 void StrategyManager::onUnitShow(BWAPI::Unit * unit)

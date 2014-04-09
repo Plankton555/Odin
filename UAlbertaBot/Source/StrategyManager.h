@@ -35,6 +35,8 @@ class StrategyManager
 	std::vector<int>			usableStrategies;
 	int							openingStrategy;
 	int							currentStrategy;
+	int							timeSinceLastStateUpdate;
+	bool						doStateUpdateNow;
 
 	BWAPI::Race					selfRace;
 	BWAPI::Race					enemyRace;
@@ -49,6 +51,7 @@ class StrategyManager
 	void	writeResults();
 	void	loadStrategiesFromFile(std::string filename);
 	void	updateState();
+	bool	doStateUpdate();
 
 	const	int					getScore(BWAPI::Player * player) const;
 	const	double				getUCBValue(const size_t & strategy) const;

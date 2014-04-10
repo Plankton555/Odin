@@ -908,39 +908,14 @@ const MetaPairVector StrategyManager::getZergBuildOrderGoal() const
 	 return currentStrategy;
  }
 
-
-void debug(std::string str)
-{
-	ofstream file ("debug.txt", ios::app);
-	if (file.is_open())
-	{
-		file << str.c_str() << endl;
-		file.close();
-	}
-}
-
-void debug(std::string str, int i)
-{
-	std::ostringstream stringStream;
-	stringStream << str;
-	stringStream << ": ";
-	stringStream << i;
-	std::string newStr = stringStream.str();
-	debug(newStr);
-}
-
  void StrategyManager::updateArmyComposition()
 {
-	debug("=====BeliefsUpdates=====");
-	bayesianNet->SetEvidence("Zealot",1);
+	//Update network
+	bayesianNet->SetEvidence("TimePeriod",odin_utils::getTimePeriod());
 	bayesianNet->UpdateBeliefs();
-	stringstream ss;
-	ss << "Prob zealot ";
-	ss << bayesianNet->ReadProbability("Zealot",1);
-	debug(ss.str());
-	debug("=====START=====");
 
-
+	//Read army comp
+	std::map<BWAPI::UnitType, double>	armyComposition;
 	std::set<BWAPI::UnitType> allUnits = BWAPI::UnitTypes::allUnitTypes();
 	std::set<BWAPI::UnitType>::iterator it;
 	for (it = allUnits.begin(); it != allUnits.end(); it++)
@@ -948,39 +923,57 @@ void debug(std::string str, int i)
 		std::string name = it->c_str();
 		odin_utils::shortenUnitName(name);
 
-
 		if (it->canMove() && bayesianNet->exists(name) && bayesianNet->ReadProbability(name, 1) > ARMY_COMP_THRESHOLD)
 		{
 			//Set initial value
-			armyComposition[name] = ARMY_COMP_START_VAL;
-			debug(name, BWAPI::Broodwar->enemy()->completedUnitCount(*it));
-			debug("^CAN MOVE AND HIGH PROB IN BNET^");
-
-			//Add value depending on the percentage of the seen units
-			int totalNrUnits = BWAPI::Broodwar->enemy()->getUnits().size();
-			int nrUnits = BWAPI::Broodwar->enemy()->completedUnitCount((*it));
-			armyComposition[name] = armyComposition[name] + nrUnits/totalNrUnits;
+			armyComposition[*it] = ARMY_COMP_START_VAL;
 		}
 	}
 
-	//Normalise the values
-	double totalSum = 0;
-	std::map<std::string, double>::iterator compIt;
+
+	//Add value depending on the percentage of the seen units
+	int totalNrUnits = 0;
+	std::map<BWAPI::UnitType, double>::iterator compIt;
 	for (compIt = armyComposition.begin(); compIt != armyComposition.end(); compIt++)
 	{
+		totalNrUnits += BWAPI::Broodwar->enemy()->completedUnitCount(compIt->first);
+	}
+	
+	double totalSum = 0;
+	for (compIt = armyComposition.begin(); compIt != armyComposition.end(); compIt++)
+	{
+		int nrUnits = BWAPI::Broodwar->enemy()->completedUnitCount(compIt->first);
+		if (nrUnits) //Don't add any value if none has been seen
+		{
+			double ratio = nrUnits;
+			ratio /= totalNrUnits;
+			compIt->second += ratio;
+		}
+
 		totalSum += compIt->second;
 	}
 
+	//Save normalised counters
 	for (compIt = armyComposition.begin(); compIt != armyComposition.end(); compIt++)
 	{
-		compIt->second = compIt->second/totalSum;
+		//compIt->second = compIt->second/totalSum;
+		armyCounters[DataModule::getCounter(compIt->first.c_str())] = compIt->second/totalSum;
 	}
 
-	//Get counters
-
-	//Save for later
-
-	debug("======END======");
+	/*
+	//debug("=====FINAL RESULT?=====");
+	std::map<std::vector<BWAPI::UnitType>*, double>::iterator a;
+	for (a = armyCounters.begin(); a != armyCounters.end(); a++)
+	{
+		stringstream ss;
+		ss << a->first->at(0).c_str();
+		ss << " and ";
+		ss << a->first->at(1).c_str();
+		ss << " have prob: ";
+		ss << a->second;
+		debug(ss.str());
+	}
+	*/
  }
 
 

@@ -11,6 +11,8 @@
 #include <sys/stat.h>
 #include <cstdlib>
 #include "OdinUtils.h"
+#include "DataModule.h"
+#include <math.h>
 
 #include "..\..\StarcraftBuildOrderSearch\Source\starcraftsearch\StarcraftData.hpp"
 
@@ -18,12 +20,13 @@ typedef std::pair<int, int> IntPair;
 typedef std::pair<MetaType, UnitCountType> MetaPair;
 typedef std::vector<MetaPair> MetaPairVector;
 
+
 class StrategyManager 
 {
 	StrategyManager();
 	~StrategyManager() {}
 
-	std::map<std::string, double>	armyComposition;
+	std::map<std::vector<BWAPI::UnitType>*, double>	armyCounters;
 	BayesianNet*				bayesianNet;
 
 	std::vector<std::string>	protossOpeningBook;

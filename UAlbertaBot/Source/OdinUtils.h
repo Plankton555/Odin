@@ -30,4 +30,10 @@ namespace odin_utils
 		replaceAllString(str," ",""); //Remove all spaces
 		replaceAllString(str,"-",""); //remove '-' for u-238 shells
 	}
+
+	inline int getTimePeriod()
+	{
+		int timePeriod = BWAPI::Broodwar->getFrameCount()/1000;
+		return std::min(25, timePeriod);
+	}
 };

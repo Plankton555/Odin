@@ -23,7 +23,7 @@ Protoss Shield Battery,0,None
 ;Protoss units
 Protoss Zealot,0.3.8.15,Protoss Dragoon.Protoss High Templar
 Protoss Dragoon,0.3.7.12,Protoss Dragoon.Protoss High Templar
-Protoss Dark Templar,0.3.5.7,Protoss Photon Cannon.Protoss Observers
+Protoss Dark Templar,0.3.5.7,Protoss Photon Cannon.Protoss Observer
 Protoss High Templar,0.3.5.10,Protoss Reaver.Protoss Dark Archon
 Protoss Archon,0.2.4.6,Protoss Reaver.Protoss Carrier
 Protoss Dark Archon,0.2.3.4,Protoss Dragoon.Protoss Reaver

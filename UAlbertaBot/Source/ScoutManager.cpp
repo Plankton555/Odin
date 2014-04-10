@@ -2,11 +2,7 @@
 #include "ScoutManager.h"
 #include "InformationManager.h"
 
-<<<<<<< HEAD
-ScoutManager::ScoutManager() : workerScout(NULL), numWorkerScouts(0), scoutUnderAttack(false), circlingDone(false), circling(NULL), circlingOpposite(false)
-=======
-ScoutManager::ScoutManager() : workerScout(NULL), numWorkerScouts(0), scoutUnderAttack(false), mainObserver(NULL), secObserver(NULL), nextExp(NULL)
->>>>>>> improved-observers
+ScoutManager::ScoutManager() : workerScout(NULL), numWorkerScouts(0), scoutUnderAttack(false), circlingDone(false), circling(NULL), circlingOpposite(false), mainObserver(NULL), secObserver(NULL), nextExp(NULL)
 {
 }
 

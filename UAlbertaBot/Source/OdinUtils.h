@@ -2,6 +2,8 @@
 
 #include "Common.h"
 
+using namespace std;
+
 namespace odin_utils
 {
 	inline bool replaceString(std::string &str, const std::string &from, const std::string &to)
@@ -35,5 +37,25 @@ namespace odin_utils
 	{
 		int timePeriod = BWAPI::Broodwar->getFrameCount()/1000;
 		return std::min(25, timePeriod);
+	}
+
+	inline void debug(std::string str)
+	{
+		std::ofstream file ("bwapi-data/Odin/odin_data/debug.txt", ios::app);
+		if (file.is_open())
+		{
+			file << str.c_str() << endl;
+			file.close();
+		}
+	}
+	
+	inline void debug(std::string str, int i)
+	{
+		std::ostringstream stringStream;
+		stringStream << str;
+		stringStream << ": ";
+		stringStream << i;
+		std::string newStr = stringStream.str();
+		debug(newStr);
 	}
 };

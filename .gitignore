@@ -1,4 +1,5 @@
 # Odin data files (locally updated files)
+odin_data/debug.txt
 odin_data/openings/random.txt
 odin_data/openings/protoss.txt
 odin_data/openings/terran.txt

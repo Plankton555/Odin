@@ -18,6 +18,7 @@ StrategyManager::StrategyManager()
 	, state(OPENING)
 	, doStateUpdateNow(false)
 	, timeSinceLastStateUpdate(0)
+	, lastBnUpdate(0)
 {
 	loadBayesianNetwork();
 	addStrategies();
@@ -578,6 +579,8 @@ const bool StrategyManager::expandProtossObserver() const
 
 const MetaPairVector StrategyManager::getBuildOrderGoal()
 {
+	int now;
+
 	if (state == OPENING) // opening has just finished
 	{
 		updateState();
@@ -592,6 +595,7 @@ const MetaPairVector StrategyManager::getBuildOrderGoal()
 
 			case ATTACK:
 				// do attack
+				/*
 				if (getCurrentStrategy() == ProtossZealotRush)
 				{
 					return getProtossZealotRushBuildOrderGoal();
@@ -608,6 +612,20 @@ const MetaPairVector StrategyManager::getBuildOrderGoal()
 				{
 					return getProtossObserverBuildOrderGoal();
 				}
+				*/
+				now = BWAPI::Broodwar->getFrameCount();
+				if (now - lastBnUpdate > 100)
+				{
+					updateArmyComposition();
+					lastBnUpdate = now;
+				}
+
+				if (armyCounters.size() == 0)
+				{
+				} else {
+					return getProtossCounterBuildOrderGoal();
+				}
+
 				break;
 
 			case DEFEND:
@@ -631,6 +649,28 @@ const MetaPairVector StrategyManager::getBuildOrderGoal()
 	{
 		return getZergBuildOrderGoal();
 	}
+}
+
+const MetaPairVector StrategyManager::getProtossCounterBuildOrderGoal()
+{
+	odin_utils::debug("=== GOAL STARTING ===");
+	MetaPairVector goal;
+
+	std::map<std::vector<BWAPI::UnitType>*, double>::iterator it;
+	for (it = armyCounters.begin(); it != armyCounters.end(); it++)
+	{
+		int nrUnits = it->second * 10; //TODO: Some threshold here? Depend on economy?
+		if (nrUnits >= 1)
+		{
+			int nrUnitsWanted = nrUnits + BWAPI::Broodwar->self()->allUnitCount(it->first->at(0)); //TODO: Choose cheap or expensive counter (if expensive even exists!)
+			goal.push_back(MetaPair(it->first->at(0), nrUnitsWanted));
+			odin_utils::debug(it->first->at(0).c_str(), nrUnitsWanted);
+		}
+	}
+	odin_utils::debug("=== GOAL ENDING ===");
+	odin_utils::debug(" ");
+
+	return goal;
 }
 
 const MetaPairVector StrategyManager::getProtossObserverBuildOrderGoal() const

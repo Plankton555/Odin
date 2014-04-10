@@ -89,7 +89,7 @@ Zerg Defiler Mound,0,None
 ;
 ;Zerg units
 Zerg Zergling,0.5.10.20,Protoss Zealot.Protoss High Templar
-Zerg Hydralisk,0.3.5.10,Protoss Zealots.Protoss High Templar
+Zerg Hydralisk,0.3.5.10,Protoss Zealot.Protoss High Templar
 Zerg Lurker,0.3.5.10,Protoss High Templar.Protoss Archon
 Zerg Ultralisk,0.1.2.4,Protoss Archon.Protoss Carrier
 Zerg Defiler,0.3.5.8,Protoss Photon Cannon.Protoss Reaver

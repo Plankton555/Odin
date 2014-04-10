@@ -43,31 +43,58 @@ void CombatCommander::assignIdleSquads(std::set<BWAPI::Unit *> & unitsToAssign)
 
 	UnitVector combatUnits(unitsToAssign.begin(), unitsToAssign.end());
 	unitsToAssign.clear();
-
 	std::set<BWTA::Region *> occupiedRegions = InformationManager::Instance().getOccupiedRegions(BWAPI::Broodwar->self());
+	if(StrategyManager::Instance().state == StrategyManager::DEFEND)
+	{//Place army at the occupied region closest to the enemy
+		std::set<BWTA::Region *>::iterator regionIt = occupiedRegions.begin(); 
+		double closestDistance = 100000;
+		BWTA::Region * regionClosestToEnemy = NULL;
+		for(regionIt=occupiedRegions.begin(); regionIt!=occupiedRegions.end();)
+		{
+			BWTA::Region * region = *regionIt;
+			double distance = region->getCenter().getDistance(BWAPI::Position(BWAPI::Broodwar->enemy()->getStartLocation()));
+			if (!regionClosestToEnemy || distance < closestDistance)
+			{
+				closestDistance = distance;
+				regionClosestToEnemy = region;
+			}
+			regionIt++;
+		}
 
-	int numberOfParts = occupiedRegions.size();
-	int partSize = combatUnits.size()/numberOfParts;
+		squadData.addSquad(Squad(combatUnits, SquadOrder(SquadOrder::Defend, BWAPI::Position(regionClosestToEnemy->getCenter()), 1000, "Defend Idle")));
 
-	UnitVector::iterator tempIt;
-	UnitVector armyPart;
-	std::set<BWTA::Region *>::iterator regionIt = occupiedRegions.begin(); 
-	for(tempIt=combatUnits.begin(); tempIt!=combatUnits.end();)
-	{	
-		armyPart.push_back(*tempIt);
-		if(armyPart.size()==partSize)
+	}else
+	{//Dive the army equally between all occupied regions		
+
+		int numberOfParts = occupiedRegions.size();
+		int partSize = combatUnits.size()/numberOfParts+1;
+
+		UnitVector::iterator tempIt;
+		UnitVector armyPart;
+		std::set<BWTA::Region *>::iterator regionIt = occupiedRegions.begin(); 
+		bool fullSquad = false;
+		for(tempIt=combatUnits.begin(); tempIt!=combatUnits.end();)
+		{	
+			armyPart.push_back(*tempIt);
+			fullSquad = false;
+			if(armyPart.size()==partSize&&regionIt!=occupiedRegions.end())
+			{	
+				BWTA::Region * region = *regionIt;
+				fullSquad = true;
+				squadData.addSquad(Squad(armyPart, SquadOrder(SquadOrder::Defend, BWAPI::Position(region->getCenter()), 1000, "Defend Idle")));		
+				regionIt++;
+				armyPart.clear();
+			}
+			tempIt++;
+		}
+		if(!fullSquad&&regionIt!=occupiedRegions.end())
 		{	
 			BWTA::Region * region = *regionIt;
-
 			squadData.addSquad(Squad(armyPart, SquadOrder(SquadOrder::Defend, BWAPI::Position(region->getCenter()), 1000, "Defend Idle")));
-			regionIt++;
-			armyPart.clear();
 		}
-		tempIt++;
 	}
 
-	BWTA::Region * region = *regionIt;
-	squadData.addSquad(Squad(armyPart, SquadOrder(SquadOrder::Defend, BWAPI::Position(region->getCenter()), 1000, "Defend Idle")));
+	
 }
 
 void CombatCommander::assignAttackSquads(std::set<BWAPI::Unit *> & unitsToAssign)

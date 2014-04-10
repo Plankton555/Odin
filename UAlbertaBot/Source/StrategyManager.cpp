@@ -62,7 +62,7 @@ StrategyManager & StrategyManager::Instance()
 	// uncomment to always attack (original behaviour)
 	state = ATTACK;
 
-	//BWAPI::Broodwar->printf("known resources: %f", getEconomyPotential(BWAPI::Broodwar->self()));
+	BWAPI::Broodwar->printf("known resources: %f", getEconomyPotential(BWAPI::Broodwar->self()));
 
 
 	std::string stateName = "";
@@ -106,15 +106,15 @@ double StrategyManager::getEconomyPotential(BWAPI::Player *player)
 			bases.push_back(unit);
 		}
 	}
-
-	BOOST_FOREACH (BWAPI::Unit * unit, BWAPI::Broodwar->getAllUnits()) // only returns the resources that are visible right now...
+	//InformationManager::Instance().
+	BOOST_FOREACH (BWAPI::Unit * unit, BWAPI::Broodwar->getNeutralUnits()) // only returns the resources that are visible right now...
 	{
 		if (unit->getType().isResourceContainer())
 		{
 			resources.push_back(unit);
 		}
 	}
-	return 0;
+	return resources.size();
 }
 
 double StrategyManager::getDefensePotential(BWAPI::Player *player)

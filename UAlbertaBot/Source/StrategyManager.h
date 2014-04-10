@@ -52,6 +52,9 @@ class StrategyManager
 	void	loadStrategiesFromFile(std::string filename);
 	void	updateState();
 	bool	doStateUpdate();
+	double	getArmyPotential(int playerID, double economy);
+	double	getEconomyPotential(int playerID);
+	double	getDefensePotential(int playerID);
 
 	const	int					getScore(BWAPI::Player * player) const;
 	const	double				getUCBValue(const size_t & strategy) const;

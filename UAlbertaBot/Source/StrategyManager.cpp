@@ -59,8 +59,10 @@ StrategyManager & StrategyManager::Instance()
 
  void StrategyManager::updateState()
  {
-	// always attack
+	// uncomment to always attack (original behaviour)
 	state = ATTACK;
+
+
 
 
 	std::string stateName = "";
@@ -87,6 +89,18 @@ StrategyManager & StrategyManager::Instance()
 	}
 	BWAPI::Broodwar->printf(("Strategy state updated to " + stateName).c_str());
  }
+ 
+double StrategyManager::getArmyPotential(int playerID, double economy)
+{
+}
+
+double StrategyManager::getEconomyPotential(int playerID)
+{
+}
+
+double StrategyManager::getDefensePotential(int playerID)
+{
+}
 
  bool StrategyManager::doStateUpdate()
  {

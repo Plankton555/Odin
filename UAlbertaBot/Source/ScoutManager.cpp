@@ -21,7 +21,7 @@ void ScoutManager::update(const std::set<BWAPI::Unit *> & scoutUnits)
 			}
 		}
 	}
-	//Set the main and sec observers if any.
+	//Set the main and sec observers if any. if we have them, they are still in the list and still active
 	bool hasMainObserver = mainObserver && (scoutUnits.find(mainObserver) != scoutUnits.end()) && mainObserver->getPosition().isValid();
 	bool hasSecObserver = secObserver && (scoutUnits.find(secObserver) != scoutUnits.end()) && secObserver->getPosition().isValid();
 
@@ -59,7 +59,7 @@ void ScoutManager::update(const std::set<BWAPI::Unit *> & scoutUnits)
 
 void ScoutManager::moveObservers()
 {
-	if( mainObserver )
+	if( mainObserver && mainObserver->getPosition().isValid() )
 	{
 		//loop through enemy occupied bases check for not not recently scouted
 		//check for detectors
@@ -85,11 +85,19 @@ void ScoutManager::moveObservers()
 			{
 				//If we have recently scouted all their bases and the next expansion we should probably just idle in main for now. 
 				BWTA::BaseLocation * mainBase = InformationManager::Instance().getMainBaseLocation(BWAPI::Broodwar->enemy());
-				scoutBase(mainObserver, mainBase->getRegion());
+				if( !baseDetectors[mainBase->getRegion()] )
+				{
+					scoutBase(mainObserver, mainBase->getRegion());
+				}
+				else
+				{
+					BWAPI::Position explorePosition = MapGrid::Instance().getLeastExplored();
+					smartMove(mainObserver, explorePosition);
+				}
 			}
 		}
 	}
-	if( secObserver )
+	if( secObserver && secObserver->getPosition().isValid() )
 	{
 		//try to find enemy army and follow it
 		std::vector<UnitInfo> units;
@@ -125,7 +133,6 @@ void ScoutManager::moveObservers()
 		}
 		else
 		{
-			//BWAPI::Position explorePosition = MapGrid::Instance().getLeastExplored();
 			BWAPI::Position centerOfMainChokePoint = (*InformationManager::Instance().getMainBaseLocation(BWAPI::Broodwar->enemy())->getRegion()->getChokepoints().begin())->getCenter();
 			smartMove(secObserver, centerOfMainChokePoint);
 		}

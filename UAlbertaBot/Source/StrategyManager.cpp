@@ -60,7 +60,7 @@ StrategyManager & StrategyManager::Instance()
  void StrategyManager::updateState()
  {
 	// always attack
-	state = ATTACK;
+	state = DEFEND;
 
 
 	std::string stateName = "";
@@ -574,7 +574,12 @@ const bool StrategyManager::expandProtossObserver() const
 }
 
 const MetaPairVector StrategyManager::getBuildOrderGoal()
-{
+{	
+	
+	MetaPairVector returnGoal; //These are used in the defend state, but could not have them there
+	MetaPairVector cannonGoal; // because it gave some strange error
+	MetaPairVector armyGoal;
+
 	if (state == OPENING) // opening has just finished
 	{
 		updateState();
@@ -608,6 +613,15 @@ const MetaPairVector StrategyManager::getBuildOrderGoal()
 				break;
 
 			case DEFEND:
+				
+				cannonGoal = getStaticDefenceGoal();
+				armyGoal = getProtossDragoonsBuildOrderGoal();
+				returnGoal.reserve( cannonGoal.size() + armyGoal.size() ); // preallocate memory
+				returnGoal.insert( returnGoal.end(), cannonGoal.begin(), cannonGoal.end() );
+				returnGoal.insert( returnGoal.end(), armyGoal.begin(), armyGoal.end() );
+
+				return returnGoal;
+
 				break;// do defend
 
 			case EXPAND:
@@ -861,6 +875,22 @@ const MetaPairVector StrategyManager::getProtossZealotRushBuildOrderGoal() const
 	goal.push_back(MetaPair(BWAPI::UnitTypes::Protoss_Probe,	std::min(90, probesWanted)));
 
 	return goal;
+}
+
+const MetaPairVector StrategyManager::getStaticDefenceGoal() const
+{
+
+	int numNexusAll =			BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Nexus);
+	int numCannon =				BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Photon_Cannon);
+	int wantedTotalCannons = numNexusAll*5;
+	int cannonsWanted = wantedTotalCannons - numCannon;
+	// the goal to return
+	MetaPairVector goal;
+
+	goal.push_back(MetaPair(BWAPI::UnitTypes::Protoss_Photon_Cannon, cannonsWanted));
+
+	return goal;
+
 }
 
 const MetaPairVector StrategyManager::getTerranBuildOrderGoal() const

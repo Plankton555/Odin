@@ -62,7 +62,7 @@ StrategyManager & StrategyManager::Instance()
 	// uncomment to always attack (original behaviour)
 	state = ATTACK;
 
-
+	//BWAPI::Broodwar->printf("known resources: %f", getEconomyPotential(BWAPI::Broodwar->self()));
 
 
 	std::string stateName = "";
@@ -90,15 +90,34 @@ StrategyManager & StrategyManager::Instance()
 	BWAPI::Broodwar->printf(("Strategy state updated to " + stateName).c_str());
  }
  
-double StrategyManager::getArmyPotential(int playerID, double economy)
+double StrategyManager::getArmyPotential(BWAPI::Player *player, double economy)
 {
 }
 
-double StrategyManager::getEconomyPotential(int playerID)
+double StrategyManager::getEconomyPotential(BWAPI::Player *player)
 {
+	// find mineral patches near bases of the player
+	UnitVector bases;
+	UnitVector resources;
+	BOOST_FOREACH (BWAPI::Unit * unit, player->getUnits())
+	{
+		if (unit->getType().isResourceDepot())
+		{
+			bases.push_back(unit);
+		}
+	}
+
+	BOOST_FOREACH (BWAPI::Unit * unit, BWAPI::Broodwar->getAllUnits()) // only returns the resources that are visible right now...
+	{
+		if (unit->getType().isResourceContainer())
+		{
+			resources.push_back(unit);
+		}
+	}
+	return 0;
 }
 
-double StrategyManager::getDefensePotential(int playerID)
+double StrategyManager::getDefensePotential(BWAPI::Player *player)
 {
 }
 

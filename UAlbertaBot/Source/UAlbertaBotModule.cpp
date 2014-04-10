@@ -213,6 +213,9 @@ void UAlbertaBotModule::onSendText(std::string text)
 		} else if (text.compare("s") == 0)
 		{
 			BWAPI::Broodwar->setLocalSpeed(100);
+		} else if (text.compare("d") == 0) //debug
+		{
+			StrategyManager::Instance().updateArmyComposition();
 		}
 
 		BWAPI::Broodwar->sendText(text.c_str());

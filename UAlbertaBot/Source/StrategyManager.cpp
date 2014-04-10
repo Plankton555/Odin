@@ -1,6 +1,9 @@
 #include "Common.h"
 #include "StrategyManager.h"
 
+#define ARMY_COMP_START_VAL (0.1)
+#define ARMY_COMP_THRESHOLD (0.5)
+
 const std::string BAYESNET_FOLDER = ODIN_DATA_FILEPATH + "bayesian_networks/";
 const std::string OPENINGS_FOLDER = ODIN_DATA_FILEPATH + "openings/";
 
@@ -934,3 +937,73 @@ const MetaPairVector StrategyManager::getZergBuildOrderGoal() const
  {
 	 return currentStrategy;
  }
+
+ void StrategyManager::updateArmyComposition()
+{
+	//Update network
+	bayesianNet->SetEvidence("TimePeriod",odin_utils::getTimePeriod());
+	bayesianNet->UpdateBeliefs();
+
+	//Read army comp
+	std::map<BWAPI::UnitType, double>	armyComposition;
+	std::set<BWAPI::UnitType> allUnits = BWAPI::UnitTypes::allUnitTypes();
+	std::set<BWAPI::UnitType>::iterator it;
+	for (it = allUnits.begin(); it != allUnits.end(); it++)
+	{
+		std::string name = it->c_str();
+		odin_utils::shortenUnitName(name);
+
+		if (it->canMove() && bayesianNet->exists(name) && bayesianNet->ReadProbability(name, 1) > ARMY_COMP_THRESHOLD)
+		{
+			//Set initial value
+			armyComposition[*it] = ARMY_COMP_START_VAL;
+		}
+	}
+
+
+	//Add value depending on the percentage of the seen units
+	int totalNrUnits = 0;
+	std::map<BWAPI::UnitType, double>::iterator compIt;
+	for (compIt = armyComposition.begin(); compIt != armyComposition.end(); compIt++)
+	{
+		totalNrUnits += BWAPI::Broodwar->enemy()->completedUnitCount(compIt->first);
+	}
+	
+	double totalSum = 0;
+	for (compIt = armyComposition.begin(); compIt != armyComposition.end(); compIt++)
+	{
+		int nrUnits = BWAPI::Broodwar->enemy()->completedUnitCount(compIt->first);
+		if (nrUnits) //Don't add any value if none has been seen
+		{
+			double ratio = nrUnits;
+			ratio /= totalNrUnits;
+			compIt->second += ratio;
+		}
+
+		totalSum += compIt->second;
+	}
+
+	//Save normalised counters
+	for (compIt = armyComposition.begin(); compIt != armyComposition.end(); compIt++)
+	{
+		//compIt->second = compIt->second/totalSum;
+		armyCounters[DataModule::getCounter(compIt->first.c_str())] = compIt->second/totalSum;
+	}
+
+	/*
+	//debug("=====FINAL RESULT?=====");
+	std::map<std::vector<BWAPI::UnitType>*, double>::iterator a;
+	for (a = armyCounters.begin(); a != armyCounters.end(); a++)
+	{
+		stringstream ss;
+		ss << a->first->at(0).c_str();
+		ss << " and ";
+		ss << a->first->at(1).c_str();
+		ss << " have prob: ";
+		ss << a->second;
+		debug(ss.str());
+	}
+	*/
+ }
+
+

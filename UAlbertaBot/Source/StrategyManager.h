@@ -10,6 +10,9 @@
 #include "BNetParser.h"
 #include <sys/stat.h>
 #include <cstdlib>
+#include "OdinUtils.h"
+#include "DataModule.h"
+#include <math.h>
 
 #include "..\..\StarcraftBuildOrderSearch\Source\starcraftsearch\StarcraftData.hpp"
 
@@ -17,11 +20,13 @@ typedef std::pair<int, int> IntPair;
 typedef std::pair<MetaType, UnitCountType> MetaPair;
 typedef std::vector<MetaPair> MetaPairVector;
 
+
 class StrategyManager 
 {
 	StrategyManager();
 	~StrategyManager() {}
 
+	std::map<std::vector<BWAPI::UnitType>*, double>	armyCounters;
 	BayesianNet*				bayesianNet;
 
 	std::vector<std::string>	protossOpeningBook;
@@ -91,6 +96,7 @@ public:
 
 	static	StrategyManager &	Instance();
 
+			void				updateArmyComposition();
 			BayesianNet*		getBayesianNet() { return bayesianNet; }
 			void				onUnitShow(BWAPI::Unit * unit);
 			void				onEnd(const bool isWinner);

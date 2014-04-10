@@ -341,5 +341,8 @@
     <ClInclude Include="..\Source\ParsedNode.h">
       <Filter>bayesian_network</Filter>
     </ClInclude>
+    <ClInclude Include="..\Source\OdinUtils.h">
+      <Filter>game\util</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

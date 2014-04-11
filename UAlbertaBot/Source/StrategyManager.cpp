@@ -643,6 +643,7 @@ const MetaPairVector StrategyManager::getBuildOrderGoal()
 		}
 
 		// if something goes wrong, use zealot goal
+		odin_utils::debug("Something went wrong, use zealot!");
 		return getProtossZealotRushBuildOrderGoal();
 	}
 	else if (BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Terran)
@@ -657,19 +658,42 @@ const MetaPairVector StrategyManager::getBuildOrderGoal()
 
 const MetaPairVector StrategyManager::getProtossCounterBuildOrderGoal()
 {
-	odin_utils::debug("=== GOAL STARTING ===");
 	MetaPairVector goal;
 
 	std::map<std::vector<BWAPI::UnitType>*, double>::iterator it;
 	for (it = armyCounters.begin(); it != armyCounters.end(); it++)
 	{
-		int nrUnits = it->second * 10; //TODO: Some threshold here? Depend on economy?
-		if (nrUnits >= 1)
+		int nrExtraUnits = it->second * 10; //TODO: Some threshold here? Depend on economy?
+		if (nrExtraUnits >= 1)
 		{
-			int nrUnitsWanted = nrUnits + BWAPI::Broodwar->self()->allUnitCount(it->first->at(0)); //TODO: Choose cheap or expensive counter (if expensive even exists!)
-			goal.push_back(MetaPair(it->first->at(0), nrUnitsWanted));
-			odin_utils::debug(it->first->at(0).c_str(), nrUnitsWanted);
+			BWAPI::UnitType wantedType = it->first->at(0);//TODO: Choose cheap or expensive counter (if expensive even exists!)
+			int nrUnitsWanted = nrExtraUnits + BWAPI::Broodwar->self()->allUnitCount(wantedType);
+
+			//If we already have included this unit, then just add the nr, don't add a new line
+			boolean isIncluded = false;
+			MetaPairVector::iterator gIt;
+			for (gIt = goal.begin(); gIt != goal.end(); gIt++)
+			{
+				if (strcmp(gIt->first.getName().c_str(),wantedType.getName().c_str()) == 0)
+				{
+					gIt->second += nrExtraUnits;
+					isIncluded = true;
+					break;
+				}
+			}
+
+			if (!isIncluded)
+			{
+				goal.push_back(MetaPair(wantedType, nrUnitsWanted));
+			}
 		}
+	}
+
+	MetaPairVector::iterator gIt;
+	odin_utils::debug("=== GOAL STARTING ===");
+	for (gIt = goal.begin(); gIt != goal.end(); gIt++)
+	{
+		odin_utils::debug(gIt->first.getName(), gIt->second);
 	}
 	odin_utils::debug("=== GOAL ENDING ===");
 	odin_utils::debug(" ");

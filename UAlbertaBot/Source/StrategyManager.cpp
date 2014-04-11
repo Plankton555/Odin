@@ -643,7 +643,6 @@ const MetaPairVector StrategyManager::getBuildOrderGoal()
 		}
 
 		// if something goes wrong, use zealot goal
-		odin_utils::debug("Something went wrong, use zealot!");
 		return getProtossZealotRushBuildOrderGoal();
 	}
 	else if (BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Terran)

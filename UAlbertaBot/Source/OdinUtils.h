@@ -2,6 +2,8 @@
 
 #include "Common.h"
 
+#define ODIN_DEBUG false
+
 using namespace std;
 
 namespace odin_utils
@@ -41,6 +43,8 @@ namespace odin_utils
 
 	inline void debug(std::string str)
 	{
+		if(!ODIN_DEBUG) return;
+
 		std::ofstream file ("bwapi-data/Odin/odin_data/debug.txt", ios::app);
 		if (file.is_open())
 		{

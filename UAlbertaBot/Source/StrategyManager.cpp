@@ -616,12 +616,16 @@ const MetaPairVector StrategyManager::getBuildOrderGoal()
 				now = BWAPI::Broodwar->getFrameCount();
 				if (now - lastBnUpdate > 100)
 				{
-					updateArmyComposition();
+					//Update network
+					bayesianNet->SetEvidence("TimePeriod",odin_utils::getTimePeriod());
+					bayesianNet->UpdateBeliefs();
 					lastBnUpdate = now;
 				}
 
+				updateArmyComposition();
 				if (armyCounters.size() == 0)
 				{
+					odin_utils::debug("NO COUNTERS NOW!");
 				} else {
 					return getProtossCounterBuildOrderGoal();
 				}
@@ -950,10 +954,6 @@ const MetaPairVector StrategyManager::getZergBuildOrderGoal() const
 
  void StrategyManager::updateArmyComposition()
 {
-	//Update network
-	bayesianNet->SetEvidence("TimePeriod",odin_utils::getTimePeriod());
-	bayesianNet->UpdateBeliefs();
-
 	//Read army comp
 	std::map<BWAPI::UnitType, double>	armyComposition;
 	std::set<BWAPI::UnitType> allUnits = BWAPI::UnitTypes::allUnitTypes();
@@ -994,6 +994,8 @@ const MetaPairVector StrategyManager::getZergBuildOrderGoal() const
 	}
 
 	//Save normalised counters
+	
+	armyCounters.clear();
 	for (compIt = armyComposition.begin(); compIt != armyComposition.end(); compIt++)
 	{
 		//compIt->second = compIt->second/totalSum;

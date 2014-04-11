@@ -58,4 +58,14 @@ namespace odin_utils
 		std::string newStr = stringStream.str();
 		debug(newStr);
 	}
+
+	inline void debug(std::string str, double d)
+	{
+		std::ostringstream stringStream;
+		stringStream << str;
+		stringStream << ": ";
+		stringStream << d;
+		std::string newStr = stringStream.str();
+		debug(newStr);
+	}
 };

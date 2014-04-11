@@ -613,6 +613,7 @@ const MetaPairVector StrategyManager::getBuildOrderGoal()
 					return getProtossObserverBuildOrderGoal();
 				}
 				*/
+				if(!bayesianNet) break;
 				now = BWAPI::Broodwar->getFrameCount();
 				if (now - lastBnUpdate > 100)
 				{
@@ -621,11 +622,10 @@ const MetaPairVector StrategyManager::getBuildOrderGoal()
 					bayesianNet->UpdateBeliefs();
 					lastBnUpdate = now;
 				}
-
 				updateArmyComposition();
 				if (armyCounters.size() == 0)
 				{
-					odin_utils::debug("NO COUNTERS NOW!");
+					//odin_utils::debug("NO COUNTERS NOW!");
 				} else {
 					return getProtossCounterBuildOrderGoal();
 				}
@@ -687,16 +687,6 @@ const MetaPairVector StrategyManager::getProtossCounterBuildOrderGoal()
 			}
 		}
 	}
-
-	MetaPairVector::iterator gIt;
-	odin_utils::debug("=== GOAL STARTING ===");
-	for (gIt = goal.begin(); gIt != goal.end(); gIt++)
-	{
-		odin_utils::debug(gIt->first.getName(), gIt->second);
-	}
-	odin_utils::debug("=== GOAL ENDING ===");
-	odin_utils::debug(" ");
-
 	return goal;
 }
 

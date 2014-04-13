@@ -63,7 +63,7 @@ StrategyManager & StrategyManager::Instance()
  void StrategyManager::updateState()
  {
 	// always attack
-	state = DEFEND;
+	state = ATTACK;
 
 
 	std::string stateName = "";

@@ -28,6 +28,16 @@ BWAPI::Position MapGrid::getNaturalExpansion()
 
 BWAPI::Position MapGrid::getLeastExplored() 
 {
+	return getLeastExploredBase(BWAPI::Broodwar->self()->getStartLocation());
+}
+
+BWAPI::Position MapGrid::getLeastExploredEnemy()
+{
+	return getLeastExploredBase(BWAPI::Broodwar->enemy()->getStartLocation());
+}
+
+BWAPI::Position MapGrid::getLeastExploredBase(BWAPI::TilePosition base)
+{
 	int minSeen = 1000000;
 	double minSeenDist = 100000;
 	int leastRow(0), leastCol(0);
@@ -39,13 +49,13 @@ BWAPI::Position MapGrid::getLeastExplored()
 			// get the center of this cell
 			BWAPI::Position cellCenter = getCellCenter(r,c);
 
-			// don't worry about places that aren't connected to our start locatin
-			if (!BWTA::isConnected(BWAPI::TilePosition(cellCenter), BWAPI::Broodwar->self()->getStartLocation()))
+			// don't worry about places that aren't connected to our base
+			if (!BWTA::isConnected(BWAPI::TilePosition(cellCenter), base))
 			{
 				continue;
 			}
 
-			BWAPI::Position home(BWAPI::Broodwar->self()->getStartLocation());
+			BWAPI::Position home(base);
 			double dist = home.getDistance(getCellByIndex(r, c).center);
 			if ((getCellByIndex(r, c).timeLastVisited < minSeen) || ((getCellByIndex(r, c).timeLastVisited == minSeen) && (dist < minSeenDist)))
 			{

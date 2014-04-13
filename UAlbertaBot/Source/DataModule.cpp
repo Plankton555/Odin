@@ -4,16 +4,18 @@
 #include <stdlib.h>
 #include "Common.h"
 
-#define FUZZY_VALUES_START (1)
-#define FUZZY_VALUES_END (5)
+#define FUZZY_VALUES_POSITION (1)
+#define COUNTER_NAMES_POSITION (2)
 #define NR_FUZZY_VALUES  (FUZZY_VALUES_END - FUZZY_VALUES_START)
 const std::string FUZZY_VALUES_FILEPATH = ODIN_DATA_FILEPATH + "fuzzy_units.txt";
 const std::string SPLIT_SYMBOL = ",";
+const std::string SUB_SPLIT_SYMBOL = ".";
 const char COMMENT_CHAR = ';';
 
 using namespace std;
 
-std::map<const char*,int*> *DataModule::units = NULL;
+std::map<const char*,std::vector<int>*> *DataModule::units = NULL;
+std::map<const char*,std::vector<BWAPI::UnitType>* > *DataModule::counters = NULL;
 int DataModule::loaded = 0;
 
 void DataModule::init()
@@ -25,7 +27,8 @@ void DataModule::init()
 		std::ifstream unitfile (FUZZY_VALUES_FILEPATH.c_str());
 		if (unitfile.is_open())
 		{
-			units = new std::map<const char*, int*>;
+			units = new std::map<const char*, std::vector<int>*>;
+			counters = new std::map<const char*, std::vector<BWAPI::UnitType>* >;
 
 			while (getline(unitfile,line)) {
 				if (*line.c_str() != COMMENT_CHAR) //Ignore comments
@@ -34,12 +37,29 @@ void DataModule::init()
 					std::vector<std::string>* sub = splitDelim(line, SPLIT_SYMBOL);
 
 					//Save fuzzy values
-					int* fuzzyValues = new int[NR_FUZZY_VALUES];
-					for (int i = 0; i < NR_FUZZY_VALUES; i++)
+					std::vector<std::string>* readValues = splitDelim(sub->at(FUZZY_VALUES_POSITION), SUB_SPLIT_SYMBOL);
+					std::vector<int>* fuzzyValues = new std::vector<int>(readValues->size());
+					for (int i = 0; i < readValues->size(); i++)
 					{
-						fuzzyValues[i] = atoi(sub->at(FUZZY_VALUES_START + i).c_str());
+						fuzzyValues->at(i) = atoi(readValues->at(i).c_str());
 					}
 					(*units)[sub->at(0).c_str()] = fuzzyValues;
+
+					//Save the counters
+					std::vector<std::string>* readCounters = splitDelim(sub->at(COUNTER_NAMES_POSITION), SUB_SPLIT_SYMBOL);
+					if (readCounters->size() == 1 && strcmp(readCounters->at(0).c_str(),"None") == 0) //There are no counters
+					{
+						(*counters)[sub->at(0).c_str()] = NULL;
+					} else
+					{
+						std::vector<BWAPI::UnitType>* counterNames = new std::vector<BWAPI::UnitType>(readCounters->size());
+
+						for (int i = 0; i < readCounters->size(); i++)
+						{
+							counterNames->at(i) = BWAPI::UnitTypes::getUnitType(readCounters->at(i).c_str());
+						}
+						(*counters)[sub->at(0).c_str()] = counterNames;
+					}
 				}
 			}
 
@@ -57,30 +77,33 @@ void DataModule::destroy()
 {
 	if (loaded == 1)
 	{
-		std::map<const char*,int*>::iterator it;
+		std::map<const char*,std::vector<int>*>::iterator it;
 		for(it=units->begin(); it!=units->end(); it++)
 		{
 			delete (it->first); //Delete each string
-			delete[] (it->second); //delete each int array
+			delete (it->second); //delete each int array
 		}
 		delete units; //delete the map itself
 	}
 	loaded = 0;
 }
 
-int DataModule::getNrFuzzyValues()
-{
-	if (!loaded)
-	{
-		return -2;
-	}
-
-	return NR_FUZZY_VALUES;
-}
-
-std::map<const char*,int*>* DataModule::getFuzzyValues()
+std::map<const char*,std::vector<int>*>* DataModule::getFuzzyValues()
 {
 	return units;
+}
+
+std::vector<BWAPI::UnitType> * DataModule::getCounter(std::string unit)
+{
+	std::map<const char*,std::vector<BWAPI::UnitType>* >::iterator it;
+	for (it = counters->begin(); it != counters->end(); it++)
+	{
+		if (strcmp(it->first, unit.c_str()) == 0)
+		{
+			return it->second;
+		}
+	}
+	return NULL;
 }
 
 std::vector<std::string>* DataModule::splitDelim(const std::string& str, const std::string& delim)

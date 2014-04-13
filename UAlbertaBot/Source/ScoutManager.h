@@ -28,6 +28,17 @@ class ScoutManager {
 	double2				getFleeVector(const std::vector<GroundThreat> & threats);
 	BWAPI::Unit *		getEnemyGeyser();
 
+	//Methods below are created for observers
+	BWAPI::Unit *		mainObserver;
+	BWAPI::Unit *		secObserver;
+	BWTA::Region *		nextExpansion();
+	BWTA::Region *		nextExp;
+	void				moveObservers();
+
+	std::map<BWTA::Region *, bool> baseDetectors;
+	bool				baseRecentlyScouted(BWTA::Region * base);
+	void				scoutBase(BWAPI::Unit * obs, BWTA::Region * base);
+	bool				detectorsInBase(BWTA::Region * base);
 
 public:
 

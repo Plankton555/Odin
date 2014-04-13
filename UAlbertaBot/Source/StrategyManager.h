@@ -10,6 +10,9 @@
 #include "BNetParser.h"
 #include <sys/stat.h>
 #include <cstdlib>
+#include "OdinUtils.h"
+#include "DataModule.h"
+#include <math.h>
 
 #include "..\..\StarcraftBuildOrderSearch\Source\starcraftsearch\StarcraftData.hpp"
 
@@ -17,11 +20,13 @@ typedef std::pair<int, int> IntPair;
 typedef std::pair<MetaType, UnitCountType> MetaPair;
 typedef std::vector<MetaPair> MetaPairVector;
 
+
 class StrategyManager 
 {
 	StrategyManager();
 	~StrategyManager() {}
 
+	std::map<std::vector<BWAPI::UnitType>*, double>	armyCounters;
 	BayesianNet*				bayesianNet;
 
 	std::vector<std::string>	protossOpeningBook;
@@ -79,6 +84,8 @@ class StrategyManager
 	const	MetaPairVector		getTerranBuildOrderGoal() const;
 	const	MetaPairVector		getZergBuildOrderGoal() const;
 
+	const	MetaPairVector		getStaticDefenceGoal() const;
+
 	const	MetaPairVector		getProtossOpeningBook() const;
 	const	MetaPairVector		getTerranOpeningBook() const;
 	const	MetaPairVector		getZergOpeningBook() const;
@@ -92,6 +99,7 @@ public:
 
 	static	StrategyManager &	Instance();
 
+			void				updateArmyComposition();
 			BayesianNet*		getBayesianNet() { return bayesianNet; }
 			void				onUnitShow(BWAPI::Unit * unit);
 			void				onEnd(const bool isWinner);

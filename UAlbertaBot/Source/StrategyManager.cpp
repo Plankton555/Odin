@@ -615,7 +615,7 @@ const MetaPairVector StrategyManager::getBuildOrderGoal()
 				*/
 				if(!bayesianNet) break;
 				now = BWAPI::Broodwar->getFrameCount();
-				if (now - lastBnUpdate > 100)
+				if (now - lastBnUpdate > 1000)
 				{
 					//Update network
 					bayesianNet->SetEvidence("TimePeriod",odin_utils::getTimePeriod());
@@ -627,7 +627,14 @@ const MetaPairVector StrategyManager::getBuildOrderGoal()
 				{
 					//odin_utils::debug("NO COUNTERS NOW!");
 				} else {
-					return getProtossCounterBuildOrderGoal();
+					MetaPairVector goal = getProtossCounterBuildOrderGoal();
+					if (goal.size() > 0)
+					{
+						return goal;
+					} else
+					{
+						//odin_utils::debug("ARMY EXIST; BUT BAD NR COUNTERS!");
+					}
 				}
 
 				break;

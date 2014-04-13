@@ -93,6 +93,7 @@ public:
 	enum { TerranMarineRush=0, NumTerranStrategies=1 };
 	enum { ZergZerglingRush=0, NumZergStrategies=1 };
 	enum State { OPENING, ATTACK, DEFEND, EXPAND };
+	enum Action {ATTACK_FOR_WIN, ATTACK_DIVIDED, ATTACK_HARASS, DEFEND_MAIN, BUILD_SD, BUILD_ARMY, BUILD_EXPANSION, BUILDPROBES, TRANSFER_PROBES };
 
 	static	StrategyManager &	Instance();
 
@@ -113,4 +114,5 @@ public:
 
 	void						update();
 	State						state;
+	Action						activeAction;
 };

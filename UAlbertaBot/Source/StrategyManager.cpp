@@ -1,5 +1,6 @@
 #include "Common.h"
 #include "StrategyManager.h"
+#include "CombatCommander.h"
 
 #define ARMY_COMP_START_VAL (0.1)
 #define ARMY_COMP_THRESHOLD (0.5)
@@ -47,6 +48,7 @@ StrategyManager & StrategyManager::Instance()
 			break;// follow build order
 
 		case ATTACK:
+			activeAction = ATTACK_DIVIDED;
 			break;// do attack
 
 		case DEFEND:
@@ -63,7 +65,11 @@ StrategyManager & StrategyManager::Instance()
  void StrategyManager::updateState()
  {
 	// always attack
-	state = ATTACK;
+	state = DEFEND;
+	if(BWAPI::Broodwar->getFrameCount()>10000)
+	{
+		state = ATTACK;
+	}
 
 
 	std::string stateName = "";

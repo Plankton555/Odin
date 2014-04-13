@@ -28,8 +28,20 @@ void CombatCommander::update(std::set<BWAPI::Unit *> unitsToAssign)
         assignScoutDefenseSquads();
 		assignDefenseSquads(unitsToAssign);
 		if (StrategyManager::Instance().state == StrategyManager::State::ATTACK)
-		{
-			assignAttackSquads(unitsToAssign);
+		{	
+			switch (StrategyManager::Instance().activeAction)
+			{
+				case StrategyManager::Action::ATTACK_DIVIDED:
+					dividedAttack(unitsToAssign);
+					break;
+				case StrategyManager::Action::ATTACK_HARASS:
+					harass(unitsToAssign);
+					break;
+				case StrategyManager::Action::ATTACK_FOR_WIN:
+					assignAttackSquads(unitsToAssign);
+					break;
+					
+			}				
 		}
 		assignIdleSquads(unitsToAssign);
 	}
@@ -345,6 +357,73 @@ void CombatCommander::assignAttackExplore(std::set<BWAPI::Unit *> & unitsToAssig
 
 	squadData.addSquad(Squad(combatUnits, SquadOrder(SquadOrder::Attack, MapGrid::Instance().getLeastExplored(), 1000, "Attack Explore")));
 }
+
+void CombatCommander::dividedAttack(std::set<BWAPI::Unit *> & unitsToAssign)
+{	
+	if (unitsToAssign.empty()) { return; }
+	UnitVector combatUnits(unitsToAssign.begin(), unitsToAssign.end());
+	unitsToAssign.clear();
+
+	std::set<BWTA::Region *> occupiedRegions = InformationManager::Instance().getOccupiedRegions(BWAPI::Broodwar->enemy());
+
+	int numberOfParts = occupiedRegions.size();
+	int partSize = combatUnits.size()/numberOfParts+1;
+
+	UnitVector::iterator tempIt;
+	UnitVector armyPart;
+	std::set<BWTA::Region *>::iterator regionIt = occupiedRegions.begin(); 
+	bool fullSquad = false;
+	for(tempIt=combatUnits.begin(); tempIt!=combatUnits.end();)
+	{	
+		armyPart.push_back(*tempIt);
+		fullSquad = false;
+		if(armyPart.size()==partSize&&regionIt!=occupiedRegions.end())
+		{	
+			BWTA::Region * region = *regionIt;
+			fullSquad = true;
+			squadData.addSquad(Squad(armyPart, SquadOrder(SquadOrder::Attack, BWAPI::Position(region->getCenter()), 1000, "Attack Region")));		
+			regionIt++;
+			armyPart.clear();
+		}
+		tempIt++;
+	}
+	if(!fullSquad&&regionIt!=occupiedRegions.end())
+	{	
+		BWTA::Region * region = *regionIt;
+		squadData.addSquad(Squad(armyPart, SquadOrder(SquadOrder::Attack, BWAPI::Position(region->getCenter()), 1000, "Attack Region")));
+	}
+}
+
+
+
+void CombatCommander::harass(std::set<BWAPI::Unit *> & unitsToAssign)
+{	
+	if (unitsToAssign.empty()) { return; }
+	UnitVector combatUnits(unitsToAssign.begin(), unitsToAssign.end());
+	unitsToAssign.clear();
+
+	std::set<BWTA::Region *> occupiedRegions = InformationManager::Instance().getOccupiedRegions(BWAPI::Broodwar->enemy());
+
+	std::set<BWTA::Region *>::iterator regionIt = occupiedRegions.begin(); 
+	
+	double closestDistance = 100000;
+	BWTA::Region * regionClosestToEnemy = NULL;
+	for(regionIt=occupiedRegions.begin(); regionIt!=occupiedRegions.end();)
+	{
+		BWTA::Region * region = *regionIt;
+		double distance = region->getCenter().getDistance(BWAPI::Position(BWAPI::Broodwar->self()->getStartLocation()));
+		if (!regionClosestToEnemy || distance < closestDistance)
+		{
+			closestDistance = distance;
+			regionClosestToEnemy = region;
+		}
+		regionIt++;
+	}
+
+	squadData.addSquad(Squad(combatUnits, SquadOrder(SquadOrder::Attack, BWAPI::Position(regionClosestToEnemy->getCenter()), 1000, "Attack Harass")));
+	
+}
+
 
 BWAPI::Unit* CombatCommander::findClosestDefender(std::set<BWAPI::Unit *> & enemyUnitsInRegion, const std::set<BWAPI::Unit *> & units) 
 {

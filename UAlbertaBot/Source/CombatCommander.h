@@ -38,6 +38,7 @@ class CombatCommander
 	BWTA::Region *		getClosestEnemyRegion();
 	BWAPI::Position		getDefendLocation();
 
+
 public:
 
 	CombatCommander();
@@ -55,4 +56,9 @@ public:
 	void handleEvent(int eventType);
 
 	void drawSquadInformation(int x, int y);
+
+	void dividedAttack(std::set<BWAPI::Unit *> & unitsToAssign);
+	void harass(std::set<BWAPI::Unit *> & unitsToAssign);
+
+
 };

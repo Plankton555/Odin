@@ -12,11 +12,11 @@ int FuzzyModule::getFuzzyNr(int nr, std::string name)
 		return -2;
 	}
 
-	std::map<const char*,std::vector<int>*>* units = DataModule::getFuzzyValues();
-	std::map<const char*,std::vector<int>*>::iterator it;
+	std::map<std::string,std::vector<int>*>* units = DataModule::getFuzzyValues();
+	std::map<std::string,std::vector<int>*>::iterator it;
 	for(it=units->begin(); it!=units->end(); it++)
 	{
-		if (strcmp(it->first, name.c_str()) == 0)
+		if (strcmp(it->first.c_str(), name.c_str()) == 0)
 		{
 			int nrFuzzyValues = it->second->size();
 			for (int i = 0; i<nrFuzzyValues; i++)

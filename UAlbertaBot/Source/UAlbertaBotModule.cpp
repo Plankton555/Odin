@@ -49,7 +49,6 @@ void UAlbertaBotModule::onStart()
 		replayModule.onStart();
 
 	}else{
-		DataModule::saveCases();
 
 		//BWAPI::Broodwar->sendText("Hello, my name is Odin!");
 		//Logger::Instance().log("Hello, my name is Odin2!\n");

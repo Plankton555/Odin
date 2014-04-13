@@ -15,8 +15,8 @@ const char COMMENT_CHAR = ';';
 
 using namespace std;
 
-std::map<const char*,std::vector<int>*>* DataModule::units = NULL;
-std::map<const char*,std::vector<BWAPI::UnitType>* >* DataModule::counters = NULL;
+std::map<std::string,std::vector<int>*>* DataModule::units = NULL;
+std::map<std::string,std::vector<BWAPI::UnitType>* >* DataModule::counters = NULL;
 std::map< std::vector<std::string>,std::vector<std::string> >* DataModule::cases = NULL;
 int DataModule::loaded = 0;
 
@@ -36,8 +36,8 @@ void DataModule::loadFuzzy()
 	std::ifstream unitfile (FUZZY_VALUES_FILEPATH.c_str());
 	if (unitfile.is_open())
 	{
-		units = new std::map<const char*, std::vector<int>*>;
-		counters = new std::map<const char*, std::vector<BWAPI::UnitType>* >;
+		units = new std::map<std::string, std::vector<int>*>;
+		counters = new std::map<std::string, std::vector<BWAPI::UnitType>* >;
 
 		while (getline(unitfile,line)) {
 			if (*line.c_str() != COMMENT_CHAR) //Ignore comments
@@ -109,10 +109,9 @@ void DataModule::destroy()
 {
 	if (loaded == 1)
 	{
-		std::map<const char*,std::vector<int>*>::iterator it;
+		std::map<std::string,std::vector<int>*>::iterator it;
 		for(it=units->begin(); it!=units->end(); it++)
 		{
-			delete (it->first); //Delete each string
 			delete (it->second); //delete each int array
 		}
 		delete units; //delete the map itself
@@ -155,22 +154,17 @@ bool DataModule::saveCases()
 	return false;
 }
 
-std::map<const char*,std::vector<int>*>* DataModule::getFuzzyValues()
+std::map<std::string,std::vector<int>*>* DataModule::getFuzzyValues()
 {
 	return units;
 }
 
 std::vector<BWAPI::UnitType> * DataModule::getCounter(std::string unit)
 {
-	std::map<const char*,std::vector<BWAPI::UnitType>* >::iterator it;
-	for (it = counters->begin(); it != counters->end(); it++)
-	{
-		if (strcmp(it->first, unit.c_str()) == 0)
-		{
-			return it->second;
-		}
-	}
-	return NULL;
+	std::map<std::string,std::vector<BWAPI::UnitType>* >::iterator it;
+	it = counters->find(unit);
+	if (it == counters->end()) return NULL;
+	return it->second;
 }
 
 std::vector<std::string> DataModule::splitDelim(const std::string& str, const std::string& delim)

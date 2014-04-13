@@ -17,7 +17,7 @@ using namespace std;
 
 std::map<const char*,std::vector<int>*>* DataModule::units = NULL;
 std::map<const char*,std::vector<BWAPI::UnitType>* >* DataModule::counters = NULL;
-std::map<std::string,std::string>* DataModule::cases = NULL;
+std::map< std::vector<std::string>,std::vector<std::string> >* DataModule::cases = NULL;
 int DataModule::loaded = 0;
 
 void DataModule::init()
@@ -43,31 +43,31 @@ void DataModule::loadFuzzy()
 			if (*line.c_str() != COMMENT_CHAR) //Ignore comments
 			{
 				//split the line
-				std::vector<std::string>* sub = splitDelim(line, SPLIT_SYMBOL);
+				std::vector<std::string> sub = splitDelim(line, SPLIT_SYMBOL);
 
 				//Save fuzzy values
-				std::vector<std::string>* readValues = splitDelim(sub->at(FUZZY_VALUES_POSITION), SUB_SPLIT_SYMBOL);
-				std::vector<int>* fuzzyValues = new std::vector<int>(readValues->size());
-				for (int i = 0; i < readValues->size(); i++)
+				std::vector<std::string> readValues = splitDelim(sub.at(FUZZY_VALUES_POSITION), SUB_SPLIT_SYMBOL);
+				std::vector<int>* fuzzyValues = new std::vector<int>(readValues.size());
+				for (unsigned int i = 0; i < readValues.size(); i++)
 				{
-					fuzzyValues->at(i) = atoi(readValues->at(i).c_str());
+					fuzzyValues->at(i) = atoi(readValues.at(i).c_str());
 				}
-				(*units)[sub->at(0).c_str()] = fuzzyValues;
+				(*units)[sub.at(0).c_str()] = fuzzyValues;
 
 				//Save the counters
-				std::vector<std::string>* readCounters = splitDelim(sub->at(COUNTER_NAMES_POSITION), SUB_SPLIT_SYMBOL);
-				if (readCounters->size() == 1 && strcmp(readCounters->at(0).c_str(),"None") == 0) //There are no counters
+				std::vector<std::string> readCounters = splitDelim(sub.at(COUNTER_NAMES_POSITION), SUB_SPLIT_SYMBOL);
+				if (readCounters.size() == 1 && strcmp(readCounters.at(0).c_str(),"None") == 0) //There are no counters
 				{
-					(*counters)[sub->at(0).c_str()] = NULL;
+					(*counters)[sub.at(0).c_str()] = NULL;
 				} else
 				{
-					std::vector<BWAPI::UnitType>* counterNames = new std::vector<BWAPI::UnitType>(readCounters->size());
+					std::vector<BWAPI::UnitType>* counterNames = new std::vector<BWAPI::UnitType>(readCounters.size());
 
-					for (int i = 0; i < readCounters->size(); i++)
+					for (unsigned int i = 0; i < readCounters.size(); i++)
 					{
-						counterNames->at(i) = BWAPI::UnitTypes::getUnitType(readCounters->at(i).c_str());
+						counterNames->at(i) = BWAPI::UnitTypes::getUnitType(readCounters.at(i).c_str());
 					}
-					(*counters)[sub->at(0).c_str()] = counterNames;
+					(*counters)[sub.at(0).c_str()] = counterNames;
 				}
 			}
 		}
@@ -85,14 +85,17 @@ void DataModule::loadCase()
 	std::ifstream file (CASES_FILEPATH.c_str());
 	if (file.is_open())
 	{
-		cases = new std::map<std::string, std::string>;
+		cases = new std::map< std::vector<std::string>,std::vector<std::string> >;
 
 		while (getline(file,line)) {
 			if (*line.c_str() != COMMENT_CHAR) //Ignore comments
 			{
 				//split the line
-				std::vector<std::string>* sub = splitDelim(line, SPLIT_SYMBOL);
-				(*cases)[sub->at(0)] = sub->at(1);
+				std::vector<std::string> sub = splitDelim(line, SPLIT_SYMBOL);
+
+				std::vector<std::string> readCases = splitDelim(sub.at(0), SUB_SPLIT_SYMBOL);
+				std::vector<std::string> readSolutions = splitDelim(sub.at(1), SUB_SPLIT_SYMBOL);
+				(*cases)[readCases] = readSolutions;
 			}
 		}
 		file.close();
@@ -117,7 +120,7 @@ void DataModule::destroy()
 	loaded = 0;
 }
 
-std::map<std::string, std::string>* DataModule::getCases()
+std::map< std::vector<std::string>,std::vector<std::string> >* DataModule::getCases()
 {
 	return cases;
 }
@@ -129,10 +132,21 @@ bool DataModule::saveCases()
 		std::ofstream file (CASES_FILEPATH.c_str());
 		if (file.is_open())
 		{
-			std::map<std::string, std::string>::iterator it;
+			std::map< std::vector<std::string>,std::vector<std::string> >::iterator it;
 			for (it = cases->begin(); it != cases->end(); it++)
 			{
-				file << it->first << "," << it->second << endl;
+				for (unsigned int i = 0; i < it->first.size(); i++)
+				{
+					file << it->first.at(i);
+					if (i != it->first.size() -1) file << ".";
+				}
+				file << ",";
+				for (unsigned int i = 0; i < it->second.size(); i++)
+				{
+					file << it->second.at(i);
+					if (i != it->second.size() -1) file << ".";
+				}
+				file << endl;
 			}
 			file.close();
 			return true;
@@ -159,17 +173,17 @@ std::vector<BWAPI::UnitType> * DataModule::getCounter(std::string unit)
 	return NULL;
 }
 
-std::vector<std::string>* DataModule::splitDelim(const std::string& str, const std::string& delim)
+std::vector<std::string> DataModule::splitDelim(const std::string& str, const std::string& delim)
 {
 	std::string s = str;
-	std::vector<std::string> *output = new std::vector<std::string>;
+	std::vector<std::string> output;
 	size_t pos = 0;
 	std::string token;
 	while ((pos = s.find(delim)) != std::string::npos) {
 		token = s.substr(0, pos);
-		output->push_back(token);
+		output.push_back(token);
 		s.erase(0, pos + delim.length());
 	}
-	output->push_back(s);
+	output.push_back(s);
 	return output;
 }

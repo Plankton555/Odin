@@ -64,8 +64,10 @@ StrategyManager & StrategyManager::Instance()
  {
 	// uncomment to always attack (original behaviour)
 	state = ATTACK;
-
-	BWAPI::Broodwar->printf("known resources: %f", getEconomyPotential(BWAPI::Broodwar->self()));
+	
+	BWAPI::Broodwar->printf("self_eco-potential: %f", getEconomyPotential(BWAPI::Broodwar->self()));
+	BWAPI::Broodwar->printf("enemy_eco-potential: %f", getEconomyPotential(BWAPI::Broodwar->enemy()));
+	BWAPI::Broodwar->printf("guessed nmy-potential: %f", getEconomyPotential(BWAPI::Broodwar->enemy())*1.4);
 
 
 	std::string stateName = "";
@@ -99,8 +101,27 @@ double StrategyManager::getArmyPotential(BWAPI::Player *player, double economy)
 
 double StrategyManager::getEconomyPotential(BWAPI::Player *player)
 {
-	// find mineral patches near bases of the player
-	UnitVector bases;
+	// this should work as a guesstimate
+	double nrKnownWorkers = InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Zerg_Drone, player);
+	nrKnownWorkers += InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Terran_SCV, player);
+	nrKnownWorkers += InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Protoss_Probe, player);
+
+	double nrRegions = InformationManager::Instance().getOccupiedRegions(player).size();
+
+	double nrKnownBases = InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Zerg_Hatchery, player);
+	nrKnownBases += InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Zerg_Lair, player);
+	nrKnownBases += InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Zerg_Hive, player);
+	nrKnownBases += InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Terran_Command_Center, player);
+	nrKnownBases += InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Protoss_Nexus, player);
+
+	//double baseVal = (nrKnownBases < 1 ? 0.2 : nrKnownBases);
+	//double regionVal = (nrRegions < 1 ? 0.2 : nrRegions);
+	double val = (nrKnownBases > nrRegions ? nrRegions : nrKnownBases);
+	
+	//double potential = nrKnownWorkers/(val < 0.2 ? 0.2 : val);
+	double potential = nrKnownWorkers*0.09 + nrRegions*0.8 + nrKnownBases*1.1;
+
+	/*UnitVector bases;
 	UnitVector resources;
 	BOOST_FOREACH (BWAPI::Unit * unit, player->getUnits())
 	{
@@ -117,7 +138,9 @@ double StrategyManager::getEconomyPotential(BWAPI::Player *player)
 			resources.push_back(unit);
 		}
 	}
-	return resources.size();
+	//return bases.size();
+	*/
+	return potential;
 }
 
 double StrategyManager::getDefensePotential(BWAPI::Player *player)

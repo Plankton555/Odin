@@ -45,6 +45,7 @@ void ProductionManager::performBuildOrderSearch(const std::vector< std::pair<Met
 	if (searchingGoal.size() == 0) //No goal is being searched
 	{
 		searchingGoal = goal;
+		lastBuildOrderUpdate = BWAPI::Broodwar->getFrameCount();
 	}
 	std::vector<MetaType> buildOrder = StarcraftBuildOrderSearchManager::Instance().findBuildOrder(searchingGoal);
 
@@ -55,7 +56,6 @@ void ProductionManager::performBuildOrderSearch(const std::vector< std::pair<Met
 	{
 		searchingGoal.clear(); //empty it to allow a new search
 	}
-	lastBuildOrderUpdate = BWAPI::Broodwar->getFrameCount();
 }
 
 void ProductionManager::setSearchGoal(MetaPairVector & goal)

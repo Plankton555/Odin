@@ -60,5 +60,8 @@ public:
 	void dividedAttack(std::set<BWAPI::Unit *> & unitsToAssign);
 	void harass(std::set<BWAPI::Unit *> & unitsToAssign);
 
+	void defendFront(std::set<BWAPI::Unit *> & unitsToAssign);
+	void defendMain(std::set<BWAPI::Unit *> & unitsToAssign);
+
 
 };

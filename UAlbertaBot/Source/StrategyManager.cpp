@@ -45,13 +45,15 @@ StrategyManager & StrategyManager::Instance()
     switch (state)
 	{
 		case OPENING:
+			activeAction = DEFEND_DIVIDED;
 			break;// follow build order
 
 		case ATTACK:
-			activeAction = ATTACK_DIVIDED;
+			activeAction = ATTACK_FOR_WIN;
 			break;// do attack
 
 		case DEFEND:
+			activeAction = DEFEND_FRONT;
 			break;// do defend
 
 		case EXPAND:
@@ -66,7 +68,7 @@ StrategyManager & StrategyManager::Instance()
  {
 	// always attack
 	state = DEFEND;
-	if(BWAPI::Broodwar->getFrameCount()>10000)
+	if(BWAPI::Broodwar->getFrameCount()>15000)
 	{
 		state = ATTACK;
 	}
@@ -588,6 +590,7 @@ const MetaPairVector StrategyManager::getBuildOrderGoal()
 	MetaPairVector returnGoal; //These are used in the defend state, but could not have them there
 	MetaPairVector cannonGoal; // because it gave some strange error
 	MetaPairVector armyGoal;
+	MetaPairVector expandGoal;
 
 	if (state == OPENING) // opening has just finished
 	{
@@ -619,15 +622,20 @@ const MetaPairVector StrategyManager::getBuildOrderGoal()
 				{
 					return getProtossObserverBuildOrderGoal();
 				}
+
+				return getProtossDarkTemplarBuildOrderGoal(); //When in doubt, dark templars
+
 				break;
 
 			case DEFEND:
 				
 				cannonGoal = getStaticDefenceGoal();
 				armyGoal = getProtossDragoonsBuildOrderGoal();
-				returnGoal.reserve( cannonGoal.size() + armyGoal.size() ); // preallocate memory
+				expandGoal = getExpandGoal();
+				returnGoal.reserve( cannonGoal.size() + armyGoal.size() + expandGoal.size()); // preallocate memory
 				returnGoal.insert( returnGoal.end(), cannonGoal.begin(), cannonGoal.end() );
 				returnGoal.insert( returnGoal.end(), armyGoal.begin(), armyGoal.end() );
+				returnGoal.insert(returnGoal.end(), expandGoal.begin(), expandGoal.end());
 
 				return returnGoal;
 
@@ -651,6 +659,32 @@ const MetaPairVector StrategyManager::getBuildOrderGoal()
 	{
 		return getZergBuildOrderGoal();
 	}
+}
+
+
+const MetaPairVector StrategyManager::getProbes() const
+{	
+	MetaPairVector goal;
+	int numNexusAll = BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Nexus);
+	int probesWanted = numNexusAll * 2;
+	goal.push_back(MetaPair(BWAPI::UnitTypes::Protoss_Probe,probesWanted));
+
+	return goal;
+}
+
+const MetaPairVector StrategyManager::getExpandGoal() const
+{	
+	MetaPairVector goal;
+	int numNexusAll = BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Nexus);
+	// if there is no place to expand to, we can't expand
+	if (MapTools::Instance().getNextExpansion() == BWAPI::TilePositions::None)
+	{
+		goal.push_back(MetaPair(BWAPI::UnitTypes::Protoss_Probe,1));
+	}else
+	{
+		goal.push_back(MetaPair(BWAPI::UnitTypes::Protoss_Nexus, numNexusAll + 1));
+	}
+	return goal;
 }
 
 const MetaPairVector StrategyManager::getProtossObserverBuildOrderGoal() const

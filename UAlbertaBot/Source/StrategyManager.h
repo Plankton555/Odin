@@ -82,6 +82,8 @@ class StrategyManager
 	const	MetaPairVector		getZergBuildOrderGoal() const;
 
 	const	MetaPairVector		getStaticDefenceGoal() const;
+	const	MetaPairVector		getExpandGoal() const;
+	const	MetaPairVector		getProbes() const
 
 	const	MetaPairVector		getProtossOpeningBook() const;
 	const	MetaPairVector		getTerranOpeningBook() const;
@@ -93,7 +95,7 @@ public:
 	enum { TerranMarineRush=0, NumTerranStrategies=1 };
 	enum { ZergZerglingRush=0, NumZergStrategies=1 };
 	enum State { OPENING, ATTACK, DEFEND, EXPAND };
-	enum Action {ATTACK_FOR_WIN, ATTACK_DIVIDED, ATTACK_HARASS, DEFEND_MAIN, BUILD_SD, BUILD_ARMY, BUILD_EXPANSION, BUILDPROBES, TRANSFER_PROBES };
+	enum Action {ATTACK_FOR_WIN, ATTACK_DIVIDED, ATTACK_HARASS, DEFEND_MAIN, DEFEND_DIVIDED, DEFEND_FRONT, BUILD_SD, BUILD_ARMY, BUILD_EXPANSION, BUILDPROBES};
 
 	static	StrategyManager &	Instance();
 

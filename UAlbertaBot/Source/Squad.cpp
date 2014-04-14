@@ -129,7 +129,7 @@ void Squad::setManagerUnits()
 				transportUnits.push_back(unit);
 			}
 			// select ranged units
-			else if ((unit->getType().groundWeapon().maxRange() > 32) || (unit->getType() == BWAPI::UnitTypes::Protoss_Reaver))
+			else if ((unit->getType().groundWeapon().maxRange() > 32) || (unit->getType() == BWAPI::UnitTypes::Protoss_Reaver) || (unit->getType() == BWAPI::UnitTypes::Protoss_Carrier))
 			{
 				rangedUnits.push_back(unit);
 			}

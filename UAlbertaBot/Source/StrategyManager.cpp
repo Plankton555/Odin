@@ -65,10 +65,13 @@ StrategyManager & StrategyManager::Instance()
 	// uncomment to always attack (original behaviour)
 	state = ATTACK;
 	
+	/*
 	BWAPI::Broodwar->printf("self_eco-potential: %f", getEconomyPotential(BWAPI::Broodwar->self()));
 	BWAPI::Broodwar->printf("enemy_eco-potential: %f", getEconomyPotential(BWAPI::Broodwar->enemy()));
-	BWAPI::Broodwar->printf("guessed nmy-potential: %f", getEconomyPotential(BWAPI::Broodwar->enemy())*1.4);
-
+	BWAPI::Broodwar->printf("guessed nmy-potential: %f", getEconomyPotential(BWAPI::Broodwar->enemy())*1.3);
+	*/
+	BWAPI::Broodwar->printf("self_techs: %f", getArmyPotential(BWAPI::Broodwar->self(), 0));
+	BWAPI::Broodwar->printf("enemy_techs: %f", getArmyPotential(BWAPI::Broodwar->enemy(), 0));
 
 	std::string stateName = "";
 	switch (state)
@@ -97,6 +100,32 @@ StrategyManager & StrategyManager::Instance()
  
 double StrategyManager::getArmyPotential(BWAPI::Player *player, double economy)
 {
+	//upgrades (procentuellt?)
+	double nrKnownUpgrades = 0;
+	double totalUpgrades = 0;
+	BOOST_FOREACH (BWAPI::UpgradeType upgrade, BWAPI::UpgradeTypes::allUpgradeTypes())
+	{
+		if (upgrade.getRace() == player->getRace())
+		{
+			nrKnownUpgrades += player->getUpgradeLevel(upgrade);
+			totalUpgrades += upgrade.maxRepeats();
+		}
+	}
+	double nrKnownTechs = 0;
+	double totalTechs = 0;
+	BOOST_FOREACH (BWAPI::TechType tech, BWAPI::TechTypes::allTechTypes())
+	{
+		if (tech.getRace() == player->getRace())
+		{
+			nrKnownTechs += player->hasResearched(tech);
+			totalTechs++;
+		}
+	}
+	double techAndUpgradePercent = (nrKnownUpgrades+nrKnownTechs)/(totalUpgrades+totalTechs);
+
+	//nrUnits
+	//production facilities
+	return techAndUpgradePercent;
 }
 
 double StrategyManager::getEconomyPotential(BWAPI::Player *player)
@@ -113,33 +142,9 @@ double StrategyManager::getEconomyPotential(BWAPI::Player *player)
 	nrKnownBases += InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Zerg_Hive, player);
 	nrKnownBases += InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Terran_Command_Center, player);
 	nrKnownBases += InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Protoss_Nexus, player);
-
-	//double baseVal = (nrKnownBases < 1 ? 0.2 : nrKnownBases);
-	//double regionVal = (nrRegions < 1 ? 0.2 : nrRegions);
-	double val = (nrKnownBases > nrRegions ? nrRegions : nrKnownBases);
 	
-	//double potential = nrKnownWorkers/(val < 0.2 ? 0.2 : val);
 	double potential = nrKnownWorkers*0.09 + nrRegions*0.8 + nrKnownBases*1.1;
 
-	/*UnitVector bases;
-	UnitVector resources;
-	BOOST_FOREACH (BWAPI::Unit * unit, player->getUnits())
-	{
-		if (unit->getType().isResourceDepot())
-		{
-			bases.push_back(unit);
-		}
-	}
-	//InformationManager::Instance().
-	BOOST_FOREACH (BWAPI::Unit * unit, BWAPI::Broodwar->getNeutralUnits()) // only returns the resources that are visible right now...
-	{
-		if (unit->getType().isResourceContainer())
-		{
-			resources.push_back(unit);
-		}
-	}
-	//return bases.size();
-	*/
 	return potential;
 }
 

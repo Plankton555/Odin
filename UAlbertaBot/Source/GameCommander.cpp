@@ -292,7 +292,9 @@ bool GameCommander::isValidUnit(BWAPI::Unit * unit)
 		&& unit->exists() 
 		&& unit->getType() != BWAPI::UnitTypes::Unknown 
 		&& unit->getPosition().x() != BWAPI::Positions::Unknown.x() 
-		&& unit->getPosition().y() != BWAPI::Positions::Unknown.y()) 
+		&& unit->getPosition().y() != BWAPI::Positions::Unknown.y()
+		&& unit->getType().getID() != BWAPI::UnitTypes::Protoss_Interceptor
+		&& unit->getType().getID() != BWAPI::UnitTypes::Protoss_Scarab ) 
 	{
 		return true;
 	}

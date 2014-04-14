@@ -95,7 +95,8 @@ BuildOrderSearch::StarcraftState StarcraftBuildOrderSearchManager::getCurrentSta
 		{
 			continue;
 		}
-
+		if (unit->getType() == BWAPI::UnitTypes::Protoss_Interceptor)
+			continue;
 		BuildOrderSearch::Action action(DATA.getAction(unit->getType()));
 
 		// if the unit is completed
@@ -248,7 +249,7 @@ std::vector<MetaType> StarcraftBuildOrderSearchManager::getMetaVector(std::strin
 
 void StarcraftBuildOrderSearchManager::drawSearchInformation(int x, int y)
 {
-	starcraftSearchData.drawSearchResults(10, 240);
+	//starcraftSearchData.drawSearchResults(10, 240);
 }
 
 	

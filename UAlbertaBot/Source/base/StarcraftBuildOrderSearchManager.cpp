@@ -91,12 +91,11 @@ BuildOrderSearch::StarcraftState StarcraftBuildOrderSearchManager::getCurrentSta
 			continue;
 		}
 
-		if (unit->getType() == BWAPI::UnitTypes::Zerg_Egg)
+		if (unit->getType() == BWAPI::UnitTypes::Zerg_Egg || unit->getType() == BWAPI::UnitTypes::Protoss_Interceptor || unit->getType() == BWAPI::UnitTypes::Protoss_Scarab)
 		{
 			continue;
 		}
-		if (unit->getType() == BWAPI::UnitTypes::Protoss_Interceptor)
-			continue;
+
 		BuildOrderSearch::Action action(DATA.getAction(unit->getType()));
 
 		// if the unit is completed

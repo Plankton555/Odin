@@ -82,6 +82,7 @@ class StarcraftData {
 			actions.push_back(StarcraftAction(BWAPI::UnitTypes::Protoss_Fleet_Beacon, actions.size()));
 			actions.push_back(StarcraftAction(BWAPI::UnitTypes::Protoss_Carrier, actions.size()));
 			actions.push_back(StarcraftAction(BWAPI::UpgradeTypes::Leg_Enhancements, actions.size()));
+			actions.push_back(StarcraftAction(BWAPI::TechTypes::Psionic_Storm, actions.size()));
 		}
 		else if (r == BWAPI::Races::Terran)
 		{

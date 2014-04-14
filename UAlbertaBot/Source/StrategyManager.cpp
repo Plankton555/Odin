@@ -63,8 +63,11 @@ StrategyManager & StrategyManager::Instance()
  void StrategyManager::updateState()
  {
 	// always attack
-	state = ATTACK;
-
+	state = DEFEND;
+	if(BWAPI::Broodwar->getFrameCount()>10000)
+	{
+		state = ATTACK;
+	}
 
 	std::string stateName = "";
 	switch (state)
@@ -885,12 +888,20 @@ const MetaPairVector StrategyManager::getStaticDefenceGoal() const
 
 	int numNexusAll =			BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Nexus);
 	int numCannon =				BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Photon_Cannon);
+	int numHighTemplars =		BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_High_Templar);
 	int wantedTotalCannons = numNexusAll*5;
 	int cannonsWanted = wantedTotalCannons - numCannon;
 	// the goal to return
 	MetaPairVector goal;
-
+	
+	
+	if (numHighTemplars>0)
+	{
+		goal.push_back(MetaPair(BWAPI::TechTypes::Psionic_Storm, 1));
+	}
 	goal.push_back(MetaPair(BWAPI::UnitTypes::Protoss_Photon_Cannon, cannonsWanted));
+	goal.push_back(MetaPair(BWAPI::UnitTypes::Protoss_High_Templar, 2));
+	
 
 	return goal;
 

@@ -21,38 +21,45 @@ void RangedManager::executeMicro(const UnitVector & targets)
 	// for each zealot
 	BOOST_FOREACH(BWAPI::Unit * rangedUnit, rangedUnits)
 	{
-		// train sub units such as scarabs or interceptors
-		//trainSubUnits(rangedUnit);
+		//try to train subUnits
+		bool hej = trainSubUnits(rangedUnit);
+		
+		/*if( rangedUnit->getType().getID() == BWAPI::UnitTypes::Protoss_Carrier.getID() )
+		{
+			microCarrier(rangedUnit);
+		}
+		else
+		{*/
+			// if the order is to attack or defend
+			if (order.type == order.Attack || order.type == order.Defend) {
 
-		// if the order is to attack or defend
-		if (order.type == order.Attack || order.type == order.Defend) {
-
-			// if there are targets
-			if (!rangedUnitTargets.empty())
-			{
-				// find the best target for this zealot
-				BWAPI::Unit * target = getTarget(rangedUnit, rangedUnitTargets);
-
-				// attack it
-				kiteTarget(rangedUnit, target);
-			}
-			// if there are no targets
-			else
-			{
-				// if we're not near the order position
-				if (rangedUnit->getDistance(order.position) > 100)
+				// if there are targets
+				if (!rangedUnitTargets.empty())
 				{
-					// move to it
-					smartAttackMove(rangedUnit, order.position);
+					// find the best target for this zealot
+					BWAPI::Unit * target = getTarget(rangedUnit, rangedUnitTargets);
+
+					// attack it
+					kiteTarget(rangedUnit, target);
+				}
+				// if there are no targets
+				else
+				{
+					// if we're not near the order position
+					if (rangedUnit->getDistance(order.position) > 100)
+					{
+						// move to it
+						smartAttackMove(rangedUnit, order.position);
+					}
 				}
 			}
-		}
 
-		if (Options::Debug::DRAW_UALBERTABOT_DEBUG) 
-		{
-			BWAPI::Broodwar->drawLineMap(rangedUnit->getPosition().x(), rangedUnit->getPosition().y(), 
-				rangedUnit->getTargetPosition().x(), rangedUnit->getTargetPosition().y(), Options::Debug::COLOR_LINE_TARGET);
-		}
+			if (Options::Debug::DRAW_UALBERTABOT_DEBUG) 
+			{
+				BWAPI::Broodwar->drawLineMap(rangedUnit->getPosition().x(), rangedUnit->getPosition().y(), 
+					rangedUnit->getTargetPosition().x(), rangedUnit->getTargetPosition().y(), Options::Debug::COLOR_LINE_TARGET);
+			}
+		//}
 	}
 }
 
@@ -202,4 +209,58 @@ BWAPI::Unit * RangedManager::closestrangedUnit(BWAPI::Unit * target, std::set<BW
 	}
 	
 	return closest;
+}
+
+bool RangedManager::trainSubUnits(BWAPI::Unit * unit)
+{
+	int unitID = unit->getType().getID();
+	if( unitID == BWAPI::UnitTypes::Protoss_Carrier.getID() )
+	{
+		int maxInterceptors = 4;
+		if( BWAPI::Broodwar->self()->getUpgradeLevel(BWAPI::UpgradeTypes::Carrier_Capacity) > 0 )
+		{
+			maxInterceptors = 8;
+		}
+		int maxQueue = 1;
+		int inQueue = unit->getTrainingQueue().size();
+		int curInterceptors = unit->getInterceptorCount();
+		
+		if( BWAPI::Broodwar->self()->minerals() >= BWAPI::UnitTypes::Protoss_Interceptor.mineralPrice() && inQueue < maxQueue && curInterceptors + inQueue < maxInterceptors)
+		{
+			unit->train(BWAPI::UnitTypes::Protoss_Interceptor);
+			return true;
+		}
+	}
+	else if( unitID == BWAPI::UnitTypes::Protoss_Reaver.getID()  && unit->exists() )
+	{
+		int maxScarabs = 5;
+		if( BWAPI::Broodwar->self()->getUpgradeLevel(BWAPI::UpgradeTypes::Reaver_Capacity) > 0 )
+		{
+			maxScarabs = 10;
+		}
+		int maxQueue = 3;
+		int inQueue = unit->getTrainingQueue().size();
+		int curScarabs = unit->getScarabCount();
+
+		//Train the max amount of reaver scarabs or fill the training queue. 
+		int nbrToTrain = std::min(maxScarabs - (curScarabs + inQueue), maxQueue-inQueue);
+		
+		if( nbrToTrain > 0 && BWAPI::Broodwar->self()->minerals() >= BWAPI::UnitTypes::Protoss_Scarab.mineralPrice() )
+		{
+			unit->train(BWAPI::UnitTypes::Protoss_Scarab);
+			return true;
+		}
+	}
+	return false;
+}
+
+void RangedManager::microCarrier(BWAPI::Unit * carrier)
+{
+	if (order.type == order.Attack || order.type == order.Defend) {
+		if (carrier->getDistance(order.position) > 500)
+		{
+			//grubla best microer eu
+			smartAttackMove(carrier, order.position);
+		}
+	}
 }

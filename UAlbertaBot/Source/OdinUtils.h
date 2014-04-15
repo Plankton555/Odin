@@ -26,6 +26,7 @@ namespace odin_utils
 		while (replaceString(str, from, to)) ;
 	}
 
+	//In order to use the short name in the BN
 	inline void shortenUnitName(std::string &str)
 	{
 		replaceAllString(str, "Protoss", "");
@@ -33,6 +34,8 @@ namespace odin_utils
 		replaceAllString(str, "Zerg", "");
 		replaceAllString(str," ",""); //Remove all spaces
 		replaceAllString(str,"-",""); //remove '-' for u-238 shells
+		replaceAllString(str,"SiegeMode",""); //Siege tanks have two modes
+		replaceAllString(str,"TankMode","");
 	}
 
 	inline int getTimePeriod()

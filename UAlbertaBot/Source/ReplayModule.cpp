@@ -380,7 +380,9 @@ void ReplayModule::writeToFile(const char* file, std::map<const char*,int> stuff
 	}
 	for(int timePeriod = 1; timePeriod <= nrOfPeriods; timePeriod++)
 	{
-		myfile << "period" <<timePeriod << ",";
+		myfile << "period";
+		if (timePeriod <= 9) myfile << "0";
+		myfile <<timePeriod << ",";
 
 		for(int i = 1; i < temp.size(); i++)
 		{	

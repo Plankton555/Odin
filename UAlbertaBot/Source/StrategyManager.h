@@ -84,6 +84,8 @@ class StrategyManager
 	const	MetaPairVector		getTerranBuildOrderGoal() const;
 	const	MetaPairVector		getZergBuildOrderGoal() const;
 
+	const	MetaPairVector		getStaticDefenceGoal() const;
+
 	const	MetaPairVector		getProtossOpeningBook() const;
 	const	MetaPairVector		getTerranOpeningBook() const;
 	const	MetaPairVector		getZergOpeningBook() const;

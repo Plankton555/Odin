@@ -2,7 +2,7 @@
 #include "ScoutManager.h"
 #include "InformationManager.h"
 
-ScoutManager::ScoutManager() : workerScout(NULL), numWorkerScouts(0), scoutUnderAttack(false), circlingDone(false), circling(NULL), circlingOpposite(false)
+ScoutManager::ScoutManager() : workerScout(NULL), numWorkerScouts(0), scoutUnderAttack(false), circlingDone(false), circling(NULL), circlingOpposite(false), mainObserver(NULL), secObserver(NULL), nextExp(NULL)
 {
 }
 
@@ -21,8 +21,208 @@ void ScoutManager::update(const std::set<BWAPI::Unit *> & scoutUnits)
 			}
 		}
 	}
+	//Set the main and sec observers if any. if we have them, they are still in the list and still active
+	bool hasMainObserver = mainObserver && (scoutUnits.find(mainObserver) != scoutUnits.end()) && mainObserver->getPosition().isValid();
+	bool hasSecObserver = secObserver && (scoutUnits.find(secObserver) != scoutUnits.end()) && secObserver->getPosition().isValid();
+
+	//if for some reason our mainobserver is no more then transfer the sec to main. 
+	if( !hasMainObserver && hasSecObserver )
+	{
+		mainObserver = secObserver;
+		secObserver = NULL;
+		hasMainObserver = true;
+		hasSecObserver = false;
+	}
+
+	BOOST_FOREACH(BWAPI::Unit * obs, scoutUnits)
+	{
+		if( obs->getType().getID() == BWAPI::UnitTypes::Protoss_Observer.getID() && obs->getPosition().isValid())
+		{
+			if( !hasMainObserver )
+			{
+				mainObserver = obs;
+				hasMainObserver = true;
+			}
+			else if( hasMainObserver && !hasSecObserver && obs != mainObserver )
+			{
+				secObserver = obs;
+				hasSecObserver = true;
+			}
+		}
+	}
+
+	
 
 	moveScouts();
+	moveObservers();
+}
+
+void ScoutManager::moveObservers()
+{
+	if( mainObserver && mainObserver->getPosition().isValid() )
+	{
+		//loop through enemy occupied bases check for not not recently scouted
+		//check for detectors
+		bool hasTarget = false;
+		std::set<BWTA::Region *> regions = InformationManager::Instance().getOccupiedRegions(BWAPI::Broodwar->enemy());
+		BOOST_FOREACH(BWTA::Region * base, regions)
+		{
+			if( !hasTarget && !baseRecentlyScouted(base) && !baseDetectors[base] )
+			{
+				scoutBase(mainObserver, base);
+				hasTarget = true;
+			}
+		}
+		if ( !hasTarget )
+		{
+			BWTA::Region * nextBase = nextExpansion();
+			if ( !baseRecentlyScouted(nextBase) )
+			{
+				scoutBase(mainObserver, nextBase);
+				hasTarget = true;
+			}
+			else
+			{
+				//If we have recently scouted all their bases and the next expansion we should probably just idle in main for now. 
+				BWTA::BaseLocation * mainBase = InformationManager::Instance().getMainBaseLocation(BWAPI::Broodwar->enemy());
+				if( !baseDetectors[mainBase->getRegion()] )
+				{
+					scoutBase(mainObserver, mainBase->getRegion());
+				}
+				else
+				{
+					BWAPI::Position explorePosition = MapGrid::Instance().getLeastExplored();
+					smartMove(mainObserver, explorePosition);
+				}
+			}
+		}
+	}
+	if( secObserver && secObserver->getPosition().isValid() )
+	{
+		//try to find enemy army and follow it
+		std::vector<UnitInfo> units;
+		int minDistance = 10000;
+		BWAPI::Position pos;
+		BWAPI::Position cmpPos;
+		BOOST_FOREACH (BWAPI::Unit * unit, BWAPI::Broodwar->enemy()->getUnits())
+		{
+			units.clear();
+			InformationManager::Instance().getNearbyForce(units, unit->getPosition(), BWAPI::Broodwar->enemy(), 900);
+			int dist = MapTools::Instance().getGroundDistance(secObserver->getPosition(), unit->getPosition());
+			if(units.size() > 4 && dist < minDistance)
+			{
+				//Dont get stuck at the bunkers.. or buildings in general :( TODO
+				bool hasBunker = false;
+				BOOST_FOREACH(UnitInfo inf, units)
+				{
+					if(inf.unitID == BWAPI::UnitTypes::Terran_Bunker.getID())
+					{
+						hasBunker = true;
+					}
+				}
+				if( !hasBunker )
+				{
+					minDistance = dist;
+					pos = unit->getPosition();
+				}
+			}
+		}
+		if( pos != cmpPos)
+		{
+			smartMove(secObserver, pos);
+		}
+		else
+		{
+			BWAPI::Position centerOfMainChokePoint = (*InformationManager::Instance().getMainBaseLocation(BWAPI::Broodwar->enemy())->getRegion()->getChokepoints().begin())->getCenter();
+			smartMove(secObserver, centerOfMainChokePoint);
+		}
+	}
+}
+
+BWTA::Region * ScoutManager::nextExpansion()
+{
+	std::set<BWTA::Region *> occReg = InformationManager::Instance().getOccupiedRegions(BWAPI::Broodwar->enemy());
+	if( !nextExp || (occReg.find(nextExp) != occReg.end()) )
+	{
+		std::set<BWTA::BaseLocation*> bases = BWTA::getBaseLocations();
+		BWAPI::Position enemyMain = InformationManager::Instance().getMainBaseLocation(BWAPI::Broodwar->enemy())->getPosition();
+		BWAPI::Position selfMain = InformationManager::Instance().getMainBaseLocation(BWAPI::Broodwar->self())->getPosition();
+		int minDistance = MapTools::Instance().getGroundDistance(enemyMain, selfMain);
+		BWTA::BaseLocation * closestBase;
+		
+		BOOST_FOREACH(BWTA::BaseLocation * base, bases)
+		{
+			if( (occReg.find(base->getRegion()) == occReg.end()) && MapTools::Instance().getGroundDistance(enemyMain, base->getPosition()) < minDistance )
+			{
+				//The distance is saved in a map so not too bad to just call it again
+				minDistance = MapTools::Instance().getGroundDistance(enemyMain, base->getPosition());
+				closestBase = base;
+			}
+		}
+		nextExp = closestBase->getRegion();
+	}
+		return nextExp;
+}
+
+void ScoutManager::scoutBase(BWAPI::Unit * obs, BWTA::Region * base)
+{
+	// determine the region the observer is in
+	BWAPI::TilePosition scoutTile(obs->getPosition());
+	BWTA::Region * observerRegion = scoutTile.isValid() ? BWTA::getRegion(scoutTile) : NULL;
+	//if we know where the base is
+	if( base )
+	{
+		if(base == observerRegion)
+		{
+			//if we are in the enemyregion go to the place in the region we visited last
+			BWAPI::Position explorePosition = MapGrid::Instance().getLeastExploredIn(base->getPolygon());
+			if(obs->isUnderAttack())
+			{
+				//if under attack go other way then intended
+				baseDetectors[base] = true;
+				int dx = obs->getPosition().x() - explorePosition.x();
+				int dy = obs->getPosition().y() - explorePosition.y();
+				BWAPI::Position newPos = BWAPI::Position(obs->getPosition().x()+dx, obs->getPosition().y()+dy);
+				smartMove(obs, newPos);
+			}
+			else
+			{
+				smartMove(obs, explorePosition);
+			}
+		}
+		else
+		{
+			//go to base if not there
+			BWAPI::Position explorePosition = MapGrid::Instance().getLeastExploredIn(base->getPolygon());
+			smartMove(obs, explorePosition);
+		}
+	}
+}
+
+bool ScoutManager::baseRecentlyScouted(BWTA::Region * base)
+{
+	//gets the longest time since a place in the natural expansion was scouted
+	BWAPI::Position leastExplored = MapGrid::Instance().getLeastExploredIn(base->getPolygon());
+	int seen = MapGrid::Instance().getCell(leastExplored).timeLastVisited;
+
+	//compare to 2 min ingame (2500 frames)
+	int currTime = BWAPI::Broodwar->getFrameCount();
+	int recentAmountOfFrames = 2500;
+
+	return (currTime - seen) < recentAmountOfFrames;
+}
+
+bool ScoutManager::detectorsInBase(BWTA::Region * base)
+{
+	if( baseDetectors.find(base) != baseDetectors.end())
+	{
+		return baseDetectors[base];
+	}
+	else
+	{
+		baseDetectors[base] = false;
+		return false;
+	}
 }
 
 void ScoutManager::moveScouts()

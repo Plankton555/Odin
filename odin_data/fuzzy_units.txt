@@ -61,7 +61,8 @@ Terran Medic,0.3.5.10,Protoss Reaver.Protoss Dark Archon
 Terran Ghost,0.3.5.10,Protoss Photon Cannon.Protoss Observer
 Terran Vulture,0.3.5.10,Protoss Dragoon.Protoss Scout
 Terran Spider Mine,0.3.6.12,Protoss Zealot.Protoss Observer
-Terran Siege Tank,0.2.4.6,Protoss Zealot.Protoss Dark Templar
+Terran Siege Tank Tank Mode,0.2.4.6,Protoss Zealot.Protoss Dark Templar
+Terran Siege Tank Siege Mode,0.2.4.6,Protoss Zealot.Protoss Dark Templar
 Terran Goliath,0.2.5.8,Protoss Zealot.Protoss Reaver
 Terran Wraith,0.2.4.6,Protoss Dragoon.Protoss Observer
 Terran Dropship,0.1.2.5,Protoss Photon Cannon.Protoss Corsair

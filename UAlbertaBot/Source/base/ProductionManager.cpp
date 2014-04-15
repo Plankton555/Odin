@@ -91,7 +91,7 @@ void ProductionManager::update()
 	}
 
 	// Update the build order regurlarly
-	if (BWAPI::Broodwar->getFrameCount() - lastBuildOrderUpdate > 1000)
+	if (BWAPI::Broodwar->getFrameCount() - lastBuildOrderUpdate > 10000)
 	{
 		BWAPI::Broodwar->printf("Updating the build order in case new information has been gathered");
 		searchingGoal.clear();

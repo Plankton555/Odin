@@ -628,7 +628,7 @@ const MetaPairVector StrategyManager::getBuildOrderGoal()
 				updateArmyComposition();
 				if (armyCounters.size() == 0)
 				{
-					//odin_utils::debug("NO COUNTERS NOW!");
+					odin_utils::debug("NO COUNTERS NOW!");
 				} else {
 					MetaPairVector goal = getProtossCounterBuildOrderGoal();
 					if (goal.size() > 0)
@@ -636,7 +636,7 @@ const MetaPairVector StrategyManager::getBuildOrderGoal()
 						return goal;
 					} else
 					{
-						//odin_utils::debug("ARMY EXIST; BUT BAD NR COUNTERS!");
+						odin_utils::debug("ARMY EXIST; BUT BAD NR COUNTERS!");
 					}
 				}
 
@@ -706,6 +706,24 @@ const MetaPairVector StrategyManager::getProtossCounterBuildOrderGoal()
 			}
 		}
 	}
+	
+	MetaPairVector::iterator gIt;
+	odin_utils::debug("=== GOAL STARTING ===");
+	for (gIt = goal.begin(); gIt != goal.end(); gIt++)
+	{
+		stringstream ss;
+		ss << gIt->first.getName();
+		ss << ": ";
+		int nr = BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::getUnitType(gIt->first.getName()));
+		ss << nr;
+		ss << " + ";
+		ss << gIt->second - nr;
+		odin_utils::debug(ss.str());
+		//odin_utils::debug(gIt->first.getName(), gIt->second);
+	}
+	odin_utils::debug("=== GOAL ENDING ===");
+	odin_utils::debug(" ");
+
 	return goal;
 }
 
@@ -1011,7 +1029,8 @@ const MetaPairVector StrategyManager::getZergBuildOrderGoal() const
 		std::string name = it->c_str();
 		odin_utils::shortenUnitName(name);
 
-		if (it->canMove() && bayesianNet->exists(name) && bayesianNet->ReadProbability(name, 1) > ARMY_COMP_THRESHOLD)
+		if (it->canMove() && bayesianNet->exists(name) && bayesianNet->ReadProbability(name, 1) > ARMY_COMP_THRESHOLD
+					&& DataModule::getCounter(it->c_str()) != NULL)
 		{
 			//Set initial value
 			armyComposition[*it] = ARMY_COMP_START_VAL;
@@ -1051,18 +1070,22 @@ const MetaPairVector StrategyManager::getZergBuildOrderGoal() const
 	}
 
 	/*
-	//debug("=====FINAL RESULT?=====");
+	odin_utils::debug("=====FINAL RESULT?=====");
+	int size = armyCounters.size();
+	odin_utils::debug("Counters Size", size);
 	std::map<std::vector<BWAPI::UnitType>*, double>::iterator a;
 	for (a = armyCounters.begin(); a != armyCounters.end(); a++)
 	{
+		odin_utils::debug("First Null?", a->first == NULL);
 		stringstream ss;
 		ss << a->first->at(0).c_str();
 		ss << " and ";
 		ss << a->first->at(1).c_str();
 		ss << " have prob: ";
 		ss << a->second;
-		debug(ss.str());
+		odin_utils::debug(ss.str());
 	}
+	odin_utils::debug("===== END FINAL RESULT?=====");
 	*/
  }
 

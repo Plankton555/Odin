@@ -8,6 +8,7 @@ BuildingManager::BuildingManager()
 	, reservedGas(0)
 	, buildingSpace(1)
 	, totalBuildTasks(0)
+	, lastUnsuccessfulSearch(0)
 {
 
 }
@@ -70,6 +71,11 @@ void BuildingManager::validateWorkersAndBuildings()
 // STEP 2: ASSIGN WORKERS TO BUILDINGS WITHOUT THEM
 void BuildingManager::assignWorkersToUnassignedBuildings() 
 {
+	if (BWAPI::Broodwar->getFrameCount() - lastUnsuccessfulSearch < 10) //If a recent search has been unsuccessful, don't repeat it every frame
+	{																	//It probably failed due to lack of pylons, so wait for more pylons!
+		return;
+	}
+
 	// for each building that doesn't have a builder, assign one
 	buildingData.begin(ConstructionData::Unassigned);
 	while (buildingData.hasNextBuilding(ConstructionData::Unassigned)) 
@@ -90,6 +96,7 @@ void BuildingManager::assignWorkersToUnassignedBuildings()
 		// if we can't find a valid build location, we can't assign this building
 		if (!testLocation.isValid())
 		{
+			lastUnsuccessfulSearch = BWAPI::Broodwar->getFrameCount();
 			continue;
 		}
 
@@ -116,6 +123,7 @@ void BuildingManager::assignWorkersToUnassignedBuildings()
 			// hopefully this will not blow up
 			if (!testLocation.isValid())
 			{
+				lastUnsuccessfulSearch = BWAPI::Broodwar->getFrameCount();
 				continue;
 			}
 
@@ -146,7 +154,7 @@ BWAPI::TilePosition BuildingManager::getBuildingLocation(const Building & b)
 	}
 
 	// special case for early pylons
-	if (b.type == BWAPI::UnitTypes::Protoss_Pylon && (numPylons < 3))
+	if (b.type == BWAPI::UnitTypes::Protoss_Pylon && (numPylons < 3)) //TODO:: Is this really good though? Blocks build on some maps I think
 	{
 		BWAPI::TilePosition posInRegion =    BuildingPlacer::Instance().getBuildLocationNear(b, 4, true);
 		BWAPI::TilePosition posNotInRegion = BuildingPlacer::Instance().getBuildLocationNear(b, 4, false);

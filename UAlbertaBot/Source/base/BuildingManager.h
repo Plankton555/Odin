@@ -11,6 +11,8 @@ class BuildingManager {
 
 	BuildingManager();
 
+	int							lastUnsuccessfulSearch;
+
 	ConstructionData			buildingData;
 
 	bool						debugMode;

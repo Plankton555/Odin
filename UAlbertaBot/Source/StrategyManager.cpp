@@ -62,15 +62,6 @@ StrategyManager & StrategyManager::Instance()
 
  void StrategyManager::updateState()
  {
-	// uncomment to always attack (original behaviour)
-	state = ATTACK;
-	
-	/*
-	BWAPI::Broodwar->printf("self_eco-potential: %f", getEconomyPotential(BWAPI::Broodwar->self()));
-	BWAPI::Broodwar->printf("enemy_eco-potential: %f", getEconomyPotential(BWAPI::Broodwar->enemy()));
-	BWAPI::Broodwar->printf("guessed nmy-potential: %f", getEconomyPotential(BWAPI::Broodwar->enemy())*1.3);
-	*/
-
 	double enemyUncertaintyFactor = 1.66;
 	double myEconomy = getEconomyPotential(BWAPI::Broodwar->self());
 	double myArmy = getArmyPotential(BWAPI::Broodwar->self(), myEconomy);
@@ -79,9 +70,9 @@ StrategyManager & StrategyManager::Instance()
 	double opArmy = getArmyPotential(BWAPI::Broodwar->enemy(), opEconomy)*enemyUncertaintyFactor;
 	double opDefense = getDefensePotential(BWAPI::Broodwar->enemy())*enemyUncertaintyFactor;
 	
-	BWAPI::Broodwar->printf("myArmy: %f", myArmy);
-	BWAPI::Broodwar->printf("opArmy: %f", opArmy);
-	BWAPI::Broodwar->printf("opDefense: %f", opDefense);
+	//BWAPI::Broodwar->printf("myArmy: %f", myArmy);
+	//BWAPI::Broodwar->printf("opArmy: %f", opArmy);
+	//BWAPI::Broodwar->printf("opDefense: %f", opDefense);
 
 	if (myArmy < opArmy)
 	{
@@ -89,7 +80,7 @@ StrategyManager & StrategyManager::Instance()
 	}
 	else if (myArmy < opDefense)
 	{
-		// state = EXPAND;
+		// state = EXPAND; // should expand here, but expand is not implemented
 		state = ATTACK;
 	}
 	else
@@ -184,7 +175,6 @@ double StrategyManager::getArmyPotential(BWAPI::Player *player, double economy)
 	}
 
 	double potential = 2*techAndUpgradePercent + 1.2*nrArmyUnits + 0.3*(nrProductionFacilities)*(economy+2);
-
 	return potential;
 }
 

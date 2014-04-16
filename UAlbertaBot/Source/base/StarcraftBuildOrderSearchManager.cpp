@@ -91,7 +91,7 @@ BuildOrderSearch::StarcraftState StarcraftBuildOrderSearchManager::getCurrentSta
 			continue;
 		}
 
-		if (unit->getType() == BWAPI::UnitTypes::Zerg_Egg)
+		if (unit->getType() == BWAPI::UnitTypes::Zerg_Egg || unit->getType() == BWAPI::UnitTypes::Protoss_Interceptor || unit->getType() == BWAPI::UnitTypes::Protoss_Scarab)
 		{
 			continue;
 		}
@@ -248,7 +248,7 @@ std::vector<MetaType> StarcraftBuildOrderSearchManager::getMetaVector(std::strin
 
 void StarcraftBuildOrderSearchManager::drawSearchInformation(int x, int y)
 {
-	starcraftSearchData.drawSearchResults(10, 240);
+	//starcraftSearchData.drawSearchResults(10, 240);
 }
 
 	

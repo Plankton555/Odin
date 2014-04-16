@@ -70,8 +70,8 @@ StrategyManager & StrategyManager::Instance()
 	BWAPI::Broodwar->printf("enemy_eco-potential: %f", getEconomyPotential(BWAPI::Broodwar->enemy()));
 	BWAPI::Broodwar->printf("guessed nmy-potential: %f", getEconomyPotential(BWAPI::Broodwar->enemy())*1.3);
 	*/
-	BWAPI::Broodwar->printf("self_techs: %f", getArmyPotential(BWAPI::Broodwar->self(), 0));
-	BWAPI::Broodwar->printf("enemy_techs: %f", getArmyPotential(BWAPI::Broodwar->enemy(), 0));
+	BWAPI::Broodwar->printf("self_army: %f", getArmyPotential(BWAPI::Broodwar->self(), 0));
+	BWAPI::Broodwar->printf("enemy_army: %f", getArmyPotential(BWAPI::Broodwar->enemy(), 0)*1.3);
 
 	std::string stateName = "";
 	switch (state)
@@ -123,9 +123,45 @@ double StrategyManager::getArmyPotential(BWAPI::Player *player, double economy)
 	}
 	double techAndUpgradePercent = (nrKnownUpgrades+nrKnownTechs)/(totalUpgrades+totalTechs);
 
-	//nrUnits
-	//production facilities
-	return techAndUpgradePercent;
+	// army size and production facilities
+	double nrArmyUnits = 0;
+	double nrProductionFacilities = 0;
+	BOOST_FOREACH (BWAPI::UnitType t, BWAPI::UnitTypes::allUnitTypes()) 
+	{
+		int numUnits = InformationManager::Instance().getNumUnits(t, player);
+		if (numUnits > 0)
+		{
+			if (t.canAttack() && !t.isWorker() && !t.isBuilding())
+			{
+				nrArmyUnits += numUnits;
+			}
+			if (t == BWAPI::UnitTypes::Terran_Bunker)
+			{
+				nrArmyUnits += 4; // potentially can hold 4 units
+			}
+
+			if (t.isBuilding() && t.canProduce())
+			{
+				nrProductionFacilities += numUnits;
+			}
+			if (t == BWAPI::UnitTypes::Zerg_Hatchery)
+			{
+				nrProductionFacilities += 2;
+			}
+			else if (t == BWAPI::UnitTypes::Zerg_Lair)
+			{
+				nrProductionFacilities +=4;
+			}
+			else if (t == BWAPI::UnitTypes::Zerg_Hive)
+			{
+				nrProductionFacilities += 6;
+			}
+		}
+	}
+
+	double potential = 2*techAndUpgradePercent + 1.2*nrArmyUnits + 0.3*(nrProductionFacilities)*(economy+2);
+
+	return potential;
 }
 
 double StrategyManager::getEconomyPotential(BWAPI::Player *player)

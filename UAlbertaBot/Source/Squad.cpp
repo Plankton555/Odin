@@ -48,6 +48,7 @@ void Squad::update()
 		InformationManager::Instance().lastFrameRegroup = 1;
 
 		meleeManager.execute(order);
+		rangedManager.setUnitClosestToEnemy(unitClosestToEnemy());
 		rangedManager.execute(order);
 		transportManager.execute(order);
 
@@ -129,7 +130,7 @@ void Squad::setManagerUnits()
 				transportUnits.push_back(unit);
 			}
 			// select ranged units
-			else if ((unit->getType().groundWeapon().maxRange() > 32) || (unit->getType() == BWAPI::UnitTypes::Protoss_Reaver))
+			else if ((unit->getType().groundWeapon().maxRange() > 32) || (unit->getType() == BWAPI::UnitTypes::Protoss_Reaver) || (unit->getType() == BWAPI::UnitTypes::Protoss_Carrier))
 			{
 				rangedUnits.push_back(unit);
 			}
@@ -271,7 +272,7 @@ BWAPI::Unit * Squad::unitClosestToEnemy()
 
 	BOOST_FOREACH (BWAPI::Unit * unit, units)
 	{
-		if (unit->getType() == BWAPI::UnitTypes::Protoss_Observer)
+		if (unit->getType() == BWAPI::UnitTypes::Protoss_Observer || unit->getType() == BWAPI::UnitTypes::Protoss_Carrier)
 		{
 			continue;
 		}

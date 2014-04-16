@@ -70,8 +70,32 @@ StrategyManager & StrategyManager::Instance()
 	BWAPI::Broodwar->printf("enemy_eco-potential: %f", getEconomyPotential(BWAPI::Broodwar->enemy()));
 	BWAPI::Broodwar->printf("guessed nmy-potential: %f", getEconomyPotential(BWAPI::Broodwar->enemy())*1.3);
 	*/
-	BWAPI::Broodwar->printf("self_def: %f", getDefensePotential(BWAPI::Broodwar->self()));
-	BWAPI::Broodwar->printf("enemy_def: %f", getDefensePotential(BWAPI::Broodwar->enemy())*1.3);
+
+	double enemyUncertaintyFactor = 1.66;
+	double myEconomy = getEconomyPotential(BWAPI::Broodwar->self());
+	double myArmy = getArmyPotential(BWAPI::Broodwar->self(), myEconomy);
+	double myDefense = getDefensePotential(BWAPI::Broodwar->self());
+	double opEconomy = getEconomyPotential(BWAPI::Broodwar->enemy())*enemyUncertaintyFactor;
+	double opArmy = getArmyPotential(BWAPI::Broodwar->enemy(), opEconomy)*enemyUncertaintyFactor;
+	double opDefense = getDefensePotential(BWAPI::Broodwar->enemy())*enemyUncertaintyFactor;
+	
+	BWAPI::Broodwar->printf("myArmy: %f", myArmy);
+	BWAPI::Broodwar->printf("opArmy: %f", opArmy);
+	BWAPI::Broodwar->printf("opDefense: %f", opDefense);
+
+	if (myArmy < opArmy)
+	{
+		state = DEFEND;
+	}
+	else if (myArmy < opDefense)
+	{
+		// state = EXPAND;
+		state = ATTACK;
+	}
+	else
+	{
+		state = ATTACK;
+	}
 
 	std::string stateName = "";
 	switch (state)
@@ -186,16 +210,19 @@ double StrategyManager::getEconomyPotential(BWAPI::Player *player)
 double StrategyManager::getDefensePotential(BWAPI::Player *player)
 {
 	double defenseStructures = 2*InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Terran_Bunker, player);
+	defenseStructures += 0.9*InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Terran_Missile_Turret, player);
 	defenseStructures += 0.8*InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Zerg_Spore_Colony, player);
-	defenseStructures += 0.9*InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Zerg_Sunken_Colony, player);
+	defenseStructures += 1.1*InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Zerg_Sunken_Colony, player);
 	defenseStructures += 1*InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Protoss_Photon_Cannon, player);
 
 	double defenseUnits = 1*InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Terran_Siege_Tank_Tank_Mode, player);
 	defenseUnits += 1.6*InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Terran_Siege_Tank_Siege_Mode, player);
 	defenseUnits += 1.2*InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Zerg_Lurker, player);
 
+	// Can (should) also take number of units inside bases into account. Not necessary right now though.
+
 	double potential = 1*defenseStructures + 0.8*defenseUnits;
-	return potential;
+	return 5*potential;
 }
 
  bool StrategyManager::doStateUpdate()
@@ -576,7 +603,7 @@ const bool StrategyManager::doAttack(const std::set<BWAPI::Unit *> & freeUnits)
 {
 	int ourForceSize = (int)freeUnits.size();
 
-	int numUnitsNeededForAttack = 6;
+	int numUnitsNeededForAttack = 2;
 
 	bool doAttack  = BWAPI::Broodwar->self()->completedUnitCount(BWAPI::UnitTypes::Protoss_Dark_Templar) >= 1
 					|| ourForceSize >= numUnitsNeededForAttack;

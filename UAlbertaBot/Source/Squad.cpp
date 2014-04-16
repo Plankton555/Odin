@@ -48,6 +48,7 @@ void Squad::update()
 		InformationManager::Instance().lastFrameRegroup = 1;
 
 		meleeManager.execute(order);
+		rangedManager.setUnitClosestToEnemy(unitClosestToEnemy());
 		rangedManager.execute(order);
 		transportManager.execute(order);
 
@@ -271,7 +272,7 @@ BWAPI::Unit * Squad::unitClosestToEnemy()
 
 	BOOST_FOREACH (BWAPI::Unit * unit, units)
 	{
-		if (unit->getType() == BWAPI::UnitTypes::Protoss_Observer)
+		if (unit->getType() == BWAPI::UnitTypes::Protoss_Observer || unit->getType() == BWAPI::UnitTypes::Protoss_Carrier)
 		{
 			continue;
 		}

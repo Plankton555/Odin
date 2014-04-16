@@ -70,8 +70,8 @@ StrategyManager & StrategyManager::Instance()
 	BWAPI::Broodwar->printf("enemy_eco-potential: %f", getEconomyPotential(BWAPI::Broodwar->enemy()));
 	BWAPI::Broodwar->printf("guessed nmy-potential: %f", getEconomyPotential(BWAPI::Broodwar->enemy())*1.3);
 	*/
-	BWAPI::Broodwar->printf("self_army: %f", getArmyPotential(BWAPI::Broodwar->self(), 0));
-	BWAPI::Broodwar->printf("enemy_army: %f", getArmyPotential(BWAPI::Broodwar->enemy(), 0)*1.3);
+	BWAPI::Broodwar->printf("self_def: %f", getDefensePotential(BWAPI::Broodwar->self()));
+	BWAPI::Broodwar->printf("enemy_def: %f", getDefensePotential(BWAPI::Broodwar->enemy())*1.3);
 
 	std::string stateName = "";
 	switch (state)
@@ -100,7 +100,7 @@ StrategyManager & StrategyManager::Instance()
  
 double StrategyManager::getArmyPotential(BWAPI::Player *player, double economy)
 {
-	//upgrades (procentuellt?)
+	//upgrades (procentuellt)
 	double nrKnownUpgrades = 0;
 	double totalUpgrades = 0;
 	BOOST_FOREACH (BWAPI::UpgradeType upgrade, BWAPI::UpgradeTypes::allUpgradeTypes())
@@ -180,12 +180,22 @@ double StrategyManager::getEconomyPotential(BWAPI::Player *player)
 	nrKnownBases += InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Protoss_Nexus, player);
 	
 	double potential = nrKnownWorkers*0.09 + nrRegions*0.8 + nrKnownBases*1.1;
-
 	return potential;
 }
 
 double StrategyManager::getDefensePotential(BWAPI::Player *player)
 {
+	double defenseStructures = 2*InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Terran_Bunker, player);
+	defenseStructures += 0.8*InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Zerg_Spore_Colony, player);
+	defenseStructures += 0.9*InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Zerg_Sunken_Colony, player);
+	defenseStructures += 1*InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Protoss_Photon_Cannon, player);
+
+	double defenseUnits = 1*InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Terran_Siege_Tank_Tank_Mode, player);
+	defenseUnits += 1.6*InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Terran_Siege_Tank_Siege_Mode, player);
+	defenseUnits += 1.2*InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Zerg_Lurker, player);
+
+	double potential = 1*defenseStructures + 0.8*defenseUnits;
+	return potential;
 }
 
  bool StrategyManager::doStateUpdate()

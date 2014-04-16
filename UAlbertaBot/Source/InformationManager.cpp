@@ -22,7 +22,8 @@ InformationManager & InformationManager::Instance()
 
 void InformationManager::update() 
 {
-	updateEnemyResearchInfo();
+	updateResearchInfo(BWAPI::Broodwar->self());
+	updateResearchInfo(BWAPI::Broodwar->enemy());
 	updateUnitInfo();
 	updateBaseLocationInfo();
 	map.setUnitData(BWAPI::Broodwar);
@@ -461,7 +462,7 @@ bool InformationManager::tileContainsUnit(BWAPI::TilePosition tile)
 	return map.canBuildHere(tile);
 }
 
-void InformationManager::updateEnemyResearchInfo()
+void InformationManager::updateResearchInfo(BWAPI::Player * player)
 {
 
 	//Update upgrades
@@ -470,22 +471,29 @@ void InformationManager::updateEnemyResearchInfo()
 	for (itUpg = allUpgrades.begin(); itUpg != allUpgrades.end(); itUpg++)
 	{
 		int level;
-		if ((level = BWAPI::Broodwar->enemy()->getUpgradeLevel(*itUpg)) > 0) //Has the upgrade
+		if ((level = player->getUpgradeLevel(*itUpg)) > 0) //Has the upgrade
 		{
-
-			//Append the level to the name if there is more than 1
-			std::string name;
-			if ((*itUpg).maxRepeats() > 1)
+			if (player == BWAPI::Broodwar->enemy())
 			{
-				std::ostringstream stringStream;
-				stringStream << (*itUpg).c_str();
-				stringStream << level;
-				name = stringStream.str();
-			} else {
-				name = (*itUpg).c_str();
-			}
+				enemyUnitData.updateUpgrade(*itUpg, level);
+				//Append the level to the name if there is more than 1
+				std::string name;
+				if ((*itUpg).maxRepeats() > 1)
+				{
+					std::ostringstream stringStream;
+					stringStream << (*itUpg).c_str();
+					stringStream << level;
+					name = stringStream.str();
+				} else {
+					name = (*itUpg).c_str();
+				}
 
-			updateIfNotExists(name);
+				updateIfNotExists(name);
+			}
+			else if (player == BWAPI::Broodwar->self())
+			{
+				selfUnitData.updateUpgrade(*itUpg, level);
+			}
 		}
 	}
 	
@@ -495,9 +503,17 @@ void InformationManager::updateEnemyResearchInfo()
 	for (itTech = allTechs.begin(); itTech != allTechs.end(); itTech++)
 	{
 
-		if (BWAPI::Broodwar->enemy()->hasResearched(*itTech))
+		if (player->hasResearched(*itTech))
 		{
-			updateIfNotExists((*itTech).c_str());
+			if (player == BWAPI::Broodwar->enemy())
+			{
+				enemyUnitData.updateTech(*itTech, true);
+				updateIfNotExists((*itTech).c_str());
+			}
+			else if (player == BWAPI::Broodwar->self())
+			{
+				selfUnitData.updateTech(*itTech, true);
+			}
 		}
 	}
 
@@ -530,4 +546,30 @@ void InformationManager::updateIfNotExists(const std::string &name)
 		}
 		bn->SetEvidence(shortName, 1);
 	}
+}
+
+int InformationManager::getUpgradeLevel(BWAPI::Player * player, BWAPI::UpgradeType upgrade)
+{
+	if (player == BWAPI::Broodwar->self())
+	{
+		return selfUnitData.getUpgradeLevel(upgrade);
+	}
+	else if (player == BWAPI::Broodwar->enemy())
+	{
+		return enemyUnitData.getUpgradeLevel(upgrade);
+	}
+	return 0;
+}
+
+bool InformationManager::hasResearched(BWAPI::Player * player, BWAPI::TechType tech)
+{
+	if (player == BWAPI::Broodwar->self())
+	{
+		return selfUnitData.hasResearched(tech);
+	}
+	else if (player == BWAPI::Broodwar->enemy())
+	{
+		return enemyUnitData.hasResearched(tech);
+	}
+	return false;
 }

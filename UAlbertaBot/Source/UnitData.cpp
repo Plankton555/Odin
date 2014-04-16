@@ -162,3 +162,58 @@ bool UnitData::hasDetectorUnits() const
 
 	return false;
 }
+
+void UnitData::updateUpgrade(BWAPI::UpgradeType upgrade, int level)
+{
+	if (level >= 0 && level <= upgrade.maxRepeats()) //has upgraded
+	{
+		std::map<BWAPI::UpgradeType, int>::iterator it = upgrades.find(upgrade);
+		if (it == upgrades.end()) // did not already exist
+		{
+			upgrades.insert(std::pair<BWAPI::UpgradeType, int>(upgrade, level));
+		}
+		else
+		{
+			it->second = level;
+		}
+	}
+}
+
+void UnitData::updateTech(BWAPI::TechType tech, bool hasTech)
+{
+	std::map<BWAPI::TechType, bool>::iterator it = techs.find(tech);
+	if (it == techs.end()) // did not already exist
+	{
+		upgrades.insert(std::pair<BWAPI::TechType, bool>(tech, hasTech));
+	}
+	else
+	{
+		it->second = hasTech;
+	}
+}
+
+int UnitData::getUpgradeLevel(BWAPI::UpgradeType upgrade)
+{
+	std::map<BWAPI::UpgradeType, int>::iterator it = upgrades.find(upgrade);
+	if (it == upgrades.end())
+	{
+		return 0;
+	}
+	else
+	{
+		return it->second;
+	}
+}
+
+bool UnitData::hasResearched(BWAPI::TechType tech)
+{
+	std::map<BWAPI::TechType, bool>::iterator it = techs.find(tech);
+	if (it == techs.end())
+	{
+		return false;
+	}
+	else
+	{
+		return it->second;
+	}
+}

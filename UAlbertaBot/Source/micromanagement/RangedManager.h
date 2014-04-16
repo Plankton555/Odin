@@ -7,6 +7,10 @@ class MicroManager;
 
 class RangedManager : public MicroManager
 {
+	BWAPI::Unit * unitClosestToEnemy;
+	void microCarrier(BWAPI::Unit * carrier, UnitVector targets);
+	void trainSubUnits(BWAPI::Unit * unit);
+
 public:
 
 	RangedManager();
@@ -20,7 +24,6 @@ public:
 	BWAPI::Unit * getTarget(BWAPI::Unit * rangedUnit, UnitVector & targets);
 
 	void kiteTarget(BWAPI::Unit * rangedUnit, BWAPI::Unit * target);
-	bool trainSubUnits(BWAPI::Unit * unit);
-
-	void microCarrier(BWAPI::Unit * carrier);
+	
+	void setUnitClosestToEnemy(BWAPI::Unit * unit) { unitClosestToEnemy = unit; }
 };

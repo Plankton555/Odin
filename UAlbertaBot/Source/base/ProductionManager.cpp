@@ -101,6 +101,11 @@ void ProductionManager::update()
 			queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Protoss_Forge), true);
 		}
 
+		if (BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Observer) < 2)
+		{
+			queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Protoss_Observer), true);
+		}
+
 		BWAPI::Broodwar->printf("Enemy Cloaked Unit Detected!");
 		enemyCloakedDetected = true;
 	}

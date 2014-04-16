@@ -107,7 +107,7 @@ double StrategyManager::getArmyPotential(BWAPI::Player *player, double economy)
 	{
 		if (upgrade.getRace() == player->getRace())
 		{
-			nrKnownUpgrades += player->getUpgradeLevel(upgrade);
+			nrKnownUpgrades += InformationManager::Instance().getUpgradeLevel(player, upgrade);
 			totalUpgrades += upgrade.maxRepeats();
 		}
 	}
@@ -117,7 +117,7 @@ double StrategyManager::getArmyPotential(BWAPI::Player *player, double economy)
 	{
 		if (tech.getRace() == player->getRace())
 		{
-			nrKnownTechs += player->hasResearched(tech);
+			nrKnownTechs += InformationManager::Instance().hasResearched(player, tech);
 			totalTechs++;
 		}
 	}

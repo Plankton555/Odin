@@ -125,7 +125,7 @@ BWAPI::Unit * RangedManager::getTarget(BWAPI::Unit * rangedUnit, UnitVector & ta
 {
 	int range(rangedUnit->getType().groundWeapon().maxRange());
 	if(rangedUnit->getType() == BWAPI::UnitTypes::Protoss_Carrier)
-		range = 256;
+		range = 192;
 	int highestInRangePriority(0);
 	int highestNotInRangePriority(0);
 	int lowestInRangeHitPoints(10000);
@@ -262,7 +262,6 @@ void RangedManager::microCarrier(BWAPI::Unit * carrier, UnitVector targets)
 	if (order.type == order.Attack || order.type == order.Defend) {
 		if(!targets.empty())
 		{
-			BWAPI::Position carrierPos;
 			BWAPI::Unit * enemy = getTarget(carrier, targets);
 			int enemyDist = carrier->getDistance(enemy);
 			int enemyRange = enemy->getType().airWeapon().maxRange();
@@ -272,8 +271,8 @@ void RangedManager::microCarrier(BWAPI::Unit * carrier, UnitVector targets)
 
 			if( (noShields && enemyDist < enemyRange && greaterRange) || noInterceptors)
 			{
-				carrierPos = (unitClosestToEnemy->getPosition() - enemy->getPosition() + unitClosestToEnemy->getPosition());
-				smartAttackMove(carrier, carrierPos);
+				BWAPI::Position carrierPos = (unitClosestToEnemy->getPosition() - enemy->getPosition() + unitClosestToEnemy->getPosition());
+				smartMove(carrier, carrierPos);
 			}
 			else
 			{

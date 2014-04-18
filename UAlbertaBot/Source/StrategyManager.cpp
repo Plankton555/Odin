@@ -63,9 +63,31 @@ StrategyManager & StrategyManager::Instance()
 
  void StrategyManager::updateState()
  {
-	// always attack
-	state = ATTACK;
+	double enemyUncertaintyFactor = 1.6;
+	double myEconomy = getEconomyPotential(BWAPI::Broodwar->self());
+	double myArmy = getArmyPotential(BWAPI::Broodwar->self(), myEconomy);
+	double myDefense = getDefensePotential(BWAPI::Broodwar->self());
+	double opEconomy = getEconomyPotential(BWAPI::Broodwar->enemy())*enemyUncertaintyFactor;
+	double opArmy = getArmyPotential(BWAPI::Broodwar->enemy(), opEconomy)*enemyUncertaintyFactor;
+	double opDefense = getDefensePotential(BWAPI::Broodwar->enemy())*enemyUncertaintyFactor;
+	
+	//BWAPI::Broodwar->printf("myArmy: %f", myArmy);
+	//BWAPI::Broodwar->printf("opArmy: %f", opArmy);
+	//BWAPI::Broodwar->printf("opDefense: %f", opDefense);
 
+	if (myArmy < opArmy)
+	{
+		state = DEFEND;
+	}
+	else if (myArmy < opDefense)
+	{
+		// state = EXPAND; // should expand here, but expand is not implemented
+		state = ATTACK;
+	}
+	else
+	{
+		state = ATTACK;
+	}
 
 	std::string stateName = "";
 	switch (state)
@@ -91,6 +113,108 @@ StrategyManager & StrategyManager::Instance()
 	}
 	BWAPI::Broodwar->printf(("Strategy state updated to " + stateName).c_str());
  }
+ 
+double StrategyManager::getArmyPotential(BWAPI::Player *player, double economy)
+{
+	//upgrades (procentuellt)
+	double nrKnownUpgrades = 0;
+	double totalUpgrades = 0;
+	BOOST_FOREACH (BWAPI::UpgradeType upgrade, BWAPI::UpgradeTypes::allUpgradeTypes())
+	{
+		if (upgrade.getRace() == player->getRace())
+		{
+			nrKnownUpgrades += InformationManager::Instance().getUpgradeLevel(player, upgrade);
+			totalUpgrades += upgrade.maxRepeats();
+		}
+	}
+	double nrKnownTechs = 0;
+	double totalTechs = 0;
+	BOOST_FOREACH (BWAPI::TechType tech, BWAPI::TechTypes::allTechTypes())
+	{
+		if (tech.getRace() == player->getRace())
+		{
+			nrKnownTechs += InformationManager::Instance().hasResearched(player, tech);
+			totalTechs++;
+		}
+	}
+	double techAndUpgradePercent = (nrKnownUpgrades+nrKnownTechs)/(totalUpgrades+totalTechs);
+
+	// army size and production facilities
+	double nrArmyUnits = 0;
+	double nrProductionFacilities = 0;
+	BOOST_FOREACH (BWAPI::UnitType t, BWAPI::UnitTypes::allUnitTypes()) 
+	{
+		int numUnits = InformationManager::Instance().getNumUnits(t, player);
+		if (numUnits > 0)
+		{
+			if (t.canAttack() && !t.isWorker() && !t.isBuilding())
+			{
+				nrArmyUnits += numUnits;
+			}
+			if (t == BWAPI::UnitTypes::Terran_Bunker)
+			{
+				nrArmyUnits += 4; // potentially can hold 4 units
+			}
+
+			if (t.isBuilding() && t.canProduce())
+			{
+				nrProductionFacilities += numUnits;
+			}
+			if (t == BWAPI::UnitTypes::Zerg_Hatchery)
+			{
+				nrProductionFacilities += 2;
+			}
+			else if (t == BWAPI::UnitTypes::Zerg_Lair)
+			{
+				nrProductionFacilities +=4;
+			}
+			else if (t == BWAPI::UnitTypes::Zerg_Hive)
+			{
+				nrProductionFacilities += 6;
+			}
+		}
+	}
+
+	double potential = 2*techAndUpgradePercent + 1.2*nrArmyUnits + 0.3*(nrProductionFacilities)*(economy+2);
+	return potential;
+}
+
+double StrategyManager::getEconomyPotential(BWAPI::Player *player)
+{
+	// this should work as a guesstimate
+	double nrKnownWorkers = InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Zerg_Drone, player);
+	nrKnownWorkers += InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Terran_SCV, player);
+	nrKnownWorkers += InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Protoss_Probe, player);
+
+	double nrRegions = InformationManager::Instance().getOccupiedRegions(player).size();
+
+	double nrKnownBases = InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Zerg_Hatchery, player);
+	nrKnownBases += InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Zerg_Lair, player);
+	nrKnownBases += InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Zerg_Hive, player);
+	nrKnownBases += InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Terran_Command_Center, player);
+	nrKnownBases += InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Protoss_Nexus, player);
+	
+	double potential = nrKnownWorkers*0.09 + nrRegions*0.8 + nrKnownBases*1.1;
+	return potential;
+}
+
+double StrategyManager::getDefensePotential(BWAPI::Player *player)
+{
+	double defenseStructures = 2*InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Terran_Bunker, player);
+	defenseStructures += 0.9*InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Terran_Missile_Turret, player);
+	defenseStructures += 0.8*InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Zerg_Spore_Colony, player);
+	defenseStructures += 1.1*InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Zerg_Sunken_Colony, player);
+	defenseStructures += 1*InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Protoss_Photon_Cannon, player);
+
+	double defenseUnits = 1*InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Terran_Siege_Tank_Tank_Mode, player);
+	defenseUnits += 1.6*InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Terran_Siege_Tank_Siege_Mode, player);
+	defenseUnits += 1.2*InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Zerg_Lurker, player);
+
+	// Can (should) also take number of units inside bases into account. Not necessary right now though.
+
+	double potential = 1*defenseStructures + 0.8*defenseUnits;
+	return 5*potential;
+}
 
  bool StrategyManager::doStateUpdate()
  {
@@ -470,7 +594,7 @@ const bool StrategyManager::doAttack(const std::set<BWAPI::Unit *> & freeUnits)
 {
 	int ourForceSize = (int)freeUnits.size();
 
-	int numUnitsNeededForAttack = 6;
+	int numUnitsNeededForAttack = 2;
 
 	bool doAttack  = BWAPI::Broodwar->self()->completedUnitCount(BWAPI::UnitTypes::Protoss_Dark_Templar) >= 1
 					|| ourForceSize >= numUnitsNeededForAttack;

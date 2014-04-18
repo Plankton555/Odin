@@ -137,7 +137,7 @@ void UAlbertaBotModule::onFrame()
 		replayModule.onFrame();
 
 	}else{
-		if (BWAPI::Broodwar->getFrameCount() == 500)
+		if (BWAPI::Broodwar->getFrameCount() == 260)
 		{
 			BWAPI::Broodwar->sendText("glhf");
 		}

@@ -92,6 +92,9 @@ class UnitData {
 
 	const bool badUnitInfo(const UnitInfo & ui) const;
 
+	std::map<BWAPI::UpgradeType, int>		upgrades;
+	std::map<BWAPI::TechType, bool>			techs;
+
 public:
 
 	UnitData();
@@ -112,4 +115,9 @@ public:
 	int		getNumUnits(BWAPI::UnitType t)						const	{ return numUnits[t.getID()]; }
 	int		getNumDeadUnits(BWAPI::UnitType t)					const	{ return numDeadUnits[t.getID()]; }
 	const	std::map<BWAPI::Unit *, UnitInfo> & getUnits()		const	{ return unitMap; }
+
+	void	updateUpgrade(BWAPI::UpgradeType upgrade, int level);
+	void	updateTech(BWAPI::TechType tech, bool hasTech);
+	int		getUpgradeLevel(BWAPI::UpgradeType upgrade);
+	bool	hasResearched(BWAPI::TechType tech);
 };

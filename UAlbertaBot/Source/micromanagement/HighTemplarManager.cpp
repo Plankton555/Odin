@@ -15,32 +15,36 @@ void HighTemplarManager::executeMicro(const UnitVector & targets)
 	// for each templar
 	BOOST_FOREACH(BWAPI::Unit * templar, templarUnits)
 	{
-		if (order.type == order.Attack || order.type == order.Defend) {
+		if (order.type == order.Attack || order.type == order.Defend) 
+		{			
+
 			BWAPI::TechType psiStorm = BWAPI::TechTypes::Psionic_Storm;
-			if (BWAPI::Broodwar->self()->hasResearched(psiStorm))
-			{	
-				if(!targets.empty())
-				{
+			
+			if(!targets.empty())
+			{
+				if (BWAPI::Broodwar->self()->hasResearched(psiStorm))
+				{	
 					if (templar->getEnergy() >= 75)
 					{
 						BWAPI::Unit* target = targets[0];
 						if (target != NULL)
 						{
 							templar->useTech(psiStorm, target->getPosition());
-							return;
 						}
 					}
-				}
-				else
+				}				
+
+			}else
+			{
+				// if we're not near the order position
+				if (templar->getDistance(order.position) > 100)
 				{
-					// if we're not near the order position
-					if (templar->getDistance(order.position) > 100)
-					{
-						// move to it
-						smartMove(templar, order.position);
-					}
+					// move to it
+					smartMove(templar, order.position);
 				}
+
 			}
+	
 		}
 	}
 }

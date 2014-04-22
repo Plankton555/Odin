@@ -768,13 +768,7 @@ const MetaPairVector StrategyManager::getBuildOrderGoal()
 
 			case DEFEND:
 				
-				cannonGoal = getStaticDefenceGoal();
-				armyGoal = getProtossDragoonsBuildOrderGoal();
-				returnGoal.reserve( cannonGoal.size() + armyGoal.size() ); // preallocate memory
-				returnGoal.insert( returnGoal.end(), cannonGoal.begin(), cannonGoal.end() );
-				returnGoal.insert( returnGoal.end(), armyGoal.begin(), armyGoal.end() );
-
-				return returnGoal;
+				return getStaticDefenceGoal();
 
 				break;// do defend
 
@@ -1091,17 +1085,20 @@ const MetaPairVector StrategyManager::getStaticDefenceGoal() const
 	int numCannon =				BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Photon_Cannon);
 	int numHighTemplars =		BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_High_Templar);
 	int wantedTotalCannons = numNexusAll*5;
-	int cannonsWanted = wantedTotalCannons - numCannon;
+	int cannonsWanted = wantedTotalCannons;
 	// the goal to return
 	MetaPairVector goal;
 	
 	
-	if (numHighTemplars>0)
+	if (!BWAPI::Broodwar->self()->hasResearched(BWAPI::TechTypes::Psionic_Storm))
 	{
 		goal.push_back(MetaPair(BWAPI::TechTypes::Psionic_Storm, 1));
+		BWAPI::Broodwar->printf("Added psi-storm to goal");
 	}
+	
 	goal.push_back(MetaPair(BWAPI::UnitTypes::Protoss_Photon_Cannon, cannonsWanted));
-	goal.push_back(MetaPair(BWAPI::UnitTypes::Protoss_High_Templar, 2));
+	
+	goal.push_back(MetaPair(BWAPI::UnitTypes::Protoss_High_Templar, numHighTemplars+2));
 	
 
 	return goal;

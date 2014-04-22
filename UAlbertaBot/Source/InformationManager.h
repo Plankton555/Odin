@@ -28,7 +28,7 @@ class InformationManager {
 	std::set<BWTA::Region *>			occupiedRegions[2];
 
 	void								updateIfNotExists(const std::string &name);
-	void								updateEnemyResearchInfo();
+	void								updateResearchInfo(BWAPI::Player * player);
 
 	int									getIndex(BWAPI::Player * player);
 
@@ -95,6 +95,9 @@ public:
 	void						drawUnitInformation(int x, int y);
 
 	SparCraft::Map *			getMap() { return &map; }
+
+	int							getUpgradeLevel(BWAPI::Player * player, BWAPI::UpgradeType upgrade);
+	bool						hasResearched(BWAPI::Player * player, BWAPI::TechType tech);
 };
 
 

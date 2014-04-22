@@ -17,6 +17,7 @@ ProductionManager::ProductionManager()
 	, haveLocationForThisBuilding(false)
 	, enemyCloakedDetected(false)
 	, rushDetected(false)
+	, lastBuildOrderUpdate(0)
 {
 	populateTypeCharMap();
 
@@ -41,10 +42,20 @@ void ProductionManager::setBuildOrder(const std::vector<MetaType> & buildOrder)
 
 void ProductionManager::performBuildOrderSearch(const std::vector< std::pair<MetaType, UnitCountType> > & goal)
 {	
-	std::vector<MetaType> buildOrder = StarcraftBuildOrderSearchManager::Instance().findBuildOrder(goal);
+	if (searchingGoal.size() == 0) //No goal is being searched
+	{
+		searchingGoal = goal;
+		lastBuildOrderUpdate = BWAPI::Broodwar->getFrameCount();
+	}
+	std::vector<MetaType> buildOrder = StarcraftBuildOrderSearchManager::Instance().findBuildOrder(searchingGoal);
 
 	// set the build order
 	setBuildOrder(buildOrder);
+
+	if (buildOrder.size() > 0) //build order found
+	{
+		searchingGoal.clear(); //empty it to allow a new search
+	}
 }
 
 void ProductionManager::setSearchGoal(MetaPairVector & goal)
@@ -76,11 +87,18 @@ void ProductionManager::update()
 	if ((queue.size() == 0) && (BWAPI::Broodwar->getFrameCount() > 10) && !Options::Modules::USING_BUILD_ORDER_DEMO)
 	{
 		BWAPI::Broodwar->drawTextScreen(150, 10, "Nothing left to build, new search!");
-		const std::vector< std::pair<MetaType, UnitCountType> > newGoal = StrategyManager::Instance().getBuildOrderGoal();
-		performBuildOrderSearch(newGoal);
+		performBuildOrderSearch(searchingGoal.size() > 0 ? searchingGoal : StrategyManager::Instance().getBuildOrderGoal());
 	}
 
-	//// detect if there's a build order deadlock once per second
+	// Update the build order regurlarly
+	if (BWAPI::Broodwar->getFrameCount() - lastBuildOrderUpdate > 10000)
+	{
+		BWAPI::Broodwar->printf("Updating the build order in case new information has been gathered");
+		searchingGoal.clear();
+		performBuildOrderSearch(StrategyManager::Instance().getBuildOrderGoal());
+	}
+
+	// detect if there's a build order deadlock once per second
 	if ((BWAPI::Broodwar->getFrameCount() % 24 == 0) && detectBuildOrderDeadlock())
 	{
 		BWAPI::Broodwar->printf("Supply deadlock detected, building pylon!");
@@ -100,6 +118,13 @@ void ProductionManager::update()
 		{
 			queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Protoss_Forge), true);
 		}
+
+		/*
+		if (BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Observer) < 2)
+		{
+			queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Protoss_Observer), true);
+		}
+		*/
 
 		BWAPI::Broodwar->printf("Enemy Cloaked Unit Detected!");
 		enemyCloakedDetected = true;
@@ -127,6 +152,7 @@ void ProductionManager::onUnitDestroy(BWAPI::Unit * unit)
 
 			if (unit->getType() != BWAPI::UnitTypes::Zerg_Drone)
 			{
+				searchingGoal.clear(); //Force update
 				performBuildOrderSearch(StrategyManager::Instance().getBuildOrderGoal());
 			}
 		}

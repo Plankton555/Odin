@@ -18,6 +18,7 @@ StrategyManager::StrategyManager()
 	, state(OPENING)
 	, doStateUpdateNow(false)
 	, timeSinceLastStateUpdate(0)
+	, lastBnUpdate(0)
 {
 	loadBayesianNetwork();
 	addStrategies();
@@ -62,9 +63,28 @@ StrategyManager & StrategyManager::Instance()
 
  void StrategyManager::updateState()
  {
-	// always attack
-	state = DEFEND;
-	if(BWAPI::Broodwar->getFrameCount()>10000)
+	double enemyUncertaintyFactor = 1.6;
+	double myEconomy = getEconomyPotential(BWAPI::Broodwar->self());
+	double myArmy = getArmyPotential(BWAPI::Broodwar->self(), myEconomy);
+	double myDefense = getDefensePotential(BWAPI::Broodwar->self());
+	double opEconomy = getEconomyPotential(BWAPI::Broodwar->enemy())*enemyUncertaintyFactor;
+	double opArmy = getArmyPotential(BWAPI::Broodwar->enemy(), opEconomy)*enemyUncertaintyFactor;
+	double opDefense = getDefensePotential(BWAPI::Broodwar->enemy())*enemyUncertaintyFactor;
+	
+	//BWAPI::Broodwar->printf("myArmy: %f", myArmy);
+	//BWAPI::Broodwar->printf("opArmy: %f", opArmy);
+	//BWAPI::Broodwar->printf("opDefense: %f", opDefense);
+
+	if (myArmy < opArmy)
+	{
+		state = DEFEND;
+	}
+	else if (myArmy < opDefense)
+	{
+		// state = EXPAND; // should expand here, but expand is not implemented
+		state = ATTACK;
+	}
+	else
 	{
 		state = ATTACK;
 	}
@@ -93,6 +113,108 @@ StrategyManager & StrategyManager::Instance()
 	}
 	BWAPI::Broodwar->printf(("Strategy state updated to " + stateName).c_str());
  }
+ 
+double StrategyManager::getArmyPotential(BWAPI::Player *player, double economy)
+{
+	//upgrades (procentuellt)
+	double nrKnownUpgrades = 0;
+	double totalUpgrades = 0;
+	BOOST_FOREACH (BWAPI::UpgradeType upgrade, BWAPI::UpgradeTypes::allUpgradeTypes())
+	{
+		if (upgrade.getRace() == player->getRace())
+		{
+			nrKnownUpgrades += InformationManager::Instance().getUpgradeLevel(player, upgrade);
+			totalUpgrades += upgrade.maxRepeats();
+		}
+	}
+	double nrKnownTechs = 0;
+	double totalTechs = 0;
+	BOOST_FOREACH (BWAPI::TechType tech, BWAPI::TechTypes::allTechTypes())
+	{
+		if (tech.getRace() == player->getRace())
+		{
+			nrKnownTechs += InformationManager::Instance().hasResearched(player, tech);
+			totalTechs++;
+		}
+	}
+	double techAndUpgradePercent = (nrKnownUpgrades+nrKnownTechs)/(totalUpgrades+totalTechs);
+
+	// army size and production facilities
+	double nrArmyUnits = 0;
+	double nrProductionFacilities = 0;
+	BOOST_FOREACH (BWAPI::UnitType t, BWAPI::UnitTypes::allUnitTypes()) 
+	{
+		int numUnits = InformationManager::Instance().getNumUnits(t, player);
+		if (numUnits > 0)
+		{
+			if (t.canAttack() && !t.isWorker() && !t.isBuilding())
+			{
+				nrArmyUnits += numUnits;
+			}
+			if (t == BWAPI::UnitTypes::Terran_Bunker)
+			{
+				nrArmyUnits += 4; // potentially can hold 4 units
+			}
+
+			if (t.isBuilding() && t.canProduce())
+			{
+				nrProductionFacilities += numUnits;
+			}
+			if (t == BWAPI::UnitTypes::Zerg_Hatchery)
+			{
+				nrProductionFacilities += 2;
+			}
+			else if (t == BWAPI::UnitTypes::Zerg_Lair)
+			{
+				nrProductionFacilities +=4;
+			}
+			else if (t == BWAPI::UnitTypes::Zerg_Hive)
+			{
+				nrProductionFacilities += 6;
+			}
+		}
+	}
+
+	double potential = 2*techAndUpgradePercent + 1.2*nrArmyUnits + 0.3*(nrProductionFacilities)*(economy+2);
+	return potential;
+}
+
+double StrategyManager::getEconomyPotential(BWAPI::Player *player)
+{
+	// this should work as a guesstimate
+	double nrKnownWorkers = InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Zerg_Drone, player);
+	nrKnownWorkers += InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Terran_SCV, player);
+	nrKnownWorkers += InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Protoss_Probe, player);
+
+	double nrRegions = InformationManager::Instance().getOccupiedRegions(player).size();
+
+	double nrKnownBases = InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Zerg_Hatchery, player);
+	nrKnownBases += InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Zerg_Lair, player);
+	nrKnownBases += InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Zerg_Hive, player);
+	nrKnownBases += InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Terran_Command_Center, player);
+	nrKnownBases += InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Protoss_Nexus, player);
+	
+	double potential = nrKnownWorkers*0.09 + nrRegions*0.8 + nrKnownBases*1.1;
+	return potential;
+}
+
+double StrategyManager::getDefensePotential(BWAPI::Player *player)
+{
+	double defenseStructures = 2*InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Terran_Bunker, player);
+	defenseStructures += 0.9*InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Terran_Missile_Turret, player);
+	defenseStructures += 0.8*InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Zerg_Spore_Colony, player);
+	defenseStructures += 1.1*InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Zerg_Sunken_Colony, player);
+	defenseStructures += 1*InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Protoss_Photon_Cannon, player);
+
+	double defenseUnits = 1*InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Terran_Siege_Tank_Tank_Mode, player);
+	defenseUnits += 1.6*InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Terran_Siege_Tank_Siege_Mode, player);
+	defenseUnits += 1.2*InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Zerg_Lurker, player);
+
+	// Can (should) also take number of units inside bases into account. Not necessary right now though.
+
+	double potential = 1*defenseStructures + 0.8*defenseUnits;
+	return 5*potential;
+}
 
  bool StrategyManager::doStateUpdate()
  {
@@ -472,7 +594,7 @@ const bool StrategyManager::doAttack(const std::set<BWAPI::Unit *> & freeUnits)
 {
 	int ourForceSize = (int)freeUnits.size();
 
-	int numUnitsNeededForAttack = 6;
+	int numUnitsNeededForAttack = 2;
 
 	bool doAttack  = BWAPI::Broodwar->self()->completedUnitCount(BWAPI::UnitTypes::Protoss_Dark_Templar) >= 1
 					|| ourForceSize >= numUnitsNeededForAttack;
@@ -580,8 +702,8 @@ const bool StrategyManager::expandProtossObserver() const
 }
 
 const MetaPairVector StrategyManager::getBuildOrderGoal()
-{	
-	
+{
+	int now;
 	MetaPairVector returnGoal; //These are used in the defend state, but could not have them there
 	MetaPairVector cannonGoal; // because it gave some strange error
 	MetaPairVector armyGoal;
@@ -600,6 +722,7 @@ const MetaPairVector StrategyManager::getBuildOrderGoal()
 
 			case ATTACK:
 				// do attack
+				/*
 				if (getCurrentStrategy() == ProtossZealotRush)
 				{
 					return getProtossZealotRushBuildOrderGoal();
@@ -616,6 +739,31 @@ const MetaPairVector StrategyManager::getBuildOrderGoal()
 				{
 					return getProtossObserverBuildOrderGoal();
 				}
+				*/
+				if(!bayesianNet) break;
+				now = BWAPI::Broodwar->getFrameCount();
+				if (now - lastBnUpdate > 1000)
+				{
+					//Update network
+					bayesianNet->SetEvidence("TimePeriod",odin_utils::getTimePeriod());
+					bayesianNet->UpdateBeliefs();
+					lastBnUpdate = now;
+				}
+				updateArmyComposition();
+				if (armyCounters.size() == 0)
+				{
+					odin_utils::debug("NO COUNTERS NOW!");
+				} else {
+					MetaPairVector goal = getProtossCounterBuildOrderGoal();
+					if (goal.size() > 0)
+					{
+						return goal;
+					} else
+					{
+						odin_utils::debug("ARMY EXIST; BUT BAD NR COUNTERS!");
+					}
+				}
+
 				break;
 
 			case DEFEND:
@@ -648,6 +796,59 @@ const MetaPairVector StrategyManager::getBuildOrderGoal()
 	{
 		return getZergBuildOrderGoal();
 	}
+}
+
+const MetaPairVector StrategyManager::getProtossCounterBuildOrderGoal()
+{
+	MetaPairVector goal;
+
+	std::map<std::vector<BWAPI::UnitType>*, double>::iterator it;
+	for (it = armyCounters.begin(); it != armyCounters.end(); it++)
+	{
+		int nrExtraUnits = it->second * 10; //TODO: Some threshold here? Depend on economy?
+		if (nrExtraUnits >= 1)
+		{
+			BWAPI::UnitType wantedType = it->first->at(0);//TODO: Choose cheap or expensive counter (if expensive even exists!)
+			int nrUnitsWanted = nrExtraUnits + BWAPI::Broodwar->self()->allUnitCount(wantedType);
+
+			//If we already have included this unit, then just add the nr, don't add a new line
+			boolean isIncluded = false;
+			MetaPairVector::iterator gIt;
+			for (gIt = goal.begin(); gIt != goal.end(); gIt++)
+			{
+				if (strcmp(gIt->first.getName().c_str(),wantedType.getName().c_str()) == 0)
+				{
+					gIt->second += nrExtraUnits;
+					isIncluded = true;
+					break;
+				}
+			}
+
+			if (!isIncluded)
+			{
+				goal.push_back(MetaPair(wantedType, nrUnitsWanted));
+			}
+		}
+	}
+	
+	MetaPairVector::iterator gIt;
+	odin_utils::debug("=== GOAL STARTING ===");
+	for (gIt = goal.begin(); gIt != goal.end(); gIt++)
+	{
+		stringstream ss;
+		ss << gIt->first.getName();
+		ss << ": ";
+		int nr = BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::getUnitType(gIt->first.getName()));
+		ss << nr;
+		ss << " + ";
+		ss << gIt->second - nr;
+		odin_utils::debug(ss.str());
+		//odin_utils::debug(gIt->first.getName(), gIt->second);
+	}
+	odin_utils::debug("=== GOAL ENDING ===");
+	odin_utils::debug(" ");
+
+	return goal;
 }
 
 const MetaPairVector StrategyManager::getProtossObserverBuildOrderGoal() const
@@ -951,10 +1152,6 @@ const MetaPairVector StrategyManager::getZergBuildOrderGoal() const
 
  void StrategyManager::updateArmyComposition()
 {
-	//Update network
-	bayesianNet->SetEvidence("TimePeriod",odin_utils::getTimePeriod());
-	bayesianNet->UpdateBeliefs();
-
 	//Read army comp
 	std::map<BWAPI::UnitType, double>	armyComposition;
 	std::set<BWAPI::UnitType> allUnits = BWAPI::UnitTypes::allUnitTypes();
@@ -964,7 +1161,8 @@ const MetaPairVector StrategyManager::getZergBuildOrderGoal() const
 		std::string name = it->c_str();
 		odin_utils::shortenUnitName(name);
 
-		if (it->canMove() && bayesianNet->exists(name) && bayesianNet->ReadProbability(name, 1) > ARMY_COMP_THRESHOLD)
+		if (it->canMove() && bayesianNet->exists(name) && bayesianNet->ReadProbability(name, 1) > ARMY_COMP_THRESHOLD
+					&& DataModule::getCounter(it->c_str()) != NULL)
 		{
 			//Set initial value
 			armyComposition[*it] = ARMY_COMP_START_VAL;
@@ -995,6 +1193,8 @@ const MetaPairVector StrategyManager::getZergBuildOrderGoal() const
 	}
 
 	//Save normalised counters
+	
+	armyCounters.clear();
 	for (compIt = armyComposition.begin(); compIt != armyComposition.end(); compIt++)
 	{
 		//compIt->second = compIt->second/totalSum;
@@ -1002,18 +1202,22 @@ const MetaPairVector StrategyManager::getZergBuildOrderGoal() const
 	}
 
 	/*
-	//debug("=====FINAL RESULT?=====");
+	odin_utils::debug("=====FINAL RESULT?=====");
+	int size = armyCounters.size();
+	odin_utils::debug("Counters Size", size);
 	std::map<std::vector<BWAPI::UnitType>*, double>::iterator a;
 	for (a = armyCounters.begin(); a != armyCounters.end(); a++)
 	{
+		odin_utils::debug("First Null?", a->first == NULL);
 		stringstream ss;
 		ss << a->first->at(0).c_str();
 		ss << " and ";
 		ss << a->first->at(1).c_str();
 		ss << " have prob: ";
 		ss << a->second;
-		debug(ss.str());
+		odin_utils::debug(ss.str());
 	}
+	odin_utils::debug("===== END FINAL RESULT?=====");
 	*/
  }
 

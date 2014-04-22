@@ -28,6 +28,7 @@ class StrategyManager
 
 	std::map<std::vector<BWAPI::UnitType>*, double>	armyCounters;
 	BayesianNet*				bayesianNet;
+	int							lastBnUpdate;
 
 	std::vector<std::string>	protossOpeningBook;
 	std::vector<std::string>	terranOpeningBook;
@@ -57,11 +58,16 @@ class StrategyManager
 	void	loadStrategiesFromFile(std::string filename);
 	void	updateState();
 	bool	doStateUpdate();
+	double	getArmyPotential(BWAPI::Player *player, double economy);
+	double	getEconomyPotential(BWAPI::Player *player);
+	double	getDefensePotential(BWAPI::Player *player);
 
 	const	int					getScore(BWAPI::Player * player) const;
 	const	double				getUCBValue(const size_t & strategy) const;
 	
 	// protoss strategy
+	const	MetaPairVector		getProtossCounterBuildOrderGoal();
+
 	const	bool				expandProtossZealotRush() const;
 	const	std::string			getProtossZealotRushOpeningBook() const;
 	const	MetaPairVector		getProtossZealotRushBuildOrderGoal() const;

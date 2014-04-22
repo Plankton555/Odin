@@ -29,6 +29,9 @@ class ProductionManager
 {
 	ProductionManager();
 
+	std::vector< std::pair<MetaType, UnitCountType> >	searchingGoal;
+	int							lastBuildOrderUpdate;
+
 	BuildLearner				buildLearner;
 	bool						initialBuildSet;
 

@@ -19,7 +19,7 @@ void HighTemplarManager::executeMicro(const UnitVector & targets)
 			BWAPI::TechType psiStorm = BWAPI::TechTypes::Psionic_Storm;
 			if (BWAPI::Broodwar->self()->hasResearched(psiStorm))
 			{	
-				if(!targets.empty)
+				if(!targets.empty())
 				{
 					if (templar->getEnergy() >= 75)
 					{

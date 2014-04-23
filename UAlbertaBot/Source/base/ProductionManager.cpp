@@ -58,7 +58,7 @@ void ProductionManager::performBuildOrderSearch(const std::vector< std::pair<Met
 	}else if(BWAPI::Broodwar->getFrameCount()-lastBuildOrderUpdate>500)
 	{	
 		lastBuildOrderUpdate = BWAPI::Broodwar->getFrameCount();
-		if(searchingGoal.size()>1)
+		if(searchingGoal.size()>0)
 		{
 			searchingGoal.pop_back();
 		}

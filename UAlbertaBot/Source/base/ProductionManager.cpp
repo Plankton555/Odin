@@ -55,6 +55,14 @@ void ProductionManager::performBuildOrderSearch(const std::vector< std::pair<Met
 	if (buildOrder.size() > 0) //build order found
 	{
 		searchingGoal.clear(); //empty it to allow a new search
+	}else if(BWAPI::Broodwar->getFrameCount()-lastBuildOrderUpdate>500)
+	{	
+		lastBuildOrderUpdate = BWAPI::Broodwar->getFrameCount();
+		if(searchingGoal.size()>1)
+		{
+			searchingGoal.pop_back();
+		}
+		BWAPI::Broodwar->printf("Nothing found in search, trying a smaller search goal");
 	}
 }
 

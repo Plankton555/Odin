@@ -774,6 +774,8 @@ const MetaPairVector StrategyManager::getBuildOrderGoal()
 				returnGoal.insert( returnGoal.end(), cannonGoal.begin(), cannonGoal.end() );
 				returnGoal.insert( returnGoal.end(), armyGoal.begin(), armyGoal.end() );
 
+				BWAPI::Broodwar->printf("Goal set with length: (%d) ", returnGoal.size());
+
 				return returnGoal;
 
 				break;// do defend
@@ -1089,12 +1091,15 @@ const MetaPairVector StrategyManager::getStaticDefenceGoal() const
 
 	int numNexusAll =			BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Nexus);
 	int numCannon =				BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Photon_Cannon);
-	int wantedTotalCannons = numNexusAll*5;
-	int cannonsWanted = wantedTotalCannons - numCannon;
+	int wantedExtraCannons =	(BWAPI::Broodwar->self()->minerals()/BWAPI::UnitTypes::Protoss_Photon_Cannon.mineralPrice());
+	if(wantedExtraCannons<2)
+	{
+		wantedExtraCannons = 2;
+	}
 	// the goal to return
 	MetaPairVector goal;
 
-	goal.push_back(MetaPair(BWAPI::UnitTypes::Protoss_Photon_Cannon, cannonsWanted));
+	goal.push_back(MetaPair(BWAPI::UnitTypes::Protoss_Photon_Cannon, numCannon + wantedExtraCannons));
 
 	return goal;
 

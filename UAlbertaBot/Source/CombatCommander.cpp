@@ -52,7 +52,7 @@ void CombatCommander::assignIdleSquads(std::set<BWAPI::Unit *> & unitsToAssign)
 		for(regionIt=occupiedRegions.begin(); regionIt!=occupiedRegions.end();)
 		{
 			BWTA::Region * region = *regionIt;
-			double distance = region->getCenter().getDistance(BWAPI::Position(BWAPI::Broodwar->enemy()->getStartLocation()));
+			double distance = region->getCenter().getDistance(BWAPI::Position(getClosestEnemyRegion()->getCenter()));
 			if (!regionClosestToEnemy || distance < closestDistance)
 			{
 				closestDistance = distance;

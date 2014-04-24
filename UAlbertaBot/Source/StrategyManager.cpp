@@ -63,7 +63,7 @@ StrategyManager & StrategyManager::Instance()
 
  void StrategyManager::updateState()
  {
-	double enemyUncertaintyFactor = 1.6;
+	double enemyUncertaintyFactor = 1.0;
 	double myEconomy = getEconomyPotential(BWAPI::Broodwar->self());
 	double myArmy = getArmyPotential(BWAPI::Broodwar->self(), myEconomy);
 	double myDefense = getDefensePotential(BWAPI::Broodwar->self());
@@ -850,6 +850,14 @@ const MetaPairVector StrategyManager::getProtossCounterBuildOrderGoal()
 	odin_utils::debug("=== GOAL ENDING ===");
 	odin_utils::debug(" ");
 
+	//add psi-storm if we use high templars
+	if(BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_High_Templar)>0&&!BWAPI::Broodwar->self()->hasResearched(BWAPI::TechTypes::Psionic_Storm))
+	{
+		goal.push_back(MetaPair(BWAPI::TechTypes::Psionic_Storm,1));
+	}
+
+	
+
 	return goal;
 }
 
@@ -1097,15 +1105,6 @@ const MetaPairVector StrategyManager::getStaticDefenceGoal() const
 	// the goal to return
 	MetaPairVector goal;
 	
-	
-	if (!BWAPI::Broodwar->self()->hasResearched(BWAPI::TechTypes::Psionic_Storm))
-	{
-		goal.push_back(MetaPair(BWAPI::TechTypes::Psionic_Storm, 1));
-		BWAPI::Broodwar->printf("Added psi-storm to goal");
-	}
-		
-	goal.push_back(MetaPair(BWAPI::UnitTypes::Protoss_High_Templar, numHighTemplars+2));
-	
 	int wantedExtraCannons =	(BWAPI::Broodwar->self()->minerals()/BWAPI::UnitTypes::Protoss_Photon_Cannon.mineralPrice());
 	if(wantedExtraCannons<2)
 	{
@@ -1113,7 +1112,7 @@ const MetaPairVector StrategyManager::getStaticDefenceGoal() const
 	}
 
 	goal.push_back(MetaPair(BWAPI::UnitTypes::Protoss_Photon_Cannon, numCannon + wantedExtraCannons));
-
+	
 	return goal;
 
 }

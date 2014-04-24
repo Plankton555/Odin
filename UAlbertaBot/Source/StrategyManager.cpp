@@ -767,8 +767,16 @@ const MetaPairVector StrategyManager::getBuildOrderGoal()
 				break;
 
 			case DEFEND:
-				
-				return getStaticDefenceGoal();
+
+				cannonGoal = getStaticDefenceGoal();
+				armyGoal = getProtossDragoonsBuildOrderGoal();
+				returnGoal.reserve( cannonGoal.size() + armyGoal.size() ); // preallocate memory
+				returnGoal.insert( returnGoal.end(), cannonGoal.begin(), cannonGoal.end() );
+				returnGoal.insert( returnGoal.end(), armyGoal.begin(), armyGoal.end() );
+
+				BWAPI::Broodwar->printf("Goal set with length: (%d) ", returnGoal.size());
+
+				return returnGoal;
 
 				break;// do defend
 
@@ -1095,11 +1103,16 @@ const MetaPairVector StrategyManager::getStaticDefenceGoal() const
 		goal.push_back(MetaPair(BWAPI::TechTypes::Psionic_Storm, 1));
 		BWAPI::Broodwar->printf("Added psi-storm to goal");
 	}
-	
-	goal.push_back(MetaPair(BWAPI::UnitTypes::Protoss_Photon_Cannon, cannonsWanted));
-	
+		
 	goal.push_back(MetaPair(BWAPI::UnitTypes::Protoss_High_Templar, numHighTemplars+2));
 	
+	int wantedExtraCannons =	(BWAPI::Broodwar->self()->minerals()/BWAPI::UnitTypes::Protoss_Photon_Cannon.mineralPrice());
+	if(wantedExtraCannons<2)
+	{
+		wantedExtraCannons = 2;
+	}
+
+	goal.push_back(MetaPair(BWAPI::UnitTypes::Protoss_Photon_Cannon, numCannon + wantedExtraCannons));
 
 	return goal;
 

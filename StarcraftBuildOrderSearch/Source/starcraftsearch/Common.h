@@ -12,7 +12,7 @@
 #define DATA 				(BuildOrderSearch::getStarcraftDataInstance())
 
 // maximum number of actions allowed in StarcraftData
-#define MAX_ACTIONS 		30
+#define MAX_ACTIONS 		31
 
 // maximum number of actions in progress allowed
 #define MAX_PROGRESS 		30

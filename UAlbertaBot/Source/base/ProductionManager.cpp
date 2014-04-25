@@ -59,10 +59,17 @@ void ProductionManager::performBuildOrderSearch(const std::vector< std::pair<Met
 	{	
 		lastBuildOrderUpdate = BWAPI::Broodwar->getFrameCount();
 		if(searchingGoal.size()>0)
-		{
-			searchingGoal.pop_back();
+		{	int size = searchingGoal.size();
+			while(searchingGoal.size()>size/2&&searchingGoal.size()>1)
+			{
+				searchingGoal.pop_back();
+			}
+		}else
+		{	MetaPairVector goal;
+			goal.push_back(MetaPair(BWAPI::UnitTypes::Protoss_Zealot, BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Zealot)+2));
+			searchingGoal = goal;
 		}
-		BWAPI::Broodwar->printf("Nothing found in search, trying a smaller search goal");
+		BWAPI::Broodwar->printf("Nothing found in search, trying a smaller search goal  with size: %d", searchingGoal.size());
 	}
 }
 
@@ -110,6 +117,13 @@ void ProductionManager::update()
 	if ((BWAPI::Broodwar->getFrameCount() % 24 == 0) && detectBuildOrderDeadlock())
 	{
 		BWAPI::Broodwar->printf("Supply deadlock detected, building pylon!");
+		queue.queueAsHighestPriority(MetaType(BWAPI::Broodwar->self()->getRace().getSupplyProvider()), true);
+	}
+
+	// build pylons if minerals go high
+	if ((BWAPI::Broodwar->getFrameCount() % 240 == 0) && BWAPI::Broodwar->self()->minerals()>1000)
+	{
+		BWAPI::Broodwar->printf("Production deadlock detected, building pylon!");
 		queue.queueAsHighestPriority(MetaType(BWAPI::Broodwar->self()->getRace().getSupplyProvider()), true);
 	}
 

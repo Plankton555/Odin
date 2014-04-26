@@ -773,9 +773,13 @@ const MetaPairVector StrategyManager::getDefaultBuildOrderGoal() const
 		probesWanted = numProbes + 6;
 	}
 
+	if(shouldExpand())
+	{
+		goal.push_back(MetaPair(BWAPI::UnitTypes::Protoss_Nexus, numNexusAll + 1));
+	}
 	goal.push_back(MetaPair(BWAPI::UnitTypes::Protoss_Dragoon,	dragoonsWanted));
 	goal.push_back(MetaPair(BWAPI::UnitTypes::Protoss_Gateway,	gatewayWanted));
-	goal.push_back(MetaPair(BWAPI::UnitTypes::Protoss_Probe,	std::min(75, probesWanted)));
+	goal.push_back(MetaPair(BWAPI::UnitTypes::Protoss_Probe,	std::min(90, probesWanted)));
 
 	return goal;
 }
@@ -795,11 +799,67 @@ const MetaPairVector StrategyManager::getStaticDefenceGoal() const
 	{
 		goal.push_back(MetaPair(BWAPI::TechTypes::Psionic_Storm, 1));
 	}
-	goal.push_back(MetaPair(BWAPI::UnitTypes::Protoss_Photon_Cannon, cannonsWanted));
+	if(cannonsWanted > 0)
+	{
+		goal.push_back(MetaPair(BWAPI::UnitTypes::Protoss_Photon_Cannon, cannonsWanted));
+	}
 	goal.push_back(MetaPair(BWAPI::UnitTypes::Protoss_High_Templar, 2));
 
 	return goal;
 
+}
+
+const bool StrategyManager::shouldExpand() const
+{
+	//This is right now the old zealotrush exp SHOULD FIX
+	// if there is no place to expand to, we can't expand
+	if (MapTools::Instance().getNextExpansion() == BWAPI::TilePositions::None)
+	{
+		return false;
+	}
+
+	int numNexus =				BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Nexus);
+	int numZealots =			BWAPI::Broodwar->self()->completedUnitCount(BWAPI::UnitTypes::Protoss_Zealot);
+	int frame =					BWAPI::Broodwar->getFrameCount();
+
+	// if there are more than 10 idle workers, expand
+	if (WorkerManager::Instance().getNumIdleWorkers() > 10)
+	{
+		return true;
+	}
+
+	// 2nd Nexus Conditions:
+	//		We have 12 or more zealots
+	//		It is past frame 7000
+	if ((numNexus < 2) && (numZealots > 12 || frame > 9000))
+	{
+		return true;
+	}
+
+	// 3nd Nexus Conditions:
+	//		We have 24 or more zealots
+	//		It is past frame 12000
+	if ((numNexus < 3) && (numZealots > 24 || frame > 15000))
+	{
+		return true;
+	}
+
+	if ((numNexus < 4) && (numZealots > 24 || frame > 21000))
+	{
+		return true;
+	}
+
+	if ((numNexus < 5) && (numZealots > 24 || frame > 26000))
+	{
+		return true;
+	}
+
+	if ((numNexus < 6) && (numZealots > 24 || frame > 30000))
+	{
+		return true;
+	}
+
+	return false;
 }
 
  const int StrategyManager::getCurrentStrategy()

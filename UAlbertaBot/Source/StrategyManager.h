@@ -102,6 +102,7 @@ public:
 
 	static	StrategyManager &	Instance();
 
+			void				updateBNandArmyComp();
 			void				updateArmyComposition();
 			BayesianNet*		getBayesianNet() { return bayesianNet; }
 			void				onUnitShow(BWAPI::Unit * unit);

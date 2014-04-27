@@ -703,7 +703,6 @@ const bool StrategyManager::expandProtossObserver() const
 
 const MetaPairVector StrategyManager::getBuildOrderGoal()
 {
-	int now;
 	MetaPairVector returnGoal; //These are used in the defend state, but could not have them there
 	MetaPairVector cannonGoal; // because it gave some strange error
 	MetaPairVector armyGoal;
@@ -722,59 +721,39 @@ const MetaPairVector StrategyManager::getBuildOrderGoal()
 
 			case ATTACK:
 				// do attack
-				/*
-				if (getCurrentStrategy() == ProtossZealotRush)
+				updateBNandArmyComp();
+				if (bayesianNet == NULL) break;
+				if (armyCounters.size() > 0)
 				{
-					return getProtossZealotRushBuildOrderGoal();
-				}
-				else if (getCurrentStrategy() == ProtossDarkTemplar)
-				{
-					return getProtossDarkTemplarBuildOrderGoal();
-				}
-				else if (getCurrentStrategy() == ProtossDragoons)
-				{
-					return getProtossDragoonsBuildOrderGoal();
-				}
-				else if (getCurrentStrategy() == ProtossObserver)
-				{
-					return getProtossObserverBuildOrderGoal();
-				}
-				*/
-				if(!bayesianNet) break;
-				now = BWAPI::Broodwar->getFrameCount();
-				if (now - lastBnUpdate > 1000)
-				{
-					//Update network
-					bayesianNet->SetEvidence("TimePeriod",odin_utils::getTimePeriod());
-					bayesianNet->UpdateBeliefs();
-					lastBnUpdate = now;
-				}
-				updateArmyComposition();
-				if (armyCounters.size() == 0)
-				{
-					odin_utils::debug("NO COUNTERS NOW!");
-				} else {
 					MetaPairVector goal = getProtossCounterBuildOrderGoal();
 					if (goal.size() > 0)
 					{
+						BWAPI::Broodwar->printf("(Attack) Goal set with length: (%d) ", goal.size());
 						return goal;
-					} else
-					{
-						odin_utils::debug("ARMY EXIST; BUT BAD NR COUNTERS!");
 					}
 				}
 
+				BWAPI::Broodwar->printf("(Attack) No goal found, going Zealot!");
 				break;
 
 			case DEFEND:
 				
+				updateBNandArmyComp();
+				if (bayesianNet == NULL)
+				{
+					armyGoal = getProtossDragoonsBuildOrderGoal();
+				} else
+				{
+					armyGoal = getProtossCounterBuildOrderGoal();
+				}
+
 				cannonGoal = getStaticDefenceGoal();
-				armyGoal = getProtossDragoonsBuildOrderGoal();
+				
 				returnGoal.reserve( cannonGoal.size() + armyGoal.size() ); // preallocate memory
 				returnGoal.insert( returnGoal.end(), cannonGoal.begin(), cannonGoal.end() );
 				returnGoal.insert( returnGoal.end(), armyGoal.begin(), armyGoal.end() );
 
-				BWAPI::Broodwar->printf("Goal set with length: (%d) ", returnGoal.size());
+				BWAPI::Broodwar->printf("(Defend) Goal set with length: (%d) ", returnGoal.size());
 
 				return returnGoal;
 
@@ -1145,6 +1124,19 @@ const MetaPairVector StrategyManager::getZergBuildOrderGoal() const
  const int StrategyManager::getCurrentStrategy()
  {
 	 return currentStrategy;
+ }
+
+ void StrategyManager::updateBNandArmyComp()
+ {
+	if(!bayesianNet) return;
+	int now = BWAPI::Broodwar->getFrameCount();
+	if (now - lastBnUpdate > 1000)
+	{
+		//Update network
+		bayesianNet->SetEvidence("TimePeriod",odin_utils::getTimePeriod());
+		bayesianNet->UpdateBeliefs();
+		lastBnUpdate = now;
+	}
  }
 
  void StrategyManager::updateArmyComposition()

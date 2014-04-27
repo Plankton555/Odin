@@ -63,7 +63,7 @@ StrategyManager & StrategyManager::Instance()
 
  void StrategyManager::updateState()
  {
-	double enemyUncertaintyFactor = 1.6;
+	double enemyUncertaintyFactor = 1.5;
 	double myEconomy = getEconomyPotential(BWAPI::Broodwar->self());
 	double myArmy = getArmyPotential(BWAPI::Broodwar->self(), myEconomy);
 	double myDefense = getDefensePotential(BWAPI::Broodwar->self());
@@ -737,7 +737,6 @@ const MetaPairVector StrategyManager::getBuildOrderGoal()
 				break;
 
 			case DEFEND:
-				
 				updateBNandArmyComp();
 				if (bayesianNet == NULL)
 				{
@@ -746,6 +745,7 @@ const MetaPairVector StrategyManager::getBuildOrderGoal()
 				{
 					armyGoal = getProtossCounterBuildOrderGoal();
 				}
+
 
 				cannonGoal = getStaticDefenceGoal();
 				
@@ -828,6 +828,14 @@ const MetaPairVector StrategyManager::getProtossCounterBuildOrderGoal()
 	}
 	odin_utils::debug("=== GOAL ENDING ===");
 	odin_utils::debug(" ");
+
+	//add psi-storm if we use high templars
+	if(BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_High_Templar)>0&&!BWAPI::Broodwar->self()->hasResearched(BWAPI::TechTypes::Psionic_Storm))
+	{
+		goal.push_back(MetaPair(BWAPI::TechTypes::Psionic_Storm,1));
+	}
+
+	
 
 	return goal;
 }
@@ -1070,15 +1078,19 @@ const MetaPairVector StrategyManager::getStaticDefenceGoal() const
 
 	int numNexusAll =			BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Nexus);
 	int numCannon =				BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Photon_Cannon);
-	int wantedExtraCannons =	(BWAPI::Broodwar->self()->minerals()/BWAPI::UnitTypes::Protoss_Photon_Cannon.mineralPrice());
-	if(wantedExtraCannons<2)
-	{
-		wantedExtraCannons = 2;
-	}
+	int numHighTemplars =		BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_High_Templar);
+	int wantedTotalCannons = numNexusAll*5;
+	int cannonsWanted = wantedTotalCannons;
 	// the goal to return
 	MetaPairVector goal;
-
-	goal.push_back(MetaPair(BWAPI::UnitTypes::Protoss_Photon_Cannon, numCannon + wantedExtraCannons));
+	
+	
+	if (numHighTemplars>0)
+	{
+		goal.push_back(MetaPair(BWAPI::TechTypes::Psionic_Storm, 1));
+	}
+	goal.push_back(MetaPair(BWAPI::UnitTypes::Protoss_Photon_Cannon, cannonsWanted));
+	goal.push_back(MetaPair(BWAPI::UnitTypes::Protoss_High_Templar, 2));
 
 	return goal;
 

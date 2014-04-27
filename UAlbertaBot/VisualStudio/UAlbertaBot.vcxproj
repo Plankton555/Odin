@@ -114,6 +114,7 @@
     <ClCompile Include="..\..\dlib-18.6\dlib\all\source.cpp" />
     <ClCompile Include="..\Source\base\BuildLearner.cpp" />
     <ClCompile Include="..\Source\BayesianNet.cpp" />
+    <ClCompile Include="..\Source\micromanagement\HighTemplarManager.cpp" />
     <ClCompile Include="..\Source\ParsedNode.cpp" />
     <ClCompile Include="..\Source\BNetParser.cpp" />
     <ClCompile Include="..\Source\CombatSimulation.cpp" />
@@ -161,6 +162,7 @@
   <ItemGroup>
     <ClInclude Include="..\Source\base\BuildLearner.h" />
     <ClInclude Include="..\Source\BayesianNet.h" />
+    <ClInclude Include="..\Source\micromanagement\HighTemplarManager.h" />
     <ClInclude Include="..\Source\OdinUtils.h" />
     <ClInclude Include="..\Source\ParsedNode.h" />
     <ClInclude Include="..\Source\BNetParser.h" />

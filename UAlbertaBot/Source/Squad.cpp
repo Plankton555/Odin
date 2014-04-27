@@ -51,6 +51,7 @@ void Squad::update()
 		rangedManager.setUnitClosestToEnemy(unitClosestToEnemy());
 		rangedManager.execute(order);
 		transportManager.execute(order);
+		highTemplarManager.execute(order);
 
 		detectorManager.setUnitClosestToEnemy(unitClosestToEnemy());
 		detectorManager.execute(order);
@@ -113,6 +114,7 @@ void Squad::setManagerUnits()
 	UnitVector rangedUnits;
 	UnitVector detectorUnits;
 	UnitVector transportUnits;
+	UnitVector highTemplarUnits;
 
 	// add units to micro managers
 	BOOST_FOREACH(BWAPI::Unit * unit, units)
@@ -128,6 +130,11 @@ void Squad::setManagerUnits()
 			else if (unit->getType() == BWAPI::UnitTypes::Protoss_Shuttle || unit->getType() == BWAPI::UnitTypes::Terran_Dropship)
 			{
 				transportUnits.push_back(unit);
+			}
+			// select high templar units
+			else if (unit->getType() == BWAPI::UnitTypes::Protoss_High_Templar)
+			{
+				highTemplarUnits.push_back(unit);
 			}
 			// select ranged units
 			else if ((unit->getType().groundWeapon().maxRange() > 32) || (unit->getType() == BWAPI::UnitTypes::Protoss_Reaver) || (unit->getType() == BWAPI::UnitTypes::Protoss_Carrier))
@@ -146,6 +153,7 @@ void Squad::setManagerUnits()
 	rangedManager.setUnits(rangedUnits);
 	detectorManager.setUnits(detectorUnits);
 	transportManager.setUnits(detectorUnits);
+	highTemplarManager.setUnits(highTemplarUnits);
 }
 
 // calculates whether or not to regroup

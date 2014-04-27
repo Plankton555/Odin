@@ -192,6 +192,9 @@
     <ClCompile Include="..\Source\ParsedNode.cpp">
       <Filter>bayesian_network</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\micromanagement\HighTemplarManager.cpp">
+      <Filter>game\combat\micro\generic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\CombatCommander.h">
@@ -343,6 +346,9 @@
     </ClInclude>
     <ClInclude Include="..\Source\OdinUtils.h">
       <Filter>game\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\micromanagement\HighTemplarManager.h">
+      <Filter>game\combat\micro\generic</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

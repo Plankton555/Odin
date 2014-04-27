@@ -5,6 +5,7 @@
 #include "micromanagement/RangedManager.h"
 #include "micromanagement/DetectorManager.h"
 #include "micromanagement/TransportManager.h"
+#include "micromanagement/HighTemplarManager.h"
 #include "SquadOrder.h"
 #include "DistanceMap.hpp"
 #include "StrategyManager.h"
@@ -18,6 +19,7 @@ class ObserverManager;
 class MeleeManager;
 class RangedManager;
 class DetectorManager;
+class HighTemplarManager;
 
 class Squad
 {
@@ -31,6 +33,7 @@ class Squad
 	RangedManager		rangedManager;
 	DetectorManager		detectorManager;
 	TransportManager	transportManager;
+	HighTemplarManager	highTemplarManager;
 
 	std::map<BWAPI::Unit *, bool>	nearEnemy;
 

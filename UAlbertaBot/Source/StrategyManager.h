@@ -31,8 +31,6 @@ class StrategyManager
 	int							lastBnUpdate;
 
 	std::vector<std::string>	protossOpeningBook;
-	std::vector<std::string>	terranOpeningBook;
-	std::vector<std::string>	zergOpeningBook;
 
 	std::string					readDir;
 	std::string					writeDir;
@@ -58,46 +56,23 @@ class StrategyManager
 	void	loadStrategiesFromFile(std::string filename);
 	void	updateState();
 	bool	doStateUpdate();
+	
 	double	getArmyPotential(BWAPI::Player *player, double economy);
 	double	getEconomyPotential(BWAPI::Player *player);
 	double	getDefensePotential(BWAPI::Player *player);
 
 	const	int					getScore(BWAPI::Player * player) const;
 	const	double				getUCBValue(const size_t & strategy) const;
-	
+	const	bool				shouldExpand() const;
 	// protoss strategy
 	const	MetaPairVector		getProtossCounterBuildOrderGoal();
-
-	const	bool				expandProtossZealotRush() const;
-	const	std::string			getProtossZealotRushOpeningBook() const;
-	const	MetaPairVector		getProtossZealotRushBuildOrderGoal() const;
-
-	const	bool				expandProtossDarkTemplar() const;
-	const	std::string			getProtossDarkTemplarOpeningBook() const;
-	const	MetaPairVector		getProtossDarkTemplarBuildOrderGoal() const;
-
-	const	bool				expandProtossDragoons() const;
-	const	std::string			getProtossDragoonsOpeningBook() const;
-	const	MetaPairVector		getProtossDragoonsBuildOrderGoal() const;
-
-	const	bool				expandProtossObserver() const;
-	const	std::string			getProtossObserverOpeningBook() const;
-	const	MetaPairVector		getProtossObserverBuildOrderGoal() const;
-
-	const	MetaPairVector		getTerranBuildOrderGoal() const;
-	const	MetaPairVector		getZergBuildOrderGoal() const;
-
+	const	MetaPairVector		getDefaultBuildOrderGoal() const;
 	const	MetaPairVector		getStaticDefenceGoal() const;
-
 	const	MetaPairVector		getProtossOpeningBook() const;
-	const	MetaPairVector		getTerranOpeningBook() const;
-	const	MetaPairVector		getZergOpeningBook() const;
 
 public:
 
-	enum { ProtossZealotRush=0, ProtossDarkTemplar=1, ProtossDragoons=2, ProtossObserver=3, ProtossZealotArchon=4, NumProtossStrategies=20 };
-	enum { TerranMarineRush=0, NumTerranStrategies=1 };
-	enum { ZergZerglingRush=0, NumZergStrategies=1 };
+	enum {NumProtossStrategies=20 };
 	enum State { OPENING, ATTACK, DEFEND, EXPAND };
 
 	static	StrategyManager &	Instance();

@@ -730,10 +730,9 @@ const MetaPairVector StrategyManager::getBuildOrderGoal()
 					{
 						BWAPI::Broodwar->printf("(Attack) Goal set with length: (%d) ", goal.size());
 						return goal;
-					}
-				}
+					} else { BWAPI::Broodwar->printf("ACG NOT EMPTY - NO GOAL!"); }
+				} else { BWAPI::Broodwar->printf("ACG EMPTY!"); }
 
-				BWAPI::Broodwar->printf("(Attack) No goal found, going Zealot!");
 				break;
 
 			case DEFEND:
@@ -767,6 +766,7 @@ const MetaPairVector StrategyManager::getBuildOrderGoal()
 		}
 
 		// if something goes wrong, use zealot goal
+		BWAPI::Broodwar->printf("No goal found, going Zealot Rush!");
 		return getProtossZealotRushBuildOrderGoal();
 	}
 	else if (BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Terran)
@@ -790,7 +790,17 @@ const MetaPairVector StrategyManager::getProtossCounterBuildOrderGoal()
 		if (nrExtraUnits >= 1)
 		{
 			BWAPI::UnitType wantedType = it->first->at(0);//TODO: Choose cheap or expensive counter (if expensive even exists!)
-			int nrUnitsWanted = nrExtraUnits + BWAPI::Broodwar->self()->allUnitCount(wantedType);
+			int nrUnitsNow = BWAPI::Broodwar->self()->allUnitCount(wantedType);
+			int nrUnitsWanted = nrExtraUnits + nrUnitsNow;
+
+			if (wantedType == BWAPI::UnitTypes::Protoss_Photon_Cannon)
+			{
+				nrUnitsWanted = std::min(5, nrUnitsWanted); //Don't mass out tons of photon cannons
+				if (nrUnitsWanted >= nrUnitsNow) continue; //Don't even add this line if we have enough cannons
+				nrExtraUnits = 0; //So we don't add any extra if photon cannon is added already
+				BWAPI::Broodwar->printf("ADDING CANNONS!");
+			}
+
 
 			//If we already have included this unit, then just add the nr, don't add a new line
 			boolean isIncluded = false;
@@ -811,31 +821,12 @@ const MetaPairVector StrategyManager::getProtossCounterBuildOrderGoal()
 			}
 		}
 	}
-	
-	MetaPairVector::iterator gIt;
-	odin_utils::debug("=== GOAL STARTING ===");
-	for (gIt = goal.begin(); gIt != goal.end(); gIt++)
-	{
-		stringstream ss;
-		ss << gIt->first.getName();
-		ss << ": ";
-		int nr = BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::getUnitType(gIt->first.getName()));
-		ss << nr;
-		ss << " + ";
-		ss << gIt->second - nr;
-		odin_utils::debug(ss.str());
-		//odin_utils::debug(gIt->first.getName(), gIt->second);
-	}
-	odin_utils::debug("=== GOAL ENDING ===");
-	odin_utils::debug(" ");
 
 	//add psi-storm if we use high templars
 	if(BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_High_Templar)>0&&!BWAPI::Broodwar->self()->hasResearched(BWAPI::TechTypes::Psionic_Storm))
 	{
 		goal.push_back(MetaPair(BWAPI::TechTypes::Psionic_Storm,1));
 	}
-
-	
 
 	return goal;
 }
@@ -1149,6 +1140,7 @@ const MetaPairVector StrategyManager::getZergBuildOrderGoal() const
 		bayesianNet->UpdateBeliefs();
 		lastBnUpdate = now;
 	}
+	updateArmyComposition();
  }
 
  void StrategyManager::updateArmyComposition()
@@ -1201,25 +1193,6 @@ const MetaPairVector StrategyManager::getZergBuildOrderGoal() const
 		//compIt->second = compIt->second/totalSum;
 		armyCounters[DataModule::getCounter(compIt->first.c_str())] = compIt->second/totalSum;
 	}
-
-	/*
-	odin_utils::debug("=====FINAL RESULT?=====");
-	int size = armyCounters.size();
-	odin_utils::debug("Counters Size", size);
-	std::map<std::vector<BWAPI::UnitType>*, double>::iterator a;
-	for (a = armyCounters.begin(); a != armyCounters.end(); a++)
-	{
-		odin_utils::debug("First Null?", a->first == NULL);
-		stringstream ss;
-		ss << a->first->at(0).c_str();
-		ss << " and ";
-		ss << a->first->at(1).c_str();
-		ss << " have prob: ";
-		ss << a->second;
-		odin_utils::debug(ss.str());
-	}
-	odin_utils::debug("===== END FINAL RESULT?=====");
-	*/
  }
 
 

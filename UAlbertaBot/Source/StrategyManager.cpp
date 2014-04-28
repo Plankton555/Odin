@@ -766,7 +766,7 @@ const MetaPairVector StrategyManager::getBuildOrderGoal()
 		}
 
 		// if something goes wrong, use zealot goal
-		BWAPI::Broodwar->printf("No goal found, going Zealot Rush!");
+		BWAPI::Broodwar->printf("No goal found, using Default goal!");
 		return getProtossZealotRushBuildOrderGoal();
 	}
 	else if (BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Terran)
@@ -798,7 +798,6 @@ const MetaPairVector StrategyManager::getProtossCounterBuildOrderGoal()
 				nrUnitsWanted = std::min(5, nrUnitsWanted); //Don't mass out tons of photon cannons
 				if (nrUnitsWanted >= nrUnitsNow) continue; //Don't even add this line if we have enough cannons
 				nrExtraUnits = 0; //So we don't add any extra if photon cannon is added already
-				BWAPI::Broodwar->printf("ADDING CANNONS!");
 			}
 
 

@@ -661,7 +661,49 @@ const MetaPairVector StrategyManager::getProtossCounterBuildOrderGoal()
 		int nrExtraUnits = it->second * 10; //TODO: Some threshold here? Depend on economy?
 		if (nrExtraUnits >= 1)
 		{
-			BWAPI::UnitType wantedType = it->first->at(0);//TODO: Choose cheap or expensive counter (if expensive even exists!)
+			//Find out what counter we want to build (cheap or expensive)
+			BWAPI::UnitType wantedType;
+			if (it->first->size() > 1) //Have an expensive counter
+			{
+				//Check if we have teched for it yet
+				bool haveTeched = true;
+				std::map<BWAPI::UnitType, int> m = it->first->at(1).requiredUnits();
+				std::map<BWAPI::UnitType, int>::iterator mit;
+				for (mit = m.begin(); mit != m.end(); mit++)
+				{
+					if (BWAPI::Broodwar->self()->allUnitCount(mit->first) < mit->second)
+					{
+						haveTeched = false;
+						break;
+					}
+				}
+
+				if (haveTeched) //have Teched for expensive
+				{
+					wantedType = it->first->at(1);
+				} else
+				{
+					wantedType = it->first->at(0);
+
+					//Tech to expensive if can afford
+					if (BWAPI::Broodwar->self()->minerals() > 300 && BWAPI::Broodwar->self()->gas() > 150)
+					{
+						BWAPI::Broodwar->printf("Teching for %s", it->first->at(1).getName().c_str());
+						for(mit = m.begin(); mit != m.end(); mit++)
+						{
+							if (BWAPI::Broodwar->self()->allUnitCount(mit->first) < mit->second)
+							{
+								goal.push_back(MetaPair(mit->first, 1));
+							}
+						}
+					}
+				}
+			} else
+			{
+				wantedType = it->first->at(0);
+			}
+
+			//Add the number of units we want
 			int nrUnitsNow = BWAPI::Broodwar->self()->allUnitCount(wantedType);
 			int nrUnitsWanted = nrExtraUnits + nrUnitsNow;
 

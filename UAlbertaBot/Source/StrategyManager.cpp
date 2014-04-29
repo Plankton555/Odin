@@ -620,12 +620,13 @@ const MetaPairVector StrategyManager::getBuildOrderGoal()
 
 		case DEFEND:
 			updateBNandArmyComp();
-			if (bayesianNet == NULL)
+			if (bayesianNet == NULL || armyCounters.size() == 0)
 			{
 				armyGoal = getDefaultBuildOrderGoal();
 			} else
 			{
 				armyGoal = getProtossCounterBuildOrderGoal();
+				if (armyGoal.size() == 0) armyGoal = getDefaultBuildOrderGoal(); //If counters is empty, then just go with default
 			}
 
 			cannonGoal = getStaticDefenceGoal();

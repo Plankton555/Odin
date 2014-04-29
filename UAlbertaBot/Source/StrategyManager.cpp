@@ -115,7 +115,7 @@ StrategyManager & StrategyManager::Instance()
 	BWAPI::Broodwar->printf(("Strategy state updated to " + stateName).c_str());
  }
  
-double StrategyManager::getArmyPotential(BWAPI::Player *player, double economy)
+const double StrategyManager::getArmyPotential(BWAPI::Player *player, double economy) const
 {
 	//upgrades (procentuellt)
 	double nrKnownUpgrades = 0;
@@ -180,7 +180,7 @@ double StrategyManager::getArmyPotential(BWAPI::Player *player, double economy)
 	return potential;
 }
 
-double StrategyManager::getEconomyPotential(BWAPI::Player *player)
+const double StrategyManager::getEconomyPotential(BWAPI::Player *player) const 
 {
 	// this should work as a guesstimate
 	double nrKnownWorkers = InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Zerg_Drone, player);
@@ -199,7 +199,7 @@ double StrategyManager::getEconomyPotential(BWAPI::Player *player)
 	return potential;
 }
 
-double StrategyManager::getDefensePotential(BWAPI::Player *player)
+const double StrategyManager::getDefensePotential(BWAPI::Player *player) const
 {
 	double defenseStructures = 2*InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Terran_Bunker, player);
 	defenseStructures += 0.9*InformationManager::Instance().getNumUnits(BWAPI::UnitTypes::Terran_Missile_Turret, player);
@@ -692,10 +692,17 @@ const MetaPairVector StrategyManager::getProtossCounterBuildOrderGoal()
 		}
 	}
 
+	int numNexusAll =			BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Nexus);
+
 	//add psi-storm if we use high templars
 	if(BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_High_Templar)>0&&!BWAPI::Broodwar->self()->hasResearched(BWAPI::TechTypes::Psionic_Storm))
 	{
 		goal.push_back(MetaPair(BWAPI::TechTypes::Psionic_Storm,1));
+	}
+
+	if(shouldExpand())
+	{
+		goal.push_back(MetaPair(BWAPI::UnitTypes::Protoss_Nexus, numNexusAll + 1));
 	}
 
 	return goal;
@@ -776,21 +783,15 @@ const MetaPairVector StrategyManager::getStaticDefenceGoal() const
 
 	int numNexusAll =			BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Nexus);
 	int numCannon =				BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Photon_Cannon);
-	int numHighTemplars =		BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_High_Templar);
 	int wantedTotalCannons = numNexusAll*3;
 	int cannonsWanted = wantedTotalCannons - numCannon;
 	// the goal to return
 	MetaPairVector goal;
 	
-	if (numHighTemplars>0)
-	{
-		goal.push_back(MetaPair(BWAPI::TechTypes::Psionic_Storm, 1));
-	}
 	if(cannonsWanted > 0)
 	{
 		goal.push_back(MetaPair(BWAPI::UnitTypes::Protoss_Photon_Cannon, cannonsWanted));
 	}
-	goal.push_back(MetaPair(BWAPI::UnitTypes::Protoss_High_Templar, 2));
 
 	return goal;
 
@@ -798,7 +799,7 @@ const MetaPairVector StrategyManager::getStaticDefenceGoal() const
 
 const bool StrategyManager::shouldExpand() const
 {
-	//This is right now the old zealotrush exp SHOULD FIX
+
 	// if there is no place to expand to, we can't expand
 	if (MapTools::Instance().getNextExpansion() == BWAPI::TilePositions::None)
 	{
@@ -806,8 +807,16 @@ const bool StrategyManager::shouldExpand() const
 	}
 
 	int numNexus =				BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Nexus);
-	int numZealots =			BWAPI::Broodwar->self()->completedUnitCount(BWAPI::UnitTypes::Protoss_Zealot);
 	int frame =					BWAPI::Broodwar->getFrameCount();
+	int minerals =				BWAPI::Broodwar->self()->minerals();
+
+	double enemyUncertaintyFactor = 1.5;
+	double myEconomy = getEconomyPotential(BWAPI::Broodwar->self());
+	double myArmy = getArmyPotential(BWAPI::Broodwar->self(), myEconomy);
+	double myDefense = getDefensePotential(BWAPI::Broodwar->self());
+	double opEconomy = getEconomyPotential(BWAPI::Broodwar->enemy())*enemyUncertaintyFactor;
+	double opArmy = getArmyPotential(BWAPI::Broodwar->enemy(), opEconomy)*enemyUncertaintyFactor;
+	double opDefense = getDefensePotential(BWAPI::Broodwar->enemy())*enemyUncertaintyFactor;
 
 	// if there are more than 10 idle workers, expand
 	if (WorkerManager::Instance().getNumIdleWorkers() > 10)
@@ -815,33 +824,17 @@ const bool StrategyManager::shouldExpand() const
 		return true;
 	}
 
-	// 2nd Nexus Conditions:
-	//		We have 12 or more zealots
-	//		It is past frame 7000
-	if ((numNexus < 2) && (numZealots > 12 || frame > 9000))
+	if (minerals > 600 && myArmy>opArmy*enemyUncertaintyFactor)
 	{
 		return true;
 	}
 
-	// 3nd Nexus Conditions:
-	//		We have 24 or more zealots
-	//		It is past frame 12000
-	if ((numNexus < 3) && (numZealots > 24 || frame > 15000))
+	if(myEconomy<opEconomy*enemyUncertaintyFactor)
 	{
 		return true;
 	}
 
-	if ((numNexus < 4) && (numZealots > 24 || frame > 21000))
-	{
-		return true;
-	}
-
-	if ((numNexus < 5) && (numZealots > 24 || frame > 26000))
-	{
-		return true;
-	}
-
-	if ((numNexus < 6) && (numZealots > 24 || frame > 30000))
+	if(minerals>2000)
 	{
 		return true;
 	}

@@ -57,9 +57,9 @@ class StrategyManager
 	void	updateState();
 	bool	doStateUpdate();
 	
-	double	getArmyPotential(BWAPI::Player *player, double economy);
-	double	getEconomyPotential(BWAPI::Player *player);
-	double	getDefensePotential(BWAPI::Player *player);
+	const double	getArmyPotential(BWAPI::Player *player, double economy) const;
+	const double	getEconomyPotential(BWAPI::Player *player) const;
+	const double	getDefensePotential(BWAPI::Player *player) const;
 
 	const	int					getScore(BWAPI::Player * player) const;
 	const	double				getUCBValue(const size_t & strategy) const;

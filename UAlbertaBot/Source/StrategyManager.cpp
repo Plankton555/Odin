@@ -8,6 +8,9 @@
 const std::string BAYESNET_FOLDER = ODIN_DATA_FILEPATH + "bayesian_networks/";
 const std::string OPENINGS_FOLDER = ODIN_DATA_FILEPATH + "openings/";
 
+const int MINERALS_NEEDED_TO_TECH_EXPENSIVE_COUNTER = 300;
+const int GAS_NEEDED_TO_TECH_EXPENSIVE_COUNTER = 150;
+
 // constructor
 StrategyManager::StrategyManager() 
 	: firstAttackSent(false)
@@ -686,13 +689,16 @@ const MetaPairVector StrategyManager::getProtossCounterBuildOrderGoal()
 					wantedType = it->first->at(0);
 
 					//Tech to expensive if can afford
-					if (BWAPI::Broodwar->self()->minerals() > 300 && BWAPI::Broodwar->self()->gas() > 150)
+					if (BWAPI::Broodwar->self()->minerals() > MINERALS_NEEDED_TO_TECH_EXPENSIVE_COUNTER && 
+						BWAPI::Broodwar->self()->gas() > GAS_NEEDED_TO_TECH_EXPENSIVE_COUNTER)
 					{
 						BWAPI::Broodwar->printf("Teching for %s", it->first->at(1).getName().c_str());
 						for(mit = m.begin(); mit != m.end(); mit++)
 						{
 							if (BWAPI::Broodwar->self()->allUnitCount(mit->first) < mit->second)
 							{
+								// change 1 to "mit->second - allUnitCount" if there are units that require
+								// more than 1 of a specified unit (eg Dark Archon needs 2 Dark Templars) 
 								goal.push_back(MetaPair(mit->first, 1));
 							}
 						}
@@ -714,12 +720,12 @@ const MetaPairVector StrategyManager::getProtossCounterBuildOrderGoal()
 				nrExtraUnits = 0; //So we don't add any extra if photon cannon is added already
 			}
 
-
 			//If we already have included this unit, then just add the nr, don't add a new line
 			boolean isIncluded = false;
 			MetaPairVector::iterator gIt;
 			for (gIt = goal.begin(); gIt != goal.end(); gIt++)
 			{
+				if (gIt->first.unitType == wantedType)
 				if (strcmp(gIt->first.getName().c_str(),wantedType.getName().c_str()) == 0)
 				{
 					gIt->second += nrExtraUnits;

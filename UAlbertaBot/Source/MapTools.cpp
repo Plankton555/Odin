@@ -301,8 +301,20 @@ BWAPI::TilePosition MapTools::getNextExpansion()
 	// for each base location
 	BOOST_FOREACH(BWTA::BaseLocation * base, BWTA::getBaseLocations())
 	{
+
+		//Check if the enemy occupies the region
+		bool baseIsInEnemyRegion = false;
+		BOOST_FOREACH(BWAPI::Unit* unit, BWAPI::Broodwar->enemy()->getUnits())
+		{
+			if (BWTA::getRegion(unit->getPosition()) == base->getRegion())
+			{
+				baseIsInEnemyRegion = true;
+				break;
+			}
+		}
+
 		// if the base is not our own or the enemy's
-		if(base != BWTA::getStartLocation(BWAPI::Broodwar->self()) && base != BWTA::getStartLocation(BWAPI::Broodwar->enemy()))
+		if(base != BWTA::getStartLocation(BWAPI::Broodwar->self()) && base != BWTA::getStartLocation(BWAPI::Broodwar->enemy()) && !baseIsInEnemyRegion)
 		{
 			// get the tile position of the base
 			BWAPI::TilePosition tile = base->getTilePosition();

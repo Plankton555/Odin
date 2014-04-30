@@ -710,7 +710,7 @@ const MetaPairVector StrategyManager::getProtossCounterBuildOrderGoal()
 			if (wantedType == BWAPI::UnitTypes::Protoss_Photon_Cannon)
 			{
 				nrUnitsWanted = std::min(5, nrUnitsWanted); //Don't mass out tons of photon cannons
-				if (nrUnitsWanted >= nrUnitsNow) continue; //Don't even add this line if we have enough cannons
+				if (nrUnitsWanted < nrUnitsNow) continue; //Don't even add this line if we have enough cannons
 				nrExtraUnits = 0; //So we don't add any extra if photon cannon is added already
 			}
 

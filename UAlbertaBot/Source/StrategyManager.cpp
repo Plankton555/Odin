@@ -726,7 +726,6 @@ const MetaPairVector StrategyManager::getProtossCounterBuildOrderGoal()
 			for (gIt = goal.begin(); gIt != goal.end(); gIt++)
 			{
 				if (gIt->first.unitType == wantedType)
-				if (strcmp(gIt->first.getName().c_str(),wantedType.getName().c_str()) == 0)
 				{
 					gIt->second += nrExtraUnits;
 					isIncluded = true;

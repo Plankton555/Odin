@@ -352,7 +352,7 @@ void ReplayModule::writeToFile(const char* file, std::map<const char*,int> stuff
 	myfile.open (file, std::ios::app);
 
 
-	std::vector<int> temp(unitList.size()+1);
+	std::vector<int> temp(unitList.size()+1, 0);
 	std::map<const char*,int>::iterator it;
 	for(it=stuffToWrite.begin(); it!=stuffToWrite.end();)
 	{	
@@ -365,7 +365,10 @@ void ReplayModule::writeToFile(const char* file, std::map<const char*,int> stuff
 		{
 			if(strcmp(tempIt->first, stuffName.c_str())==0)
 			{
-				temp.at(tempIt->second) = it->second;
+				if (temp.at(tempIt->second) == 0)	//Just set the value if it hasn't been set already
+				{									//(Special case with siege tanks)
+					temp.at(tempIt->second) = it->second;
+				}
 				//myfile << " in if "<< tempIt->second << " " << it->second << " ";
 			}
 			tempIt++;

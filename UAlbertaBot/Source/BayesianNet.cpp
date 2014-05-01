@@ -152,15 +152,33 @@ void BayesianNet::PrintBN()
 
 void BayesianNet::PrintNode(ParsedNode * node)
 {
-	odin_utils::debug(node->name);
 	int nodeID = nodeMap.find(node->name)->second;
 	int nrOfStates = node->states.size();
-	for (int nodeState=0; nodeState<nrOfStates; nodeState++)
+	if (nrOfStates > 2) 
 	{
-		double p = solution->probability(nodeID)(nodeState);
-		std::stringstream intToString;
-		intToString << nodeState;
-		odin_utils::debug(intToString.str(), p);
+		for (int nodeState=0; nodeState<nrOfStates; nodeState++)
+		{
+			if (solution->probability(nodeID)(nodeState) > 0.99)
+			{
+				std::stringstream intToString;
+				intToString << nodeState;
+				odin_utils::debug(intToString.str());
+			}
+		}
+	} 
+	else
+	{
+		odin_utils::debug(node->name, solution->probability(nodeID)(1));
 	}
-	return;
+	//odin_utils::debug(node->name);
+	//int nodeID = nodeMap.find(node->name)->second;
+	//int nrOfStates = node->states.size();
+	//for (int nodeState=0; nodeState<nrOfStates; nodeState++)
+	//{
+	//	double p = solution->probability(nodeID)(nodeState);
+	//	std::stringstream intToString;
+	//	intToString << nodeState;
+	//	odin_utils::debug(intToString.str(), p);
+	//}
+	//return;
 }

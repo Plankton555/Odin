@@ -21,35 +21,34 @@ ReplayModule::~ReplayModule() { }
 void ReplayModule::createMaps()
 {	
 	//Buildings 
-	protossUnitsAll["Pylon"] = 1;
-	protossUnitsAll["Gateway"] = 2;
-	protossUnitsAll["Assimilator"] = 3;
-	protossUnitsAll["Cybernetics Core"] = 4;
-	protossUnitsAll["Citadel of Adun"] = 5;
-	protossUnitsAll["Forge"] = 6;
-	protossUnitsAll["Photon Cannon"] = 7;
-	protossUnitsAll["Stargate"] = 8;
+	protossUnitsAll["Assimilator"] = 1;
+	protossUnitsAll["Pylon"] = 2;
+	protossUnitsAll["Gateway"] = 3;
+	protossUnitsAll["Zealot"] = 4;
+	protossUnitsAll["Cybernetics Core"] = 5;
+	protossUnitsAll["Citadel of Adun"] = 6;
+	protossUnitsAll["Templar Archives"] = 7;
+	protossUnitsAll["Dark Templar"] = 8;
 	protossUnitsAll["Robotics Facility"] = 9;
 	protossUnitsAll["Robotics Support Bay"] = 10;
-	protossUnitsAll["Observatory"] = 11;
-	protossUnitsAll["Arbiter Tribunal"] = 12;
-	protossUnitsAll["Templar Archives"] = 13;
-	protossUnitsAll["Fleet Beacon"] = 14;
-	protossUnitsAll["Shield Battery"] = 15;
-
-	protossUnitsAll["Zealot"] = 16;
-	protossUnitsAll["Dragoon"] = 17;
-	protossUnitsAll["Dark Templar"] = 18;
+	protossUnitsAll["Forge"] = 11;
+	protossUnitsAll["Photon Cannon"] = 12;
+	protossUnitsAll["Stargate"] = 13;
+	protossUnitsAll["Observatory"] = 14;
+	protossUnitsAll["Arbiter Tribunal"] = 15;
+	protossUnitsAll["Fleet Beacon"] = 16;
+	protossUnitsAll["Shield Battery"] = 17;
+	protossUnitsAll["Dragoon"] = 18;
 	protossUnitsAll["High Templar"] = 19;
-	protossUnitsAll["Archon"] = 20;
-	protossUnitsAll["Dark Archon"] = 21;
-	protossUnitsAll["Reaver"] = 22;
-	protossUnitsAll["Scout"] = 23;
-	protossUnitsAll["Corsair"] = 24;
-	protossUnitsAll["Arbiter"] = 25;
-	protossUnitsAll["Carrier"] = 26;
-	protossUnitsAll["Observer"] = 27;
-	protossUnitsAll["Shuttle"] = 28;
+	protossUnitsAll["Shuttle"] = 20;
+	protossUnitsAll["Reaver"] = 21;
+	protossUnitsAll["Observer"] = 22;
+	protossUnitsAll["Carrier"] = 23;
+	protossUnitsAll["Scout"] = 24;
+	protossUnitsAll["Corsair"] = 25;
+	protossUnitsAll["Arbiter"] = 26;
+	protossUnitsAll["Dark Archon"] = 27;
+	protossUnitsAll["Archon"] = 28;
 
 	protossTechAll["Hallucination"] = 29;
 	protossTechAll["Maelstrom"] = 30;

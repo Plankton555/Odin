@@ -23,6 +23,7 @@
 #include "DataModule.h"
 #include "BayesianNet.h"
 
+#define BN_SNAPSHOT_EVERY_X_FRAMES 1000
 
 BWAPI::AIModule * __NewAIModule()
 {
@@ -143,7 +144,7 @@ void UAlbertaBotModule::onFrame()
 			BWAPI::Broodwar->sendText("glhf");
 		}
 
-		if (currentFrame != 0 && (currentFrame % 1000) == 0) 
+		if (currentFrame != 0 && (currentFrame % BN_SNAPSHOT_EVERY_X_FRAMES) == 0) 
 		{
 			StrategyManager::Instance().getBayesianNet()->PrintBN();
 		}

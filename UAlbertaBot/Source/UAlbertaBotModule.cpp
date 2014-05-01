@@ -137,9 +137,15 @@ void UAlbertaBotModule::onFrame()
 		replayModule.onFrame();
 
 	}else{
-		if (BWAPI::Broodwar->getFrameCount() == 260)
+		int currentFrame = BWAPI::Broodwar->getFrameCount();
+		if (currentFrame == 260)
 		{
 			BWAPI::Broodwar->sendText("glhf");
+		}
+
+		if (currentFrame != 0 && (currentFrame % 1000) == 0) 
+		{
+			StrategyManager::Instance().getBayesianNet()->PrintBN();
 		}
 
 		if (Options::Modules::USING_UNIT_COMMAND_MGR)

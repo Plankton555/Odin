@@ -18,6 +18,7 @@ private:
 	join_tree_type join_tree;
 	bayesian_network_join_tree *solution;
 	std::map<std::string, int> nodeMap;
+	void PrintNode(ParsedNode * node);
 
 	void ApplyProbabilities(std::vector<std::string> *parents, unsigned int n, assignment *parent_state, ParsedNode *currentNode, std::vector<double>::iterator *it);
 public:
@@ -32,4 +33,6 @@ public:
 	void ClearEvidence();
 	double ReadProbability(const std::string &nodeName, int nodeState);
 	void UpdateBeliefs();
+
+	void PrintBN();
 };

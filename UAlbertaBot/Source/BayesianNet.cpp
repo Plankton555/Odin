@@ -1,4 +1,5 @@
 #include "BayesianNet.h"
+#include "OdinUtils.h"
 
 BayesianNet::BayesianNet()
 {
@@ -131,4 +132,35 @@ void BayesianNet::UpdateBeliefs()
 bool BayesianNet::exists(const std::string &nodeName)
 {
 	return nodeMap.find(nodeName) != nodeMap.end();
+}
+
+void BayesianNet::PrintBN()
+{
+	BWAPI::Race enemyRace = BWAPI::Broodwar->enemy()->getRace();
+	if (enemyRace == BWAPI::Races::Unknown || enemyRace == BWAPI::Races::Random) { return; }
+	
+	UpdateBeliefs();
+	odin_utils::debug("Frame", BWAPI::Broodwar->getFrameCount());
+	odin_utils::debug("PRINTING BAYESIAN NETWORK NOW\n-------------------------\n");
+	std::vector<ParsedNode *>::iterator it;
+	for (it = parsedNodes.begin(); it != parsedNodes.end(); it++)
+	{
+		PrintNode(*it);
+	}
+	odin_utils::debug("------------------------------");
+}
+
+void BayesianNet::PrintNode(ParsedNode * node)
+{
+	odin_utils::debug(node->name);
+	int nodeID = nodeMap.find(node->name)->second;
+	int nrOfStates = node->states.size();
+	for (int nodeState=0; nodeState<nrOfStates; nodeState++)
+	{
+		double p = solution->probability(nodeID)(nodeState);
+		std::stringstream intToString;
+		intToString << nodeState;
+		odin_utils::debug(intToString.str(), p);
+	}
+	return;
 }

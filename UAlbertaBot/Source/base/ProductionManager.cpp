@@ -13,6 +13,7 @@ ProductionManager::ProductionManager()
 	: initialBuildSet(false)
 	, reservedMinerals(0)
 	, reservedGas(0)
+	, searchCounter(0)
 	, assignedWorkerForThisBuilding(false)
 	, haveLocationForThisBuilding(false)
 	, enemyCloakedDetected(false)
@@ -54,22 +55,35 @@ void ProductionManager::performBuildOrderSearch(const std::vector< std::pair<Met
 
 	if (buildOrder.size() > 0) //build order found
 	{
+		searchCounter = 0;
 		searchingGoal.clear(); //empty it to allow a new search
-	}else if(BWAPI::Broodwar->getFrameCount()-lastBuildOrderUpdate>500)
+	}
+	else if(BWAPI::Broodwar->getFrameCount()-lastBuildOrderUpdate>500)
 	{	
-		lastBuildOrderUpdate = BWAPI::Broodwar->getFrameCount();
-		if(searchingGoal.size()>0)
-		{	int size = searchingGoal.size();
-			while(searchingGoal.size()>size/2&&searchingGoal.size()>1)
+		if(searchingGoal.size() > 0 && searchCounter < 3)
+		{	
+			BWAPI::Broodwar->printf("Trying to make the goal smaller", searchingGoal.size());
+			searchCounter++;
+			int size = searchingGoal.size();
+			while(searchingGoal.size() > size/2 && searchingGoal.size() > 1)
 			{
 				searchingGoal.pop_back();
 			}
-		}else
-		{	MetaPairVector goal;
-			goal.push_back(MetaPair(BWAPI::UnitTypes::Protoss_Zealot, BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Zealot)+2));
+		}
+		else
+		{	
+			searchCounter = 0;
+			int numNexus =				BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Nexus);
+			int numGates =				BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Gateway);
+			int numProbes =				BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Probe);
+			int numDrags =				BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Dragoon);
+
+			MetaPairVector goal;
+			goal.push_back(MetaPair(BWAPI::UnitTypes::Protoss_Probe, numProbes+numNexus));
+			goal.push_back(MetaPair(BWAPI::UnitTypes::Protoss_Dragoon, numDrags+numGates));
 			searchingGoal = goal;
 		}
-		BWAPI::Broodwar->printf("Nothing found in search, trying a smaller search goal  with size: %d", searchingGoal.size());
+		
 	}
 }
 
@@ -168,15 +182,16 @@ void ProductionManager::onUnitDestroy(BWAPI::Unit * unit)
 	if (Options::Modules::USING_MACRO_SEARCH)
 	{
 		// if it's a worker or a building, we need to re-search for the current goal
-		if ((unit->getType().isWorker() && !WorkerManager::Instance().isWorkerScout(unit)) || unit->getType().isBuilding())
+		if (unit->getType().isBuilding() && BWAPI::Broodwar->self()->completedUnitCount(unit->getType()) == 0)
 		{
-			BWAPI::Broodwar->printf("Critical unit died, re-searching build order");
 
-			if (unit->getType() != BWAPI::UnitTypes::Zerg_Drone)
-			{
-				searchingGoal.clear(); //Force update
-				performBuildOrderSearch(StrategyManager::Instance().getBuildOrderGoal());
-			}
+			BWAPI::Broodwar->printf("Queueing fallen building again");
+			queue.queueAsHighestPriority(MetaType(unit->getType()) , false);
+			//if (unit->getType() != BWAPI::UnitTypes::Zerg_Drone)
+			//{
+			//	searchingGoal.clear(); //Force update
+			//	performBuildOrderSearch(StrategyManager::Instance().getBuildOrderGoal());
+			//}
 		}
 	}
 }

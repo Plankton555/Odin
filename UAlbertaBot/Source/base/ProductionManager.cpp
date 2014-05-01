@@ -62,6 +62,7 @@ void ProductionManager::performBuildOrderSearch(const std::vector< std::pair<Met
 	{	
 		if(searchingGoal.size() > 0 && searchCounter < 3)
 		{	
+			lastBuildOrderUpdate = BWAPI::Broodwar->getFrameCount();
 			BWAPI::Broodwar->printf("Trying to make the goal smaller", searchingGoal.size());
 			searchCounter++;
 			int size = searchingGoal.size();
@@ -72,16 +73,23 @@ void ProductionManager::performBuildOrderSearch(const std::vector< std::pair<Met
 		}
 		else
 		{	
+			queue.clearAll();
+			searchGoal.clear();
 			searchCounter = 0;
+			lastBuildOrderUpdate = BWAPI::Broodwar->getFrameCount();
 			int numNexus =				BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Nexus);
 			int numGates =				BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Gateway);
 			int numProbes =				BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Probe);
 			int numDrags =				BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Dragoon);
-
-			MetaPairVector goal;
-			goal.push_back(MetaPair(BWAPI::UnitTypes::Protoss_Probe, numProbes+numNexus));
-			goal.push_back(MetaPair(BWAPI::UnitTypes::Protoss_Dragoon, numDrags+numGates));
-			searchingGoal = goal;
+			for(int i = 0; i < numNexus; i++)
+			{
+				queue.queueAsLowestPriority(MetaType(BWAPI::UnitTypes::Protoss_Probe), true);
+			}
+			for(int i = 0; i < numGates; i++)
+			{
+				queue.queueAsLowestPriority(MetaType(BWAPI::UnitTypes::Protoss_Dragoon), true);
+			}
+			
 		}
 		
 	}
@@ -186,12 +194,7 @@ void ProductionManager::onUnitDestroy(BWAPI::Unit * unit)
 		{
 
 			BWAPI::Broodwar->printf("Queueing fallen building again");
-			queue.queueAsHighestPriority(MetaType(unit->getType()) , false);
-			//if (unit->getType() != BWAPI::UnitTypes::Zerg_Drone)
-			//{
-			//	searchingGoal.clear(); //Force update
-			//	performBuildOrderSearch(StrategyManager::Instance().getBuildOrderGoal());
-			//}
+			queue.queueAsHighestPriority(MetaType(unit->getType()) , true);
 		}
 	}
 }

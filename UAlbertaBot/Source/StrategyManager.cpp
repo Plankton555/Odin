@@ -667,12 +667,10 @@ const MetaPairVector StrategyManager::getProtossCounterBuildOrderGoal()
 {
 	MetaPairVector goal;
 	bool shouldMakeStorm = false;
-	odin_utils::debug("Started");
 	std::map<std::vector<BWAPI::UnitType>*, double>::iterator it;
 	for (it = armyCounters.begin(); it != armyCounters.end(); it++)
 	{
-		int nrExtraUnits = it->second * 10;
-		odin_utils::debug(it->first->at(0).getName(), nrExtraUnits);
+		int nrExtraUnits = it->second * MAX_UNITS_PER_GOAL;
 		if (nrExtraUnits >= 1)
 		{
 			//Find out what counter we want to build (cheap or expensive)
@@ -755,7 +753,6 @@ const MetaPairVector StrategyManager::getProtossCounterBuildOrderGoal()
 			}
 		}
 	}
-	odin_utils::debug("Stopped");
 	int numNexusAll =			BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Nexus);
 	int numProbes =				BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Probe);
 

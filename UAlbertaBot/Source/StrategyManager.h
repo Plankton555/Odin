@@ -67,6 +67,7 @@ class StrategyManager
 	// protoss strategy
 	const	MetaPairVector		getProtossCounterBuildOrderGoal();
 	const	MetaPairVector		getStaticDefenceGoal() const;
+	const	MetaPairVector		getDefaultBuildOrderGoal() const;
 	const	MetaPairVector		getProtossOpeningBook() const;
 
 public:
@@ -90,7 +91,6 @@ public:
 	const	int					getCurrentStrategy();
 
 	const	MetaPairVector		getBuildOrderGoal();
-	const	MetaPairVector		getDefaultBuildOrderGoal() const;
 	const	std::string			getOpeningBook() const;
 
 	void						update();

@@ -4,6 +4,8 @@
 
 #define ARMY_COMP_START_VAL (0.1)
 #define ARMY_COMP_THRESHOLD (0.5)
+#define IDLE_WORKERS_THRESHOLD_TO_EXPAND (10)
+#define MINERAL_THRESHOLD_TO_EXPAND (2000)
 
 const std::string BAYESNET_FOLDER = ODIN_DATA_FILEPATH + "bayesian_networks/";
 const std::string OPENINGS_FOLDER = ODIN_DATA_FILEPATH + "openings/";
@@ -819,7 +821,7 @@ const bool StrategyManager::shouldExpand() const
 	double opDefense = getDefensePotential(BWAPI::Broodwar->enemy())*enemyUncertaintyFactor;
 
 	// if there are more than 10 idle workers, expand
-	if (WorkerManager::Instance().getNumIdleWorkers() > 10)
+	if (WorkerManager::Instance().getNumIdleWorkers() > IDLE_WORKERS_THRESHOLD_TO_EXPAND) 
 	{
 		return true;
 	}
@@ -834,7 +836,7 @@ const bool StrategyManager::shouldExpand() const
 		return true;
 	}
 
-	if(minerals>2000)
+	if(minerals > MINERAL_THRESHOLD_TO_EXPAND)
 	{
 		return true;
 	}

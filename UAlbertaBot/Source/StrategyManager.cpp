@@ -10,6 +10,9 @@
 const std::string BAYESNET_FOLDER = ODIN_DATA_FILEPATH + "bayesian_networks/";
 const std::string OPENINGS_FOLDER = ODIN_DATA_FILEPATH + "openings/";
 
+const int MINERALS_NEEDED_TO_TECH_EXPENSIVE_COUNTER = 300;
+const int GAS_NEEDED_TO_TECH_EXPENSIVE_COUNTER = 150;
+
 // constructor
 StrategyManager::StrategyManager() 
 	: firstAttackSent(false)
@@ -622,12 +625,13 @@ const MetaPairVector StrategyManager::getBuildOrderGoal()
 
 		case DEFEND:
 			updateBNandArmyComp();
-			if (bayesianNet == NULL)
+			if (bayesianNet == NULL || armyCounters.size() == 0)
 			{
 				armyGoal = getDefaultBuildOrderGoal();
 			} else
 			{
 				armyGoal = getProtossCounterBuildOrderGoal();
+				if (armyGoal.size() == 0) armyGoal = getDefaultBuildOrderGoal(); //If counters is empty, then just go with default
 			}
 
 			cannonGoal = getStaticDefenceGoal();
@@ -662,24 +666,68 @@ const MetaPairVector StrategyManager::getProtossCounterBuildOrderGoal()
 		int nrExtraUnits = it->second * 10; //TODO: Some threshold here? Depend on economy?
 		if (nrExtraUnits >= 1)
 		{
-			BWAPI::UnitType wantedType = it->first->at(0);//TODO: Choose cheap or expensive counter (if expensive even exists!)
+			//Find out what counter we want to build (cheap or expensive)
+			BWAPI::UnitType wantedType;
+			if (it->first->size() > 1) //Have an expensive counter
+			{
+				//Check if we have teched for it yet
+				bool haveTeched = true;
+				std::map<BWAPI::UnitType, int> m = it->first->at(1).requiredUnits();
+				std::map<BWAPI::UnitType, int>::iterator mit;
+				for (mit = m.begin(); mit != m.end(); mit++)
+				{
+					if (BWAPI::Broodwar->self()->allUnitCount(mit->first) < mit->second)
+					{
+						haveTeched = false;
+						break;
+					}
+				}
+
+				if (haveTeched) //have Teched for expensive
+				{
+					wantedType = it->first->at(1);
+				} else
+				{
+					wantedType = it->first->at(0);
+
+					//Tech to expensive if can afford
+					if (BWAPI::Broodwar->self()->minerals() > MINERALS_NEEDED_TO_TECH_EXPENSIVE_COUNTER && 
+						BWAPI::Broodwar->self()->gas() > GAS_NEEDED_TO_TECH_EXPENSIVE_COUNTER)
+					{
+						BWAPI::Broodwar->printf("Teching for %s", it->first->at(1).getName().c_str());
+						for(mit = m.begin(); mit != m.end(); mit++)
+						{
+							if (BWAPI::Broodwar->self()->allUnitCount(mit->first) < mit->second)
+							{
+								// change 1 to "mit->second - allUnitCount" if there are units that require
+								// more than 1 of a specified unit (eg Dark Archon needs 2 Dark Templars) 
+								goal.push_back(MetaPair(mit->first, 1));
+							}
+						}
+					}
+				}
+			} else
+			{
+				wantedType = it->first->at(0);
+			}
+
+			//Add the number of units we want
 			int nrUnitsNow = BWAPI::Broodwar->self()->allUnitCount(wantedType);
 			int nrUnitsWanted = nrExtraUnits + nrUnitsNow;
 
 			if (wantedType == BWAPI::UnitTypes::Protoss_Photon_Cannon)
 			{
 				nrUnitsWanted = std::min(5, nrUnitsWanted); //Don't mass out tons of photon cannons
-				if (nrUnitsWanted >= nrUnitsNow) continue; //Don't even add this line if we have enough cannons
+				if (nrUnitsWanted < nrUnitsNow) continue; //Don't even add this line if we have enough cannons
 				nrExtraUnits = 0; //So we don't add any extra if photon cannon is added already
 			}
-
 
 			//If we already have included this unit, then just add the nr, don't add a new line
 			boolean isIncluded = false;
 			MetaPairVector::iterator gIt;
 			for (gIt = goal.begin(); gIt != goal.end(); gIt++)
 			{
-				if (strcmp(gIt->first.getName().c_str(),wantedType.getName().c_str()) == 0)
+				if (gIt->first.unitType == wantedType)
 				{
 					gIt->second += nrExtraUnits;
 					isIncluded = true;

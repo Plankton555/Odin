@@ -22,16 +22,16 @@ Protoss Shield Battery,0,None
 ;
 ;Protoss units
 Protoss Zealot,0.3.8.15,Protoss Dragoon.Protoss High Templar
-Protoss Dragoon,0.3.7.12,Protoss Dragoon.Protoss High Templar
+Protoss Dragoon,0.3.7.12,Protoss Reaver.Protoss High Templar
 Protoss Dark Templar,0.3.5.7,Protoss Photon Cannon.Protoss Observer
-Protoss High Templar,0.3.5.10,Protoss Reaver.Protoss Dark Archon
+Protoss High Templar,0.3.5.10,Protoss Reaver.Protoss Dark Templar
 Protoss Archon,0.2.4.6,Protoss Reaver.Protoss Carrier
 Protoss Dark Archon,0.2.3.4,Protoss Dragoon.Protoss Reaver
-Protoss Reaver,0.1.2.5,Protoss Dragoon.Protoss Dark Templar
+Protoss Reaver,0.1.2.5,Protoss Dark Templar.Protoss Carrier
 Protoss Scout,0.2.4.8,Protoss Dragoon.Protoss Corsair
-Protoss Corsair,0.3.5.10,Protoss Dragoon.Protoss Dark Archon
+Protoss Corsair,0.3.5.10,Protoss Dragoon
 Protoss Arbiter,0.1.2.5,Protoss Observer.Protoss High Templar
-Protoss Carrier,0.1.2.5,Protoss Scout.Protoss Dark Archon
+Protoss Carrier,0.1.2.5,Protoss Dragoon.Protoss Corsair
 Protoss Observer,0.1.2.5,Protoss Photon Cannon.Protoss Observer
 Protoss Shuttle,0.1.2.5,Protoss Photon Cannon.Protoss Dragoon
 ;
@@ -55,19 +55,19 @@ Terran Physics Lab,0,None
 Terran Covert Ops,0,None
 ;
 ;Terran units
-Terran Marine,0.3.8.15,Protoss Dragoon.Protoss High Templar
+Terran Marine,0.3.8.15,Protoss Zealot.Protoss Dragoon
 Terran Firebat,0.3.7.12,Protoss Dragoon.Protoss High Templar
-Terran Medic,0.3.5.10,Protoss Reaver.Protoss Dark Archon
+Terran Medic,0.3.5.10,Protoss Zealot.Protoss Reaver
 Terran Ghost,0.3.5.10,Protoss Photon Cannon.Protoss Observer
-Terran Vulture,0.3.5.10,Protoss Dragoon.Protoss Scout
+Terran Vulture,0.3.5.10,Protoss Dragoon.Protoss Carrier
 Terran Spider Mine,0.3.6.12,Protoss Zealot.Protoss Observer
 Terran Siege Tank Tank Mode,0.2.4.6,Protoss Zealot.Protoss Dark Templar
-Terran Siege Tank Siege Mode,0.2.4.6,Protoss Zealot.Protoss Dark Templar
+Terran Siege Tank Siege Mode,0.2.4.6,Protoss Zealot.Protoss Carrier
 Terran Goliath,0.2.5.8,Protoss Zealot.Protoss Reaver
 Terran Wraith,0.2.4.6,Protoss Dragoon.Protoss Observer
 Terran Dropship,0.1.2.5,Protoss Photon Cannon.Protoss Corsair
-Terran Science Vessel,0.1.2.5,Protoss Dragoon.Protoss Dark Archon
-Terran Battlecruiser,0.1.2.3,Protoss Scout.Protoss Arbiter
+Terran Science Vessel,0.1.2.5,Protoss Dragoon.Protoss Scout
+Terran Battlecruiser,0.1.2.3,Protoss Dragoon.Protoss Scout
 Terran Valkyrie,0.1.2.5,Protoss Dragoon.Protoss Scout
 ;
 ;Zerg buildings
@@ -89,14 +89,14 @@ Zerg Ultralisk Cavern,0,None
 Zerg Defiler Mound,0,None
 ;
 ;Zerg units
-Zerg Zergling,0.5.10.20,Protoss Zealot.Protoss High Templar
-Zerg Hydralisk,0.3.5.10,Protoss Zealot.Protoss High Templar
-Zerg Lurker,0.3.5.10,Protoss High Templar.Protoss Archon
-Zerg Ultralisk,0.1.2.4,Protoss Archon.Protoss Carrier
+Zerg Zergling,0.5.10.20,Protoss Zealot.Protoss Reaver
+Zerg Hydralisk,0.3.5.10,Protoss Zealot.Protoss Dragoon
+Zerg Lurker,0.3.5.10,Protoss Observer.Protoss High Templar
+Zerg Ultralisk,0.1.2.4,Protoss Dragoon.Protoss Carrier
 Zerg Defiler,0.3.5.8,Protoss Photon Cannon.Protoss Reaver
 Zerg Overlord,0.2.4.8,Protoss Dragoon
-Zerg Mutalisk,0.1.2.5,Protoss Corsair.Protoss Arbiter
-Zerg Scourge,0.3.6.10,Protoss Dragoon.Protoss Archon
-Zerg Queen,0.2.4.6,Protoss Reaver.Protoss Archon
-Zerg Guardian,0.3.5.8,Protoss Corsair.Protoss Archon
-Zerg Devourer,0.1.2.5,Protoss Dragoon.Protoss Archon
+Zerg Mutalisk,0.1.2.5,Protoss Corsair.Protoss High Templar
+Zerg Scourge,0.3.6.10,Protoss Dragoon.Protoss Scout
+Zerg Queen,0.2.4.6,Protoss Dragoon.Protoss Reaver
+Zerg Guardian,0.3.5.8,Protoss Corsair.Protoss High Templar
+Zerg Devourer,0.1.2.5,Protoss Dragoon.Protoss High Templar

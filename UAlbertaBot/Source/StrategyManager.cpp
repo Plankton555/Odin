@@ -2,8 +2,6 @@
 #include "Common.h"
 #include "StrategyManager.h"
 
-#define ARMY_COMP_START_VAL (0.1)
-#define ARMY_COMP_THRESHOLD (0.5)
 #define IDLE_WORKERS_THRESHOLD_TO_EXPAND (10)
 #define MINERAL_THRESHOLD_TO_EXPAND (2000)
 
@@ -12,6 +10,10 @@ const std::string OPENINGS_FOLDER = ODIN_DATA_FILEPATH + "openings/";
 
 const int MINERALS_NEEDED_TO_TECH_EXPENSIVE_COUNTER = 300;
 const int GAS_NEEDED_TO_TECH_EXPENSIVE_COUNTER = 150;
+const int MAX_UNITS_PER_GOAL = 8;
+const int PROBES_PER_CYCLE = 8;
+const double ARMY_COMP_START_VAL = 0.1;
+const double ARMY_COMP_THRESHOLD = 0.5;
 
 // constructor
 StrategyManager::StrategyManager() 
@@ -614,11 +616,15 @@ const MetaPairVector StrategyManager::getBuildOrderGoal()
 			if (armyCounters.size() > 0)
 			{
 				MetaPairVector goal = getProtossCounterBuildOrderGoal();
-				if (goal.size() > 0)
+				if (goal.size() > 1)
 				{
 					BWAPI::Broodwar->printf("(Attack) Goal set with length: (%d) ", goal.size());
 					return goal;
-				} else { BWAPI::Broodwar->printf("ACG NOT EMPTY - NO GOAL!"); }
+				} 
+				else 
+				{ 
+					BWAPI::Broodwar->printf("ACG NOT EMPTY - NO GOAL!");
+				}
 			} else { BWAPI::Broodwar->printf("ACG EMPTY!"); }
 
 			break;
@@ -631,16 +637,17 @@ const MetaPairVector StrategyManager::getBuildOrderGoal()
 			} else
 			{
 				armyGoal = getProtossCounterBuildOrderGoal();
-				if (armyGoal.size() == 0) armyGoal = getDefaultBuildOrderGoal(); //If counters is empty, then just go with default
+				if (armyGoal.size() < 2) armyGoal = getDefaultBuildOrderGoal(); //If counters is empty, then just go with default
 			}
 
 			cannonGoal = getStaticDefenceGoal();
 				
 			returnGoal.reserve( cannonGoal.size() + armyGoal.size() ); // preallocate memory
-			returnGoal.insert( returnGoal.end(), cannonGoal.begin(), cannonGoal.end() );
 			returnGoal.insert( returnGoal.end(), armyGoal.begin(), armyGoal.end() );
+			returnGoal.insert( returnGoal.end(), cannonGoal.begin(), cannonGoal.end() );
 
 			BWAPI::Broodwar->printf("(Defend) Goal set with length: (%d) ", returnGoal.size());
+			BWAPI::Broodwar->printf("(Army) Goal set with length: (%d) ", armyGoal.size());
 			return returnGoal;
 
 			break;// do defend
@@ -659,11 +666,11 @@ const MetaPairVector StrategyManager::getBuildOrderGoal()
 const MetaPairVector StrategyManager::getProtossCounterBuildOrderGoal()
 {
 	MetaPairVector goal;
-
+	bool shouldMakeStorm = false;
 	std::map<std::vector<BWAPI::UnitType>*, double>::iterator it;
 	for (it = armyCounters.begin(); it != armyCounters.end(); it++)
 	{
-		int nrExtraUnits = it->second * 10; //TODO: Some threshold here? Depend on economy?
+		int nrExtraUnits = it->second * MAX_UNITS_PER_GOAL;
 		if (nrExtraUnits >= 1)
 		{
 			//Find out what counter we want to build (cheap or expensive)
@@ -722,6 +729,11 @@ const MetaPairVector StrategyManager::getProtossCounterBuildOrderGoal()
 				nrExtraUnits = 0; //So we don't add any extra if photon cannon is added already
 			}
 
+			if(wantedType == BWAPI::UnitTypes::Protoss_High_Templar)
+			{
+				shouldMakeStorm = true;
+			}
+
 			//If we already have included this unit, then just add the nr, don't add a new line
 			boolean isIncluded = false;
 			MetaPairVector::iterator gIt;
@@ -741,11 +753,11 @@ const MetaPairVector StrategyManager::getProtossCounterBuildOrderGoal()
 			}
 		}
 	}
-
 	int numNexusAll =			BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Nexus);
+	int numProbes =				BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Probe);
 
 	//add psi-storm if we use high templars
-	if(BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_High_Templar)>0&&!BWAPI::Broodwar->self()->hasResearched(BWAPI::TechTypes::Psionic_Storm))
+	if(shouldMakeStorm && !BWAPI::Broodwar->self()->hasResearched(BWAPI::TechTypes::Psionic_Storm))
 	{
 		goal.push_back(MetaPair(BWAPI::TechTypes::Psionic_Storm,1));
 	}
@@ -754,7 +766,12 @@ const MetaPairVector StrategyManager::getProtossCounterBuildOrderGoal()
 	{
 		goal.push_back(MetaPair(BWAPI::UnitTypes::Protoss_Nexus, numNexusAll + 1));
 	}
-
+	if (numNexusAll > 1)
+	{
+		int probesWanted = numProbes + PROBES_PER_CYCLE;
+		goal.push_back(MetaPair(BWAPI::UnitTypes::Protoss_Probe,	std::min(90, probesWanted)));
+	}
+	
 	return goal;
 }
 
@@ -814,7 +831,7 @@ const MetaPairVector StrategyManager::getDefaultBuildOrderGoal() const
 
 	if (numNexusAll > 1)
 	{
-		probesWanted = numProbes + 6;
+		probesWanted = numProbes + PROBES_PER_CYCLE;
 	}
 
 	if(shouldExpand())
@@ -840,7 +857,7 @@ const MetaPairVector StrategyManager::getStaticDefenceGoal() const
 	
 	if(cannonsWanted > 0)
 	{
-		goal.push_back(MetaPair(BWAPI::UnitTypes::Protoss_Photon_Cannon, cannonsWanted));
+		goal.push_back(MetaPair(BWAPI::UnitTypes::Protoss_Photon_Cannon, numCannon + 1));
 	}
 
 	return goal;
@@ -872,6 +889,11 @@ const bool StrategyManager::shouldExpand() const
 	if (WorkerManager::Instance().getNumIdleWorkers() > IDLE_WORKERS_THRESHOLD_TO_EXPAND) 
 	{
 		return true;
+	}
+
+	if(WorkerManager::Instance().getNumMineralWorkers() / numNexus < 11)
+	{
+		return false;
 	}
 
 	if (minerals > 600 && myArmy>opArmy*enemyUncertaintyFactor)

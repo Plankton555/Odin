@@ -127,6 +127,7 @@ void BayesianNet::UpdateBeliefs()
 {
 	delete solution;
 	solution = new bayesian_network_join_tree(bn, join_tree);
+	SetEvidence("TimePeriod", odin_utils::getTimePeriod());
 }
 
 bool BayesianNet::exists(const std::string &nodeName)
@@ -140,14 +141,12 @@ void BayesianNet::PrintBN()
 	if (enemyRace == BWAPI::Races::Unknown || enemyRace == BWAPI::Races::Random) { return; }
 	
 	UpdateBeliefs();
-	odin_utils::debug("Frame", BWAPI::Broodwar->getFrameCount());
-	odin_utils::debug("PRINTING BAYESIAN NETWORK NOW\n-------------------------\n");
 	std::vector<ParsedNode *>::iterator it;
 	for (it = parsedNodes.begin(); it != parsedNodes.end(); it++)
 	{
 		PrintNode(*it);
 	}
-	odin_utils::debug("------------------------------");
+	odin_utils::debugN("\n");
 }
 
 void BayesianNet::PrintNode(ParsedNode * node)
@@ -156,29 +155,26 @@ void BayesianNet::PrintNode(ParsedNode * node)
 	int nrOfStates = node->states.size();
 	if (nrOfStates > 2) 
 	{
+		odin_utils::debugN("period");
+		bool legitTimePeriod = false;
 		for (int nodeState=0; nodeState<nrOfStates; nodeState++)
 		{
 			if (solution->probability(nodeID)(nodeState) > 0.99)
 			{
-				std::stringstream intToString;
-				intToString << nodeState;
-				odin_utils::debug(intToString.str());
+				odin_utils::debugN(nodeState);
+				legitTimePeriod = true;
+				break;
 			}
+		}
+
+		if (!legitTimePeriod)
+		{
+			odin_utils::debugN((odin_utils::getTimePeriod() -1));
 		}
 	} 
 	else
 	{
-		odin_utils::debug(node->name, solution->probability(nodeID)(1));
+		odin_utils::debugN(",");
+		odin_utils::debugN(solution->probability(nodeID)(1));
 	}
-	//odin_utils::debug(node->name);
-	//int nodeID = nodeMap.find(node->name)->second;
-	//int nrOfStates = node->states.size();
-	//for (int nodeState=0; nodeState<nrOfStates; nodeState++)
-	//{
-	//	double p = solution->probability(nodeID)(nodeState);
-	//	std::stringstream intToString;
-	//	intToString << nodeState;
-	//	odin_utils::debug(intToString.str(), p);
-	//}
-	//return;
 }

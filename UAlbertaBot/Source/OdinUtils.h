@@ -44,6 +44,32 @@ namespace odin_utils
 		return std::min(25, timePeriod);
 	}
 
+	inline void debugN(std::string str)
+	{
+		if(!ODIN_DEBUG) return;
+
+		std::ofstream file ("bwapi-data/Odin/odin_data/debug.txt", ios::app);
+		if (file.is_open())
+		{
+			file << str.c_str();
+			file.close();
+		}
+	}
+
+	inline void debugN(int number)
+	{
+		std::stringstream intToString;
+		intToString << number;
+		debugN(intToString.str());
+	}
+
+	inline void debugN(double number)
+	{
+		std::stringstream doubleToString;
+		doubleToString << number;
+		debugN(doubleToString.str());
+	}
+
 	inline void debug(std::string str)
 	{
 		if(!ODIN_DEBUG) return;

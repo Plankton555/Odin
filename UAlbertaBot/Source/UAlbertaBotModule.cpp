@@ -22,6 +22,7 @@
 #include "UAlbertaBotModule.h"
 #include "DataModule.h"
 #include "BayesianNet.h"
+#include <boost/algorithm/string.hpp>
 
 #define BN_SNAPSHOT_EVERY_X_FRAMES 1000
 
@@ -37,6 +38,9 @@ void UAlbertaBotModule::onStart()
 {	
 	DataModule::init();
 
+	int gameID = odin_utils::getID();
+	BN_output_file = odin_utils::setOutputFile(gameID);
+
 	if(BWAPI::Broodwar->isReplay()){
 
 		/* If we want to show stuff on the screen. */
@@ -50,6 +54,8 @@ void UAlbertaBotModule::onStart()
 		replayModule.onStart();
 
 	}else{
+		BWAPI::Broodwar->sendText("Game ID: " + odin_utils::getID());
+		odin_utils::logBN(BN_output_file, gameID);
 
 		//BWAPI::Broodwar->sendText("Hello, my name is Odin!");
 		//Logger::Instance().log("Hello, my name is Odin2!\n");
@@ -95,7 +101,7 @@ void UAlbertaBotModule::onEnd(bool isWinner)
 	{
 		replayModule.onEnd(isWinner);
 	}else{
-
+		odin_utils::increaseID();
 		if (Options::Modules::USING_GAMECOMMANDER)
 		{
 			StrategyManager::Instance().onEnd(isWinner);
@@ -146,7 +152,7 @@ void UAlbertaBotModule::onFrame()
 
 		if (currentFrame != 0 && (currentFrame % BN_SNAPSHOT_EVERY_X_FRAMES) == 0) 
 		{
-			StrategyManager::Instance().getBayesianNet()->PrintBN();
+			StrategyManager::Instance().getBayesianNet()->PrintBN(BN_output_file);
 		}
 
 		if (Options::Modules::USING_UNIT_COMMAND_MGR)
@@ -209,6 +215,13 @@ void UAlbertaBotModule::onSendText(std::string text)
 { 
 	if(BWAPI::Broodwar->isReplay())
 	{
+		std::vector<std::string> gameID;
+		boost::split(gameID, text, boost::is_any_of(" "));
+		if (gameID[0].compare("GameID:") == 0)
+		{
+			replayModule.gameID = atoi(gameID[1].c_str());
+		}
+
 		//Do nothing
 	}else{
 		if (text.compare("l") == 0)

@@ -8,6 +8,15 @@ using namespace std;
 
 namespace odin_utils
 {
+	inline std::string setOutputFile(int ID)
+	{
+		std::ostringstream stringStream;
+		stringStream << "bwapi-data/Odin/odin_data/BNlog/";
+		stringStream << ID;
+		stringStream << ".txt";
+		return stringStream.str();
+	}
+
 	inline bool replaceString(std::string &str, const std::string &from, const std::string &to)
 	{
 		int fromPos = str.find(from);
@@ -44,11 +53,11 @@ namespace odin_utils
 		return std::min(25, timePeriod);
 	}
 
-	inline void debugN(std::string str)
+	inline void logBN(std::string filename, std::string str)
 	{
 		if(!ODIN_DEBUG) return;
-
-		std::ofstream file ("bwapi-data/Odin/odin_data/debug.txt", ios::app);
+		
+		std::ofstream file (filename.c_str(), ios::app);
 		if (file.is_open())
 		{
 			file << str.c_str();
@@ -56,18 +65,18 @@ namespace odin_utils
 		}
 	}
 
-	inline void debugN(int number)
+	inline void logBN(std::string filename, int number)
 	{
 		std::stringstream intToString;
 		intToString << number;
-		debugN(intToString.str());
+		logBN(filename, intToString.str());
 	}
 
-	inline void debugN(double number)
+	inline void logBN(std::string filename, double number)
 	{
 		std::stringstream doubleToString;
 		doubleToString << number;
-		debugN(doubleToString.str());
+		logBN(filename, doubleToString.str());
 	}
 
 	inline void debug(std::string str)
@@ -100,5 +109,34 @@ namespace odin_utils
 		stringStream << d;
 		std::string newStr = stringStream.str();
 		debug(newStr);
+	}
+
+	inline int getID()
+	{
+		std::string filename = "bwapi-data/Odin/odin_data/id.txt";
+		std::ifstream read (filename.c_str(), ios::in);
+		std::string id;
+		if (read.is_open())
+		{
+			if (!getline(read, id))
+			{
+				id = "0";
+			}
+			read.close();
+		}
+
+		return atoi(id.c_str());
+	}
+
+	inline void increaseID()
+	{
+		int id = getID() + 1;
+		std::string filename = "bwapi-data/Odin/odin_data/id.txt";
+		std::ofstream write (filename.c_str(), ios::out);
+		if (write.is_open())
+		{
+			write << id << endl;
+			write.close();
+		}
 	}
 };

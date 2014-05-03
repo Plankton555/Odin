@@ -21,6 +21,8 @@ public:
 	static BWAPI::Player* getEnemy(void);
 	static BWAPI::Player* getPlayer(void);
 
+	int gameID;
+
 private:
 	std::list<BWAPI::Unit*> morphingBuildings;
 	std::map<const char*,int> zergUnits;

@@ -135,7 +135,7 @@ bool BayesianNet::exists(const std::string &nodeName)
 	return nodeMap.find(nodeName) != nodeMap.end();
 }
 
-void BayesianNet::PrintBN()
+void BayesianNet::PrintBN(std::string filename)
 {
 	BWAPI::Race enemyRace = BWAPI::Broodwar->enemy()->getRace();
 	if (enemyRace == BWAPI::Races::Unknown || enemyRace == BWAPI::Races::Random) { return; }
@@ -144,24 +144,24 @@ void BayesianNet::PrintBN()
 	std::vector<ParsedNode *>::iterator it;
 	for (it = parsedNodes.begin(); it != parsedNodes.end(); it++)
 	{
-		PrintNode(*it);
+		PrintNode(filename, *it);
 	}
-	odin_utils::debugN("\n");
+	odin_utils::logBN(filename, "\n");
 }
 
-void BayesianNet::PrintNode(ParsedNode * node)
+void BayesianNet::PrintNode(std::string filename, ParsedNode * node)
 {
 	int nodeID = nodeMap.find(node->name)->second;
 	int nrOfStates = node->states.size();
 	if (nrOfStates > 2) 
 	{
-		odin_utils::debugN("period");
+		odin_utils::logBN(filename, "period");
 		bool legitTimePeriod = false;
 		for (int nodeState=0; nodeState<nrOfStates; nodeState++)
 		{
 			if (solution->probability(nodeID)(nodeState) > 0.99)
 			{
-				odin_utils::debugN(nodeState);
+				odin_utils::logBN(filename, nodeState);
 				legitTimePeriod = true;
 				break;
 			}
@@ -169,12 +169,12 @@ void BayesianNet::PrintNode(ParsedNode * node)
 
 		if (!legitTimePeriod)
 		{
-			odin_utils::debugN((odin_utils::getTimePeriod() -1));
+			odin_utils::logBN(filename, (odin_utils::getTimePeriod() -1));
 		}
 	} 
 	else
 	{
-		odin_utils::debugN(",");
-		odin_utils::debugN(solution->probability(nodeID)(1));
+		odin_utils::logBN(filename, ",");
+		odin_utils::logBN(filename, solution->probability(nodeID)(1));
 	}
 }

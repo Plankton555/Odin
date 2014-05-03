@@ -43,4 +43,6 @@ public:
 	void	onUnitHide(BWAPI::Unit * unit);
 	void	onUnitRenegade(BWAPI::Unit * unit);
 	void	onUnitComplete(BWAPI::Unit * unit);
+
+	std::string BN_output_file;
 };

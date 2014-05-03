@@ -7,7 +7,7 @@
 #include <BWAPI.h>
 #include <BWTA.h>
 
-#include "UAlbertaBotModule.h"
+#include "Odin.h"
 namespace BWAPI { Game* Broodwar; }
 BOOL APIENTRY DllMain( HANDLE hModule, 
                        DWORD  ul_reason_for_call, 
@@ -30,5 +30,5 @@ BOOL APIENTRY DllMain( HANDLE hModule,
  extern "C" __declspec(dllexport) BWAPI::AIModule* newAIModule(BWAPI::Game* game)
 {
 	BWAPI::Broodwar=game;
-	return new UAlbertaBotModule();
+	return new Odin();
 }

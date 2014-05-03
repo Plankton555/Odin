@@ -20,7 +20,7 @@
 #include "BNetParser.h"
 #include <dlib/xml_parser.h>
 
-class UAlbertaBotModule : public BWAPI::AIModule
+class Odin : public BWAPI::AIModule
 {
 	GameCommander			gameCommander;
 	EnhancedInterface		eui;
@@ -29,8 +29,8 @@ class UAlbertaBotModule : public BWAPI::AIModule
 
 public:
 			
-	UAlbertaBotModule();
-	~UAlbertaBotModule();
+	Odin();
+	~Odin();
 
 	void	onStart();
 	void	onFrame();

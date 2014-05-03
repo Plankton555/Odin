@@ -19,20 +19,20 @@
 */
 
 #include "Common.h"
-#include "UAlbertaBotModule.h"
+#include "Odin.h"
 #include "DataModule.h"
 #include "BayesianNet.h"
 
 
 BWAPI::AIModule * __NewAIModule()
 {
-	return new UAlbertaBotModule();
+	return new Odin();
 }
 
-UAlbertaBotModule::UAlbertaBotModule()  {}
-UAlbertaBotModule::~UAlbertaBotModule() {}
+Odin::Odin()  {}
+Odin::~Odin() {}
 
-void UAlbertaBotModule::onStart()
+void Odin::onStart()
 {	
 	DataModule::init();
 
@@ -87,7 +87,7 @@ void UAlbertaBotModule::onStart()
 
 }
 
-void UAlbertaBotModule::onEnd(bool isWinner) 
+void Odin::onEnd(bool isWinner) 
 {
 	BWAPI::Broodwar->sendText("gg");
 	if(BWAPI::Broodwar->isReplay())
@@ -130,7 +130,7 @@ void UAlbertaBotModule::onEnd(bool isWinner)
 	DataModule::destroy();
 }
 
-void UAlbertaBotModule::onFrame()
+void Odin::onFrame()
 {
 	if(BWAPI::Broodwar->isReplay())
 	{
@@ -178,7 +178,7 @@ void UAlbertaBotModule::onFrame()
 	}
 }
 
-void UAlbertaBotModule::onUnitDestroy(BWAPI::Unit * unit)
+void Odin::onUnitDestroy(BWAPI::Unit * unit)
 {
 	if(BWAPI::Broodwar->isReplay())
 	{
@@ -189,7 +189,7 @@ void UAlbertaBotModule::onUnitDestroy(BWAPI::Unit * unit)
 	}
 }
 
-void UAlbertaBotModule::onUnitMorph(BWAPI::Unit * unit)
+void Odin::onUnitMorph(BWAPI::Unit * unit)
 {	if(BWAPI::Broodwar->isReplay())
 	{
 		replayModule.onUnitMorph(unit);
@@ -198,7 +198,7 @@ void UAlbertaBotModule::onUnitMorph(BWAPI::Unit * unit)
 	}
 }
 
-void UAlbertaBotModule::onSendText(std::string text) 
+void Odin::onSendText(std::string text) 
 { 
 	if(BWAPI::Broodwar->isReplay())
 	{
@@ -282,7 +282,7 @@ void UAlbertaBotModule::onSendText(std::string text)
 	}
 }
 
-void UAlbertaBotModule::onUnitCreate(BWAPI::Unit * unit)
+void Odin::onUnitCreate(BWAPI::Unit * unit)
 { 
 	if(BWAPI::Broodwar->isReplay())
 	{
@@ -294,7 +294,7 @@ void UAlbertaBotModule::onUnitCreate(BWAPI::Unit * unit)
 	}
 }
 
-void UAlbertaBotModule::onUnitShow(BWAPI::Unit * unit)
+void Odin::onUnitShow(BWAPI::Unit * unit)
 {	
 	if(BWAPI::Broodwar->isReplay())
 	{
@@ -304,7 +304,7 @@ void UAlbertaBotModule::onUnitShow(BWAPI::Unit * unit)
 	}
 }
 
-void UAlbertaBotModule::onUnitHide(BWAPI::Unit * unit)
+void Odin::onUnitHide(BWAPI::Unit * unit)
 { 
 	if(BWAPI::Broodwar->isReplay())
 	{
@@ -314,7 +314,7 @@ void UAlbertaBotModule::onUnitHide(BWAPI::Unit * unit)
 	}
 }
 
-void UAlbertaBotModule::onUnitRenegade(BWAPI::Unit * unit)
+void Odin::onUnitRenegade(BWAPI::Unit * unit)
 { 
 	if(BWAPI::Broodwar->isReplay())
 	{
@@ -326,7 +326,7 @@ void UAlbertaBotModule::onUnitRenegade(BWAPI::Unit * unit)
 	
 }
 
-void UAlbertaBotModule::onUnitComplete(BWAPI::Unit * unit)
+void Odin::onUnitComplete(BWAPI::Unit * unit)
 {
 	if(BWAPI::Broodwar->isReplay())
 	{

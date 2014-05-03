@@ -3,6 +3,7 @@
 #include "Common.h"
 #include <iostream>
 #include <fstream>
+#include <OdinUtils.h>
 
 class ReplayModule
 {

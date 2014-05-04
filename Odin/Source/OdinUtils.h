@@ -135,7 +135,7 @@ namespace odin_utils
 		if (BWAPI::Broodwar->isReplay()) 
 		{
 			char* buf = 0;
-			size_t sz = 4;
+			size_t sz = 8;
 			if (_dupenv_s(&buf, &sz, "GAME_ID") == 0)
 			{
 				int gameID = atoi(buf);

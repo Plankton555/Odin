@@ -74,7 +74,6 @@ void Odin::onStart()
 		stringStream << gameID;
 		putenv(stringStream.str().c_str());
 
-
 		BWAPI::Broodwar->setLocalSpeed(0);
 		//BWAPI::Broodwar->setFrameSkip(240);
 
@@ -164,7 +163,7 @@ void Odin::onFrame()
 			BWAPI::Broodwar->sendText("glhf");
 		}
 
-		if (currentFrame > 30000) { BWAPI::Broodwar->leaveGame(); }
+		if (currentFrame > 25500) { BWAPI::Broodwar->leaveGame(); }
 
 		if (currentFrame != 0 && (currentFrame % BN_SNAPSHOT_EVERY_X_FRAMES) == 0) 
 		{

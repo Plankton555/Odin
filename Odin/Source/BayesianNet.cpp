@@ -127,7 +127,7 @@ void BayesianNet::UpdateBeliefs()
 {
 	delete solution;
 	solution = new bayesian_network_join_tree(bn, join_tree);
-	SetEvidence("TimePeriod", odin_utils::getTimePeriod());
+	SetEvidence("TimePeriod", std::min(24, odin_utils::getTimePeriod()));
 }
 
 bool BayesianNet::exists(const std::string &nodeName)
@@ -161,7 +161,7 @@ void BayesianNet::PrintNode(std::string filename, ParsedNode * node)
 		{
 			if (solution->probability(nodeID)(nodeState) > 0.99)
 			{
-				odin_utils::logBN(filename, nodeState);
+				odin_utils::logBN(filename, nodeState + 1);
 				legitTimePeriod = true;
 				break;
 			}
@@ -169,7 +169,7 @@ void BayesianNet::PrintNode(std::string filename, ParsedNode * node)
 
 		if (!legitTimePeriod)
 		{
-			odin_utils::logBN(filename, (odin_utils::getTimePeriod() -1));
+			odin_utils::logBN(filename, (odin_utils::getTimePeriod()));
 		}
 	} 
 	else

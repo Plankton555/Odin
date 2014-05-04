@@ -39,7 +39,7 @@ void Odin::onStart()
 	DataModule::init();
 
 	int gameID = odin_utils::getID();
-	BN_output_file = odin_utils::setOutputFile(gameID);
+	BN_output_file = odin_utils::setOutputFile(gameID);//BWAPI::Broodwar->get
 
 	if(BWAPI::Broodwar->isReplay()){
 
@@ -53,14 +53,31 @@ void Odin::onStart()
 
 		replayModule.onStart();
 
-	}else{
-		BWAPI::Broodwar->sendText("Game ID: " + odin_utils::getID());
-		odin_utils::logBN(BN_output_file, gameID);
+		//fetch game ID
+		std::string filename = BWAPI::Broodwar->mapFileName();
 
+		odin_utils::debug("GAME ID:");
+		odin_utils::debug(filename);
+
+		std::vector<std::string> gameID;
+		boost::split(gameID, filename, boost::is_any_of("\t .[_]"));
+		replayModule.gameID = atoi(gameID[0].c_str());
+		BN_output_file = odin_utils::setOutputFile(replayModule.gameID);
+		std::ostringstream stringStream;
+		stringStream << "GAME_ID=";
+		stringStream << gameID[0];
+		putenv(stringStream.str().c_str());
+
+	}else{
+		BWAPI::Broodwar->sendText("GameID: " + gameID);
+		std::ostringstream stringStream;
+		stringStream << "GAME_ID=";
+		stringStream << gameID;
+		putenv(stringStream.str().c_str());
 		//BWAPI::Broodwar->sendText("Hello, my name is Odin!");
 		//Logger::Instance().log("Hello, my name is Odin2!\n");
 
-		BWAPI::Broodwar->setLocalSpeed(10);
+		BWAPI::Broodwar->setLocalSpeed(0);
 		//BWAPI::Broodwar->setFrameSkip(240);
 
 		SparCraft::init();
@@ -99,7 +116,9 @@ void Odin::onEnd(bool isWinner)
 	BWAPI::Broodwar->sendText("gg");
 	if(BWAPI::Broodwar->isReplay())
 	{
-		replayModule.onEnd(isWinner);
+		odin_utils::debug("Output-file:");
+		odin_utils::debug(BN_output_file);
+		replayModule.onEnd(BN_output_file, isWinner);
 	}else{
 		odin_utils::increaseID();
 		if (Options::Modules::USING_GAMECOMMANDER)
@@ -149,6 +168,8 @@ void Odin::onFrame()
 		{
 			BWAPI::Broodwar->sendText("glhf");
 		}
+
+		if (currentFrame > 30000) { BWAPI::Broodwar->leaveGame(); }
 
 		if (currentFrame != 0 && (currentFrame % BN_SNAPSHOT_EVERY_X_FRAMES) == 0) 
 		{
@@ -215,13 +236,6 @@ void Odin::onSendText(std::string text)
 { 
 	if(BWAPI::Broodwar->isReplay())
 	{
-		std::vector<std::string> gameID;
-		boost::split(gameID, text, boost::is_any_of(" "));
-		if (gameID[0].compare("GameID:") == 0)
-		{
-			replayModule.gameID = atoi(gameID[1].c_str());
-		}
-
 		//Do nothing
 	}else{
 		if (text.compare("l") == 0)

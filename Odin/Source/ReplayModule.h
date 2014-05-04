@@ -12,7 +12,7 @@ public:
 	~ReplayModule();
 	void onStart();
 	void onFrame();
-	void onEnd(bool isWinner);
+	void onEnd(std::string filename, bool isWinner);
 	void onUnitDestroy(BWAPI::Unit * unit);
 	void onUnitMorph(BWAPI::Unit * unit);
 	void onUnitRenegade(BWAPI::Unit * unit);

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Common.h"
+#include "ReplayModule.h"
 
 #define ODIN_DEBUG true
 
@@ -113,19 +114,36 @@ namespace odin_utils
 
 	inline int getID()
 	{
-		std::string filename = "bwapi-data/Odin/odin_data/id.txt";
-		std::ifstream read (filename.c_str(), ios::in);
-		std::string id;
-		if (read.is_open())
+		if (BWAPI::Broodwar->isReplay()) 
 		{
-			if (!getline(read, id))
+			char* buf = 0;
+			size_t sz = 4;
+			if (_dupenv_s(&buf, &sz, "GAME_ID") == 0)
 			{
-				id = "0";
+				int gameID = atoi(buf);
+				free(buf);
+				return gameID;
 			}
-			read.close();
+		}
+		else
+		{
+			std::string filename = "bwapi-data/Odin/odin_data/id.txt";
+			std::ifstream read (filename.c_str(), ios::in);
+			std::string id;
+			if (read.is_open())
+			{
+				getline(read, id);
+				if (id.empty())
+				{
+					id = "0";
+				}
+				read.close();
+			}
+
+			return atoi(id.c_str());
 		}
 
-		return atoi(id.c_str());
+		return -1;
 	}
 
 	inline void increaseID()

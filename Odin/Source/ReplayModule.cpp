@@ -286,7 +286,7 @@ void ReplayModule::onFrame()
 	}
 }
 
-void ReplayModule::onEnd(bool isWinner)
+void ReplayModule::onEnd(std::string BNfilename, bool isWinner)
 {
 
 	//Replay has ended. Save data to database here
@@ -295,23 +295,27 @@ void ReplayModule::onEnd(bool isWinner)
 		if(!zergUnits.empty())
 		{
 			writeToFile((REPLAY_DATA_PATH+"zerg.txt").c_str(), zergUnits, zergUnitsAll);
+			writeToFile(BNfilename.c_str(), zergUnits, zergUnitsAll);
 		}
 	
 		if(!protossUnitsp1.empty())
 		{
 			// If PvP, protossUnitsp1 stores the units for player 1
 			writeToFile((REPLAY_DATA_PATH+"protoss.txt").c_str(), protossUnitsp1, protossUnitsAll);
+			//writeToFile(BNfilename.c_str(), protossUnitsp1, protossUnitsAll); //not for our bot, only for his opponent
 		}
 
 		if(!protossUnitsp2.empty())
 		{
 			// If PvP, protossUnitsp2 stores the units for player 2
 			writeToFile((REPLAY_DATA_PATH+"protoss.txt").c_str(), protossUnitsp2, protossUnitsAll);
+			writeToFile(BNfilename.c_str(), protossUnitsp2, protossUnitsAll);
 		}
 	
 		if(!terranUnits.empty())
 		{
 			writeToFile((REPLAY_DATA_PATH+"terran.txt").c_str(), terranUnits, terranUnitsAll);
+			writeToFile(BNfilename.c_str(), terranUnits, terranUnitsAll);
 		}
 	}
 

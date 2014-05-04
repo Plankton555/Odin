@@ -58,6 +58,6 @@ private:
 
 	void analyseResults(BWAPI::Race race, const char* gameFile, const char* replayFile);
 	void storeResult(std::string filename, std::vector<IntPair> result);
-	const char* getRaceResultFile(BWAPI::Race race);
+	std::string getRaceResultFile(BWAPI::Race race);
 
 };

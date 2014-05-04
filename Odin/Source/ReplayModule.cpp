@@ -81,92 +81,95 @@ void ReplayModule::createMaps()
 	protossUpgradesAll["Singularity_Charge"] = 54;
 	
 
-	terranUnitsAll["Supply Depot"] = 1;
-	terranUnitsAll["Barracks"] = 2;
-	terranUnitsAll["Refinery"] = 3;
+	terranUnitsAll["Barracks"] = 1;
+	terranUnitsAll["Bunker"] = 2;
+	terranUnitsAll["Supply Depot"] = 3;
 	terranUnitsAll["Engineering Bay"] = 4;
-	terranUnitsAll["Bunker"] = 5;
-	terranUnitsAll["Academy"] = 6;
-	terranUnitsAll["Missile Turret"] = 7;
+	terranUnitsAll["Missile Turret"] = 5;
+	terranUnitsAll["Refinery"] = 6;	
+	terranUnitsAll["Academy"] = 7;
 	terranUnitsAll["Factory"] = 8;
-	terranUnitsAll["Starport"] = 9;
-	terranUnitsAll["Armory"] = 10;
-	terranUnitsAll["Science Facility"] = 11;
-	terranUnitsAll["Comsat Station"] = 12;
-	terranUnitsAll["Nuclear Silo"] = 13;
-	terranUnitsAll["Machine Shop"] = 14;
-	terranUnitsAll["Control Tower"] = 15;
-	terranUnitsAll["Physics Lab"] = 16;
-	terranUnitsAll["Covert Ops"] = 17;
-
+	terranUnitsAll["Comsat Station"] = 9;
+	terranUnitsAll["Machine Shop"] = 10;
+	terranUnitsAll["Armory"] = 11;
+	terranUnitsAll["Starport"] = 12;
+	terranUnitsAll["Control Tower"] = 13;
+	terranUnitsAll["Science Facility"] = 14;
+	terranUnitsAll["Physics Lab"] = 15;
+	terranUnitsAll["Covert Ops"] = 16;
+	terranUnitsAll["Nuclear Silo"] = 17;
+	
 	terranUnitsAll["Marine"] = 18;
 	terranUnitsAll["Firebat"] = 19;
 	terranUnitsAll["Medic"] = 20;
-	terranUnitsAll["Ghost"] = 21;
-	terranUnitsAll["Vulture"] = 22;
-	terranUnitsAll["Vulture Spider Mine"] = 23;
-	terranUnitsAll["Siege Tank"] = 24;
-	terranUnitsAll["Goliath"] = 25;
-	terranUnitsAll["Wraith"] = 26;
-	terranUnitsAll["Dropship"] = 27;
+	terranUnitsAll["Vulture"] = 21;
+	terranUnitsAll["Vulture Spider Mine"] = 22;
+	terranUnitsAll["Siege Tank"] = 23;
+	terranUnitsAll["Goliath"] = 24;
+	terranUnitsAll["Valkyrie"] = 25;
+	terranUnitsAll["Dropship"] = 26;
+	terranUnitsAll["Wraith"] = 27;
 	terranUnitsAll["Science Vessel"] = 28;
 	terranUnitsAll["Battlecruiser"] = 29;
-	terranUnitsAll["Valkyrie"] = 30;
+	terranUnitsAll["Ghost"] = 30;
+	terranUnitsAll["Nuclear Missile"] = 31;
 
-	terranTechAll["Tank_Siege_Mode"] = 31;
-	terranTechAll["Cloaking_Field"] = 32;
-	terranTechAll["Yamato_Gun"] = 33;
-	terranTechAll["EMP_Shockwave"] = 34;
-	terranTechAll["Irradiate"] = 35;
-	terranTechAll["Personnel_Cloaking"] = 36;
-	terranTechAll["Lockdown"] = 37;
-	terranTechAll["Stim_Packs"] = 38;
-	terranTechAll["Restoration"] = 39;
-	terranTechAll["Optical_Flare"] = 40;
+	terranTechAll["Tank_Siege_Mode"] = 32;
+	terranTechAll["Cloaking_Field"] = 33;
+	terranTechAll["Yamato_Gun"] = 34;
+	terranTechAll["EMP_Shockwave"] = 35;
+	terranTechAll["Irradiate"] = 36;
+	terranTechAll["Personnel_Cloaking"] = 37;
+	terranTechAll["Lockdown"] = 38;
+	terranTechAll["Stim_Packs"] = 39;
+	terranTechAll["Restoration"] = 40;
+	terranTechAll["Optical_Flare"] = 41;
 
-	terranUpgradesAll["Terran_Infantry_Armor"] = 41;
-	terranUpgradesAll["Terran_Infantry_Weapons"] = 42;
-	terranUpgradesAll["Terran_Ship_Plating"] = 43;
-	terranUpgradesAll["Terran_Ship_Weapons"] = 44;
-	terranUpgradesAll["Terran_Vehicle_Plating"] = 45;
-	terranUpgradesAll["Terran_Vehicle_Weapons"] = 46;
-	terranUpgradesAll["Ion_Thrusters"] = 47;
-	terranUpgradesAll["Charon_Boosters"] = 48;
-	terranUpgradesAll["Apollo_Reactor"] = 49;
-	terranUpgradesAll["Colossus_Reactor"] = 50;
-	terranUpgradesAll["Titan_Reactor"] = 51;
-	terranUpgradesAll["Moebius_Reactor"] = 52;
-	terranUpgradesAll["Ocular_Implants"] = 53;
-	terranUpgradesAll["U_238_Shells"] = 54;
-	terranUpgradesAll["Caduceus_Reactor"] = 55;
+	terranUpgradesAll["Terran_Infantry_Armor"] = 42;
+	terranUpgradesAll["Terran_Infantry_Weapons"] = 43;
+	terranUpgradesAll["Terran_Ship_Plating"] = 44;
+	terranUpgradesAll["Terran_Ship_Weapons"] = 45;
+	terranUpgradesAll["Terran_Vehicle_Plating"] = 46;
+	terranUpgradesAll["Terran_Vehicle_Weapons"] = 47;
+	terranUpgradesAll["Ion_Thrusters"] = 48;
+	terranUpgradesAll["Charon_Boosters"] = 49;
+	terranUpgradesAll["Apollo_Reactor"] = 50;
+	terranUpgradesAll["Colossus_Reactor"] = 51;
+	terranUpgradesAll["Titan_Reactor"] = 52;
+	terranUpgradesAll["Moebius_Reactor"] = 53;
+	terranUpgradesAll["Ocular_Implants"] = 54;
+	terranUpgradesAll["U_238_Shells"] = 55;
+	terranUpgradesAll["Caduceus_Reactor"] = 56;
 
-	zergUnitsAll["Creep Colony"] = 1;
-	zergUnitsAll["Sunken Colony"] = 2;
-	zergUnitsAll["Spore Colony"] = 3;
-	zergUnitsAll["Extractor"] = 4;
-	zergUnitsAll["Spawning Pool"] = 5;
-	zergUnitsAll["Evolution Chamber"] = 6;
-	zergUnitsAll["Hydralisk Den"] = 7;
-	zergUnitsAll["Lair"] = 8;
-	zergUnitsAll["Spire"] = 9;
+
+	zergUnitsAll["Spawning Pool"] = 1;
+	zergUnitsAll["Zergling"] = 2;
+	zergUnitsAll["Evolution Chamber"] = 3;
+	zergUnitsAll["Creep Colony"] = 4;
+	zergUnitsAll["Spore Colony"] = 5;
+	zergUnitsAll["Sunken Colony"] = 6;
+	zergUnitsAll["Extractor"] = 7;
+	zergUnitsAll["Hydralisk Den"] = 8;
+	zergUnitsAll["Lair"] = 9;
 	zergUnitsAll["Queens Nest"] = 10;
 	zergUnitsAll["Hive"] = 11;
-	zergUnitsAll["Greater Spire"] = 12;
+	zergUnitsAll["Defiler Mound"] = 12;
 	zergUnitsAll["Nydus Canal"] = 13;
 	zergUnitsAll["Ultralisk Cavern"] = 14;
-	zergUnitsAll["Defiler Mound"] = 15;
+	zergUnitsAll["Spire"] = 15;
+	zergUnitsAll["Greater Spire"] = 16;
 
-	zergUnitsAll["Zergling"] = 16;
 	zergUnitsAll["Hydralisk"] = 17;
 	zergUnitsAll["Lurker"] = 18;
-	zergUnitsAll["Ultralisk"] = 19;
+	zergUnitsAll["Queen"] = 19;
 	zergUnitsAll["Defiler"] = 20;
-	zergUnitsAll["Overlord"] = 21;
-	zergUnitsAll["Mutalisk"] = 22;
-	zergUnitsAll["Scourge"] = 23;
-	zergUnitsAll["Queen"] = 24;
-	zergUnitsAll["Guardian"] = 25;
-	zergUnitsAll["Devourer"] = 26;
+	zergUnitsAll["Mutalisk"] = 21;
+	zergUnitsAll["Scourge"] = 22;
+	zergUnitsAll["Guardian"] = 23;
+	zergUnitsAll["Devourer"] = 24;
+	zergUnitsAll["Ultralisk"] = 25;
+
+	zergUnitsAll["Overlord"] = 26;
 
 	zergTechAll["Spawn_Broodlings"] = 27;
 	zergTechAll["Ensnare"] = 28;
@@ -322,8 +325,9 @@ void ReplayModule::analyseResults(BWAPI::Race race, const char* gameFile, const 
 		storeResult(resultFilename.str(), result);
 		
 		//sum up all results EVER into results-vector
-		const char * raceResultFile = getRaceResultFile(race);
-		std::ifstream allResults (raceResultFile);
+		std::string raceResultFile = getRaceResultFile(race);
+		odin_utils::debug(raceResultFile);
+		std::ifstream allResults (raceResultFile.c_str());
 		if (allResults.is_open())
 		{
 			std::string line;
@@ -346,11 +350,11 @@ void ReplayModule::analyseResults(BWAPI::Race race, const char* gameFile, const 
 				i++;
 			}
 
-			//write summed up results to file
-			storeResult(raceResultFile, result);
-			
 			allResults.close();
 		}
+
+		//write summed up results to file
+		storeResult(raceResultFile, result);
 
 		gameBN.close();
 		replayBN.close();
@@ -366,18 +370,18 @@ void ReplayModule::storeResult(std::string filename, std::vector<IntPair> result
 		for (int i = 0; i < result.size(); i++)
 		{
 			std::ostringstream resultStream;
-			resultStream << result[i].first << "," << result[i].second;
+			resultStream << result[i].first << "," << result[i].second << "\n";
 			resultFile << resultStream.str();
 		}
 		resultFile.close();
 	}
 }
 
-const char* ReplayModule::getRaceResultFile(BWAPI::Race race)
+std::string ReplayModule::getRaceResultFile(BWAPI::Race race)
 {
 	std::ostringstream resultStream;
 	resultStream << RACE_RESULT_FILE_BASE << race.getName() << ".txt";
-	return resultStream.str().c_str();
+	return resultStream.str();
 }
 
 void ReplayModule::onEnd(std::string BNfilename, bool isWinner)
@@ -453,7 +457,6 @@ void ReplayModule::onEnd(std::string BNfilename, bool isWinner)
 void ReplayModule::writeToFile(const char* file, std::map<const char*,int> stuffToWrite, std::map<const char*,int> unitList)
 {
 	myfile.open (file, std::ios::app);
-
 
 	std::vector<int> temp(unitList.size()+1, 0);
 	std::map<const char*,int>::iterator it;

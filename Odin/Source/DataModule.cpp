@@ -60,6 +60,9 @@ void DataModule::init()
 						}
 						(*counters)[sub->at(0).c_str()] = counterNames;
 					}
+					delete sub;
+					delete readValues;
+					delete readCounters;
 				}
 			}
 
@@ -84,6 +87,14 @@ void DataModule::destroy()
 			delete (it->second); //delete each int array
 		}
 		delete units; //delete the map itself
+
+		std::map<const char*,std::vector<BWAPI::UnitType>*>::iterator it2;
+		for(it2=counters->begin(); it2!=counters->end(); it2++)
+		{
+			delete (it2->first); //Delete each string
+			delete (it2->second); //delete each array
+		}
+		delete counters; //delete the map itself
 	}
 	loaded = 0;
 }

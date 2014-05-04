@@ -8,6 +8,10 @@ BayesianNet::BayesianNet()
 BayesianNet::~BayesianNet()
 {
 	delete solution;
+	for (int i = 0; i < parsedNodes.size(); i++)
+	{
+		delete parsedNodes.at(i);
+	}
 }
 
 void BayesianNet::AddNode(ParsedNode* node)

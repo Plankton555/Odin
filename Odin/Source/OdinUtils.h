@@ -9,12 +9,19 @@ using namespace std;
 
 namespace odin_utils
 {
-	inline std::string setOutputFile(int ID)
+	inline std::string getOutputFile(int ID)
 	{
+		std::string path;
+		if (BWAPI::Broodwar->isReplay())
+		{
+			path = "bwapi-data/Odin/odin_data/BNlog/replay/";
+		}
+		else
+		{
+			path = "bwapi-data/Odin/odin_data/BNlog/game/";
+		}
 		std::ostringstream stringStream;
-		stringStream << "bwapi-data/Odin/odin_data/BNlog/";
-		stringStream << ID;
-		stringStream << ".txt";
+		stringStream << path << ID << ".txt";
 		return stringStream.str();
 	}
 

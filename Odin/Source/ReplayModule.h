@@ -4,6 +4,10 @@
 #include <iostream>
 #include <fstream>
 #include <OdinUtils.h>
+#include <boost/algorithm/string.hpp>
+
+#define MARGIN_OF_ERROR (0.25) // if diff between prediction and truth is lower than this -> good prediction
+typedef std::pair<int, int> IntPair;
 
 class ReplayModule
 {
@@ -51,5 +55,9 @@ private:
 
 	static void analyzePlayers(void);
 	void drawUnitInformation(int x, int y);
+
+	void analyseResults(BWAPI::Race race, const char* gameFile, const char* replayFile);
+	void storeResult(std::string filename, std::vector<IntPair> result);
+	const char* getRaceResultFile(BWAPI::Race race);
 
 };

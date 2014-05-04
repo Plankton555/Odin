@@ -39,7 +39,7 @@ void Odin::onStart()
 	DataModule::init();
 
 	int gameID = odin_utils::getID();
-	BN_output_file = odin_utils::setOutputFile(gameID);//BWAPI::Broodwar->get
+	BN_output_file = odin_utils::getOutputFile(gameID);//BWAPI::Broodwar->get
 
 	if(BWAPI::Broodwar->isReplay()){
 
@@ -62,7 +62,7 @@ void Odin::onStart()
 		std::vector<std::string> gameID;
 		boost::split(gameID, filename, boost::is_any_of("\t .[_]"));
 		replayModule.gameID = atoi(gameID[0].c_str());
-		BN_output_file = odin_utils::setOutputFile(replayModule.gameID);
+		BN_output_file = odin_utils::getOutputFile(replayModule.gameID);
 		std::ostringstream stringStream;
 		stringStream << "GAME_ID=";
 		stringStream << gameID[0];

@@ -11,6 +11,8 @@ using namespace std;
 const std::string REPLAY_DATA_PATH = ODIN_DATA_FILEPATH + "replaydatastuff/";
 const std::string SEEN_REPLAYS_PATH = REPLAY_DATA_PATH + "seen_replays.txt";
 
+const char* RACE_RESULT_FILE_BASE = "bwapi-data/Odin/odin_data/BNlog/";
+
 Player* ReplayModule::player = NULL;
 Player* ReplayModule::enemy = NULL;
 
@@ -286,16 +288,112 @@ void ReplayModule::onFrame()
 	}
 }
 
+void ReplayModule::analyseResults(BWAPI::Race race, const char* gameFile, const char* replayFile)
+{
+	// analyse this games/replays result
+	ifstream gameBN (gameFile);
+	ifstream replayBN (replayFile);
+	if (gameBN.is_open() && replayBN.is_open()) {
+		std::vector<IntPair> result;
+		std::string gameLine, replayLine;
+		while (getline(gameBN,gameLine) && getline(replayBN, replayLine)) {
+			std::vector<std::string> gameValues, replayValues;
+			boost::split(gameValues, gameLine, boost::is_any_of(","));
+			boost::split(replayValues, replayLine, boost::is_any_of(","));
+			int gameSize = gameValues.size();
+			int replaySize = replayValues.size(); 
+			int correctPredictions = 0;
+			for (int i = 1; i < gameSize && i < replaySize; i++)
+			{
+				double diff = abs(atof(gameValues[i].c_str()) - atof(replayValues[i].c_str()));
+				if (diff < MARGIN_OF_ERROR)
+				{
+					correctPredictions++;
+				}
+			}
+
+			int totalPredictions = std::min(gameSize, replaySize) - 1;
+			result.push_back(std::make_pair(correctPredictions, totalPredictions));
+		}
+
+		//write to file
+		std::ostringstream resultFilename;
+		resultFilename << "bwapi-data/Odin/odin_data/BNlog/" << gameID << ".txt";
+		storeResult(resultFilename.str(), result);
+		
+		//sum up all results EVER into results-vector
+		const char * raceResultFile = getRaceResultFile(race);
+		std::ifstream allResults (raceResultFile);
+		if (allResults.is_open())
+		{
+			std::string line;
+			int i = 0;
+			while (getline(allResults, line))
+			{
+				std::vector<std::string> buff;
+				boost::split(buff, line, boost::is_any_of(","));
+				if (i < result.size())
+				{
+					result[i].first += atoi(buff[0].c_str());
+					result[i].second += atoi(buff[1].c_str());
+				} 
+				else
+				{
+					int first = atoi(buff[0].c_str());
+					int second = atoi(buff[1].c_str());
+					result.push_back(std::make_pair(first, second));
+				}
+				i++;
+			}
+
+			//write summed up results to file
+			storeResult(raceResultFile, result);
+			
+			allResults.close();
+		}
+
+		gameBN.close();
+		replayBN.close();
+	}
+
+}
+
+void ReplayModule::storeResult(std::string filename, std::vector<IntPair> result)
+{
+	std::ofstream resultFile (filename.c_str());
+	if (resultFile.is_open())
+	{
+		for (int i = 0; i < result.size(); i++)
+		{
+			std::ostringstream resultStream;
+			resultStream << result[i].first << "," << result[i].second;
+			resultFile << resultStream.str();
+		}
+		resultFile.close();
+	}
+}
+
+const char* ReplayModule::getRaceResultFile(BWAPI::Race race)
+{
+	std::ostringstream resultStream;
+	resultStream << RACE_RESULT_FILE_BASE << race.getName() << ".txt";
+	return resultStream.str().c_str();
+}
+
 void ReplayModule::onEnd(std::string BNfilename, bool isWinner)
 {
 
 	//Replay has ended. Save data to database here
 	if(!gameSeen)
 	{
+		std::ostringstream gameBN;
+		gameBN << "bwapi-data/Odin/odin_data/BNlog/game/" << gameID << ".txt";
+		std::string replayBN = odin_utils::getOutputFile(gameID);
+
 		if(!zergUnits.empty())
 		{
 			writeToFile((REPLAY_DATA_PATH+"zerg.txt").c_str(), zergUnits, zergUnitsAll);
-			writeToFile(BNfilename.c_str(), zergUnits, zergUnitsAll);
+			writeToFile(replayBN.c_str(), zergUnits, zergUnitsAll);
 		}
 	
 		if(!protossUnitsp1.empty())
@@ -309,14 +407,16 @@ void ReplayModule::onEnd(std::string BNfilename, bool isWinner)
 		{
 			// If PvP, protossUnitsp2 stores the units for player 2
 			writeToFile((REPLAY_DATA_PATH+"protoss.txt").c_str(), protossUnitsp2, protossUnitsAll);
-			writeToFile(BNfilename.c_str(), protossUnitsp2, protossUnitsAll);
+			writeToFile(replayBN.c_str(), protossUnitsp2, protossUnitsAll);
 		}
 	
 		if(!terranUnits.empty())
 		{
 			writeToFile((REPLAY_DATA_PATH+"terran.txt").c_str(), terranUnits, terranUnitsAll);
-			writeToFile(BNfilename.c_str(), terranUnits, terranUnitsAll);
+			writeToFile(replayBN.c_str(), terranUnits, terranUnitsAll);
 		}
+
+		analyseResults(getEnemy()->getRace(), gameBN.str().c_str(), replayBN.c_str());
 	}
 
 	//Count seen replays

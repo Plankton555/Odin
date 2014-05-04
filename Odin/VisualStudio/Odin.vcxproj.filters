@@ -195,6 +195,9 @@
     <ClCompile Include="..\Source\Odin.cpp">
       <Filter>module</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\OdinUtils.cpp">
+      <Filter>game\util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\CombatCommander.h">

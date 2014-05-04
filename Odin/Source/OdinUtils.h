@@ -7,6 +7,17 @@
 
 using namespace std;
 
+class OdinUtils
+{
+public:
+	bool updateID;
+	int gameID;
+	OdinUtils::OdinUtils();
+	OdinUtils::~OdinUtils();
+
+	static OdinUtils &Instance();
+};
+
 namespace odin_utils
 {
 	inline std::string getOutputFile(int ID)
@@ -134,6 +145,8 @@ namespace odin_utils
 		}
 		else
 		{
+			if (!OdinUtils::Instance().updateID) { return OdinUtils::Instance().gameID; }
+
 			std::string filename = "bwapi-data/Odin/odin_data/id.txt";
 			std::ifstream read (filename.c_str(), ios::in);
 			std::string id;
@@ -147,7 +160,9 @@ namespace odin_utils
 				read.close();
 			}
 
-			return atoi(id.c_str());
+			OdinUtils::Instance().gameID = atoi(id.c_str());
+			OdinUtils::Instance().updateID = false;
+			return OdinUtils::Instance().gameID;
 		}
 
 		return -1;
@@ -163,5 +178,7 @@ namespace odin_utils
 			write << id << endl;
 			write.close();
 		}
+
+		OdinUtils::Instance().updateID = true;
 	}
 };

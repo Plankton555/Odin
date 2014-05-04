@@ -38,6 +38,7 @@ void Odin::onStart()
 {	
 	DataModule::init();
 
+	odin_utils::increaseID();
 	int gameID = odin_utils::getID();
 	BN_output_file = odin_utils::getOutputFile(gameID);//BWAPI::Broodwar->get
 
@@ -56,8 +57,8 @@ void Odin::onStart()
 		//fetch game ID
 		std::string filename = BWAPI::Broodwar->mapFileName();
 
-		odin_utils::debug("GAME ID:");
-		odin_utils::debug(filename);
+		//odin_utils::debug("GAME ID:");
+		//odin_utils::debug(filename);
 
 		std::vector<std::string> gameID;
 		boost::split(gameID, filename, boost::is_any_of("\t .[_]"));
@@ -116,11 +117,10 @@ void Odin::onEnd(bool isWinner)
 	BWAPI::Broodwar->sendText("gg");
 	if(BWAPI::Broodwar->isReplay())
 	{
-		odin_utils::debug("Output-file:");
-		odin_utils::debug(BN_output_file);
+		//odin_utils::debug("Output-file:");
+		//odin_utils::debug(BN_output_file);
 		replayModule.onEnd(BN_output_file, isWinner);
 	}else{
-		odin_utils::increaseID();
 		if (Options::Modules::USING_GAMECOMMANDER)
 		{
 			StrategyManager::Instance().onEnd(isWinner);

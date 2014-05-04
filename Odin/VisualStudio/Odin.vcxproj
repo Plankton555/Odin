@@ -115,6 +115,7 @@
     <ClCompile Include="..\Source\base\BuildLearner.cpp" />
     <ClCompile Include="..\Source\BayesianNet.cpp" />
     <ClCompile Include="..\Source\micromanagement\HighTemplarManager.cpp" />
+    <ClCompile Include="..\Source\OdinUtils.cpp" />
     <ClCompile Include="..\Source\ParsedNode.cpp" />
     <ClCompile Include="..\Source\BNetParser.cpp" />
     <ClCompile Include="..\Source\CombatSimulation.cpp" />

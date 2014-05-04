@@ -692,6 +692,11 @@ const MetaPairVector StrategyManager::getProtossCounterBuildOrderGoal()
 
 				if (haveTeched) //have Teched for expensive
 				{
+					if (nrExtraUnits > 1) //If we want more than 1 unit, then let half the units be cheap units
+					{
+						nrExtraUnits /= 2;
+						goal.push_back(MetaPair(it->first->at(0), nrExtraUnits));
+					}
 					wantedType = it->first->at(1);
 				} else
 				{

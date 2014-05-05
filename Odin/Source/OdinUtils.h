@@ -135,7 +135,6 @@ namespace odin_utils
 	{
 		if (BWAPI::Broodwar->isReplay()) 
 		{
-			//BWAPI::Broodwar->mapFileName();
 			return OdinUtils::Instance().gameID;
 		}
 		else

@@ -325,7 +325,7 @@ void ReplayModule::analyseResults(BWAPI::Race race, const char* gameFile, const 
 				}
 			}
 
-			int totalPredictions = std::min(gameSize, replaySize) - 1;
+			int totalPredictions = std::min(gameSize, replaySize) - 2;
 			result.push_back(std::make_pair(correctPredictions, totalPredictions));
 			gameLineOK = getline(gameBN, gameLine);
 		}
@@ -375,6 +375,8 @@ void ReplayModule::analyseResults(BWAPI::Race race, const char* gameFile, const 
 
 void ReplayModule::storeResult(std::string filename, std::vector<IntPair> result)
 {
+	odin_utils::debug("First", result[0].first);
+	odin_utils::debug("Second", result[0].second);
 	std::ofstream resultFile (filename.c_str());
 	if (resultFile.is_open())
 	{

@@ -2,6 +2,7 @@
 
 #include "Common.h"
 #include "ReplayModule.h"
+#include <boost/algorithm/string.hpp>
 
 #define ODIN_DEBUG true
 
@@ -135,9 +136,10 @@ namespace odin_utils
 		if (BWAPI::Broodwar->isReplay()) 
 		{
 			char* buf = 0;
-			size_t sz = 4;
+			size_t sz = 8;
 			if (_dupenv_s(&buf, &sz, "GAME_ID") == 0)
 			{
+				debug(buf);
 				int gameID = atoi(buf);
 				free(buf);
 				return gameID;

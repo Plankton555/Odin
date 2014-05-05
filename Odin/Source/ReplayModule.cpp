@@ -299,14 +299,24 @@ void ReplayModule::analyseResults(BWAPI::Race race, const char* gameFile, const 
 	if (gameBN.is_open() && replayBN.is_open()) {
 		std::vector<IntPair> result;
 		std::string gameLine, replayLine;
-		while (getline(gameBN,gameLine) && getline(replayBN, replayLine)) {
+		bool gameLineOK = getline(gameBN, gameLine);
+		while (gameLineOK && getline(replayBN, replayLine)) {
 			std::vector<std::string> gameValues, replayValues;
-			boost::split(gameValues, gameLine, boost::is_any_of(","));
-			boost::split(replayValues, replayLine, boost::is_any_of(","));
+			boost::split(gameValues, gameLine, boost::is_any_of(",d"));
+			boost::split(replayValues, replayLine, boost::is_any_of(",d"));
+
+			int gamePeriod = atoi(gameValues[1].c_str());
+			int replayPeriod = atoi(replayValues[1].c_str());
+			if (gamePeriod > replayPeriod) 
+			{
+				result.push_back(std::make_pair(0, 0));
+				continue;
+			}
+
 			int gameSize = gameValues.size();
 			int replaySize = replayValues.size(); 
 			int correctPredictions = 0;
-			for (int i = 1; i < gameSize && i < replaySize; i++)
+			for (int i = 2; i < gameSize && i < replaySize; i++)
 			{
 				double diff = abs(atof(gameValues[i].c_str()) - atof(replayValues[i].c_str()));
 				if (diff < MARGIN_OF_ERROR)
@@ -317,6 +327,7 @@ void ReplayModule::analyseResults(BWAPI::Race race, const char* gameFile, const 
 
 			int totalPredictions = std::min(gameSize, replaySize) - 1;
 			result.push_back(std::make_pair(correctPredictions, totalPredictions));
+			gameLineOK = getline(gameBN, gameLine);
 		}
 
 		//write to file

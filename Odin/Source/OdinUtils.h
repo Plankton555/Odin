@@ -135,15 +135,8 @@ namespace odin_utils
 	{
 		if (BWAPI::Broodwar->isReplay()) 
 		{
-			char* buf = 0;
-			size_t sz = 8;
-			if (_dupenv_s(&buf, &sz, "GAME_ID") == 0)
-			{
-				debug(buf);
-				int gameID = atoi(buf);
-				free(buf);
-				return gameID;
-			}
+			//BWAPI::Broodwar->mapFileName();
+			return OdinUtils::Instance().gameID;
 		}
 		else
 		{
@@ -172,6 +165,15 @@ namespace odin_utils
 
 	inline void increaseID()
 	{
+		if (BWAPI::Broodwar->isReplay())
+		{
+			std::string filename = BWAPI::Broodwar->mapFileName();
+			std::vector<std::string> gameID;
+			boost::split(gameID, filename, boost::is_any_of("\t .[_]"));
+			OdinUtils::Instance().gameID = atoi(gameID[0].c_str());
+			return;
+		}
+
 		int id = getID() + 1;
 		std::string filename = "bwapi-data/Odin/odin_data/id.txt";
 		std::ofstream write (filename.c_str(), ios::out);

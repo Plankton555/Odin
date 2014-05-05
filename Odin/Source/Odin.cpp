@@ -63,6 +63,7 @@ void Odin::onStart()
 		std::vector<std::string> gameID;
 		boost::split(gameID, filename, boost::is_any_of("\t .[_]"));
 		replayModule.gameID = atoi(gameID[0].c_str());
+		OdinUtils::Instance().gameID = replayModule.gameID;
 		BN_output_file = odin_utils::getOutputFile(replayModule.gameID);
 		std::ostringstream stringStream;
 		stringStream << "GAME_ID=";

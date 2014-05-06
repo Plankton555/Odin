@@ -23,6 +23,7 @@
 #include "DataModule.h"
 #include "BayesianNet.h"
 #include <boost/algorithm/string.hpp>
+#include "OdinUtils.h"
 
 #define BN_SNAPSHOT_EVERY_X_FRAMES 1000
 
@@ -38,10 +39,13 @@ void Odin::onStart()
 {	
 	DataModule::init();
 
+	odin_utils::debug("Start", OdinUtils::Instance().gameID);
 	OdinUtils::Instance().updateID = true; //important for initialization!
+	odin_utils::debug("updateID set", OdinUtils::Instance().gameID);
 	odin_utils::increaseID();
-	int gameID = OdinUtils::Instance().gameID;
-	BN_output_file = odin_utils::getOutputFile(gameID); //BWAPI::Broodwar->get
+	odin_utils::debug("ID increased", OdinUtils::Instance().gameID);
+	BN_output_file = odin_utils::getOutputFile(OdinUtils::Instance().gameID); //BWAPI::Broodwar->get
+	odin_utils::debug("OutputFile received", OdinUtils::Instance().gameID);
 	if(BWAPI::Broodwar->isReplay()){
 
 		/* If we want to show stuff on the screen. */
@@ -68,10 +72,9 @@ void Odin::onStart()
 	}else{
 
 		// Save game ID as system environment variable so that game gets stored
-		BWAPI::Broodwar->sendText("GameID: " + gameID);
 		std::ostringstream stringStream;
 		stringStream << "GAME_ID=";
-		stringStream << gameID;
+		stringStream << OdinUtils::Instance().gameID;
 		putenv(stringStream.str().c_str());
 
 		BWAPI::Broodwar->setLocalSpeed(0);

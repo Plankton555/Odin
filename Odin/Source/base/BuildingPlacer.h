@@ -4,6 +4,7 @@
 #include "BuildingData.h"
 #include "MetaType.h"
 #include "../InformationManager.h"
+#include <stdlib.h>
 
 class BuildingPlacer
 {
@@ -27,6 +28,7 @@ class BuildingPlacer
 	bool					isReserved(int x, int y) const;
 	bool					isInResourceBox(int x, int y) const;
 	bool					tileOverlapsBaseLocation(BWAPI::TilePosition tile, BWAPI::UnitType type) const;
+	bool					isPosCloseToPylon(int x, int y) const;
 
 	// determines whether we can build at a given location
 	bool					canBuildHere(BWAPI::TilePosition position, const Building & b) const;

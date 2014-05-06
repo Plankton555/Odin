@@ -409,27 +409,27 @@ void ReplayModule::onEnd(std::string BNfilename, bool isWinner)
 
 		if(!zergUnits.empty())
 		{
-			writeToFile((REPLAY_DATA_PATH+"zerg.txt").c_str(), zergUnits, zergUnitsAll);
+			writeToFile(getReplayFileSpecificForInstance(BWAPI::Races::Zerg), zergUnits, zergUnitsAll);
 			writeToFile(replayBN.c_str(), zergUnits, zergUnitsAll);
 		}
 	
 		if(!protossUnitsp1.empty())
 		{
 			// If PvP, protossUnitsp1 stores the units for player 1
-			writeToFile((REPLAY_DATA_PATH+"protoss.txt").c_str(), protossUnitsp1, protossUnitsAll);
+			writeToFile(getReplayFileSpecificForInstance(BWAPI::Races::Protoss), protossUnitsp1, protossUnitsAll);
 			//writeToFile(BNfilename.c_str(), protossUnitsp1, protossUnitsAll); //not for our bot, only for his opponent
 		}
 
 		if(!protossUnitsp2.empty())
 		{
 			// If PvP, protossUnitsp2 stores the units for player 2
-			writeToFile((REPLAY_DATA_PATH+"protoss.txt").c_str(), protossUnitsp2, protossUnitsAll);
+			writeToFile(getReplayFileSpecificForInstance(BWAPI::Races::Protoss), protossUnitsp2, protossUnitsAll);
 			writeToFile(replayBN.c_str(), protossUnitsp2, protossUnitsAll);
 		}
 	
 		if(!terranUnits.empty())
 		{
-			writeToFile((REPLAY_DATA_PATH+"terran.txt").c_str(), terranUnits, terranUnitsAll);
+			writeToFile(getReplayFileSpecificForInstance(BWAPI::Races::Terran), terranUnits, terranUnitsAll);
 			writeToFile(replayBN.c_str(), terranUnits, terranUnitsAll);
 		}
 
@@ -465,6 +465,13 @@ void ReplayModule::onEnd(std::string BNfilename, bool isWinner)
 		exit(0);
 	}
 
+}
+
+const char* ReplayModule::getReplayFileSpecificForInstance(BWAPI::Race race)
+{
+	std::ostringstream filename;
+	filename << REPLAY_DATA_PATH << race.getName().c_str() << "/" << BWAPI::Broodwar->getInstanceNumber() <<".txt";
+	return filename.str().c_str();
 }
 
 void ReplayModule::writeToFile(const char* file, std::map<const char*,int> stuffToWrite, std::map<const char*,int> unitList)

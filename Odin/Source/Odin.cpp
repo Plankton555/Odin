@@ -62,22 +62,18 @@ void Odin::onStart()
 
 		std::vector<std::string> gameID;
 		boost::split(gameID, filename, boost::is_any_of("\t .[_]"));
-		replayModule.gameID = atoi(gameID[0].c_str());
-		OdinUtils::Instance().gameID = replayModule.gameID;
-		BN_output_file = odin_utils::getOutputFile(replayModule.gameID);
-		std::ostringstream stringStream;
-		stringStream << "GAME_ID=";
-		stringStream << gameID[0];
-		putenv(stringStream.str().c_str());
+		OdinUtils::Instance().gameID = atoi(gameID[0].c_str());
+		BN_output_file = odin_utils::getOutputFile(OdinUtils::Instance().gameID);
 
 	}else{
+
+		// Save game ID as system environment variable so that game gets stored
 		BWAPI::Broodwar->sendText("GameID: " + gameID);
 		std::ostringstream stringStream;
 		stringStream << "GAME_ID=";
 		stringStream << gameID;
 		putenv(stringStream.str().c_str());
-		//BWAPI::Broodwar->sendText("Hello, my name is Odin!");
-		//Logger::Instance().log("Hello, my name is Odin2!\n");
+
 
 		BWAPI::Broodwar->setLocalSpeed(0);
 		//BWAPI::Broodwar->setFrameSkip(240);
@@ -118,8 +114,6 @@ void Odin::onEnd(bool isWinner)
 	BWAPI::Broodwar->sendText("gg");
 	if(BWAPI::Broodwar->isReplay())
 	{
-		//odin_utils::debug("Output-file:");
-		//odin_utils::debug(BN_output_file);
 		replayModule.onEnd(BN_output_file, isWinner);
 	}else{
 		if (Options::Modules::USING_GAMECOMMANDER)

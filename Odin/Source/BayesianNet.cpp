@@ -123,11 +123,16 @@ double BayesianNet::ReadProbability(const std::string &nodeName, int nodeState)
 }
 
 
-void BayesianNet::UpdateBeliefs()
+void BayesianNet::UpdateBeliefs(int timePeriod)
 {
 	delete solution;
 	solution = new bayesian_network_join_tree(bn, join_tree);
-	SetEvidence("TimePeriod", std::min(24, odin_utils::getTimePeriod()));
+	SetEvidence("TimePeriod", timePeriod);
+}
+
+void BayesianNet::UpdateBeliefs()
+{
+	UpdateBeliefs(std::min(24, odin_utils::getTimePeriod()));
 }
 
 bool BayesianNet::exists(const std::string &nodeName)

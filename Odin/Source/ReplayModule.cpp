@@ -332,7 +332,7 @@ void ReplayModule::analyseResults(BWAPI::Race race, const char* gameFile, const 
 
 		//write to file
 		std::ostringstream resultFilename;
-		resultFilename << "bwapi-data/Odin/odin_data/BNlog/" << gameID << ".txt";
+		resultFilename << "bwapi-data/Odin/odin_data/BNlog/" << OdinUtils::Instance().gameID << ".txt";
 		storeResult(resultFilename.str(), result);
 		
 		//sum up all results EVER into results-vector
@@ -404,8 +404,8 @@ void ReplayModule::onEnd(std::string BNfilename, bool isWinner)
 	if(!gameSeen)
 	{
 		std::ostringstream gameBN;
-		gameBN << "bwapi-data/Odin/odin_data/BNlog/game/" << gameID << ".txt";
-		std::string replayBN = odin_utils::getOutputFile(gameID);
+		gameBN << "bwapi-data/Odin/odin_data/BNlog/game/" << OdinUtils::Instance().gameID << ".txt";
+		std::string replayBN = odin_utils::getOutputFile(OdinUtils::Instance().gameID);
 
 		if(!zergUnits.empty())
 		{

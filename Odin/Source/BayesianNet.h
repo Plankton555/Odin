@@ -33,6 +33,7 @@ public:
 	void ClearEvidence();
 	double ReadProbability(const std::string &nodeName, int nodeState);
 	void UpdateBeliefs();
+	void UpdateBeliefs(int timePeriod);
 
 	void PrintBN(std::string filename);
 };

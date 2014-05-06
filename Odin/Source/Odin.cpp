@@ -39,13 +39,9 @@ void Odin::onStart()
 {	
 	DataModule::init();
 
-	odin_utils::debug("Start", OdinUtils::Instance().gameID);
 	OdinUtils::Instance().updateID = true; //important for initialization!
-	odin_utils::debug("updateID set", OdinUtils::Instance().gameID);
 	odin_utils::increaseID();
-	odin_utils::debug("ID increased", OdinUtils::Instance().gameID);
-	BN_output_file = odin_utils::getOutputFile(OdinUtils::Instance().gameID); //BWAPI::Broodwar->get
-	odin_utils::debug("OutputFile received", OdinUtils::Instance().gameID);
+	BN_output_file = odin_utils::getBNOutputFile(OdinUtils::Instance().gameID); //BWAPI::Broodwar->get
 	if(BWAPI::Broodwar->isReplay()){
 
 		/* If we want to show stuff on the screen. */
@@ -57,17 +53,6 @@ void Odin::onStart()
 		BWAPI::Broodwar->setGUI(false);
 
 		replayModule.onStart();
-
-		//fetch game ID
-		std::string filename = BWAPI::Broodwar->mapFileName();
-
-		//odin_utils::debug("GAME ID:");
-		//odin_utils::debug(filename);
-
-		std::vector<std::string> gameID;
-		boost::split(gameID, filename, boost::is_any_of("\t .[_]"));
-		OdinUtils::Instance().gameID = atoi(gameID[0].c_str());
-		BN_output_file = odin_utils::getOutputFile(OdinUtils::Instance().gameID);
 
 	}else{
 
@@ -170,7 +155,10 @@ void Odin::onFrame()
 
 		if (currentFrame != 0 && (currentFrame % BN_SNAPSHOT_EVERY_X_FRAMES) == 0) 
 		{
-			StrategyManager::Instance().getBayesianNet()->PrintBN(BN_output_file);
+			for (int i = 0; i <= OdinUtils::Instance().predictTimePeriodsAhead; i++)
+			{
+				StrategyManager::Instance().getBayesianNet()->PrintBN(odin_utils::getOutputFile(odin_utils::getID(), i));
+			}
 		}
 
 		if (Options::Modules::USING_UNIT_COMMAND_MGR)

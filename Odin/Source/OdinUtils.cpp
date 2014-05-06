@@ -4,7 +4,8 @@
 
 OdinUtils::OdinUtils()  
 	: gameID(-1)
-	, updateID(true) {}
+	, updateID(true)
+	, predictTimePeriodsAhead(0) {}
 OdinUtils::~OdinUtils() {}
 
 // get an instance of this

@@ -17,24 +17,38 @@ public:
 	OdinUtils::~OdinUtils();
 
 	static OdinUtils &Instance();
+
+	int predictTimePeriodsAhead;
 };
 
 namespace odin_utils
 {
-	inline std::string getOutputFile(int ID)
+	//this one only return output file for data mining, NOT REPLAYS.
+	//call getBNOutputFile(int ID) if REPLAY
+	inline std::string getOutputFile(int ID, int timePeriodsAhead)
 	{
-		std::string path;
+		std::ostringstream basePath;
+		basePath << "bwapi-data/Odin/odin_data/BNlog/game/";
+		if (timePeriodsAhead >= 0)
+		{
+			basePath << timePeriodsAhead << "/";
+		}
+
+		std::ostringstream stringStream;
+		stringStream << basePath.str() << ID << ".txt";
+		return stringStream.str();
+	}
+
+	inline std::string getBNOutputFile(int ID)
+	{
 		if (BWAPI::Broodwar->isReplay())
 		{
-			path = "bwapi-data/Odin/odin_data/BNlog/replay/";
+			std::string path = "bwapi-data/Odin/odin_data/BNlog/replay/";
+			std::ostringstream stringStream;
+			stringStream << path << ID << ".txt";
+			return stringStream.str();
 		}
-		else
-		{
-			path = "bwapi-data/Odin/odin_data/BNlog/game/";
-		}
-		std::ostringstream stringStream;
-		stringStream << path << ID << ".txt";
-		return stringStream.str();
+		return getOutputFile(ID, 0);
 	}
 
 	inline bool replaceString(std::string &str, const std::string &from, const std::string &to)
@@ -70,7 +84,7 @@ namespace odin_utils
 	inline int getTimePeriod()
 	{
 		int timePeriod = BWAPI::Broodwar->getFrameCount()/1000;
-		return std::min(25, timePeriod);
+		return timePeriod + 1;
 	}
 
 	inline void logBN(std::string filename, std::string str)

@@ -41,7 +41,7 @@ private:
 	std::map<const char*,int> terranUpgradesAll;
 	std::map<const char*,int> protossTechAll;
 	std::map<const char*,int> protossUpgradesAll;
-	std::ofstream myfile;
+
 	bool gameSeen;
 	int replayLength;
 
@@ -54,9 +54,9 @@ private:
 	static void analyzePlayers(void);
 	void drawUnitInformation(int x, int y);
 
-	void analyseResults(BWAPI::Race race, const char* gameFile, const char* replayFile);
+	void analyseResults(int timePeriodAhead, BWAPI::Race race);
 	void storeResult(std::string filename, std::vector<IntPair> result);
-	std::string getRaceResultFile(BWAPI::Race race);
+	std::string getRaceResultFile(BWAPI::Race race, int timePeriodAhead);
 	const char* getReplayFileSpecificForInstance(BWAPI::Race race);
 
 };

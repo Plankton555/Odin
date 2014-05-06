@@ -8,7 +8,7 @@
 using namespace BWAPI;
 using namespace std;
 
-const std::string REPLAY_DATA_PATH = ODIN_DATA_FILEPATH + "replaydatastuff/";
+const std::string REPLAY_DATA_PATH = ODIN_DATA_FILEPATH + "replays/";
 const std::string SEEN_REPLAYS_PATH = REPLAY_DATA_PATH + "seen_replays.txt";
 
 const char* RACE_RESULT_FILE_BASE = "bwapi-data/Odin/odin_data/BNlog/";
@@ -291,11 +291,17 @@ void ReplayModule::onFrame()
 	}
 }
 
-void ReplayModule::analyseResults(BWAPI::Race race, const char* gameFile, const char* replayFile)
+void ReplayModule::analyseResults(int timePeriodAhead, BWAPI::Race race)
 {
+	std::string gameFile = odin_utils::getOutputFile(OdinUtils::Instance().gameID, timePeriodAhead);
+	std::string replayFile = odin_utils::getBNOutputFile(OdinUtils::Instance().gameID);
+
+	odin_utils::debug(gameFile);
+	odin_utils::debug(replayFile);
+
 	// analyse this games/replays result
-	ifstream gameBN (gameFile);
-	ifstream replayBN (replayFile);
+	ifstream gameBN (gameFile.c_str());
+	ifstream replayBN (replayFile.c_str());
 	if (gameBN.is_open() && replayBN.is_open()) {
 		std::vector<IntPair> result;
 		std::string gameLine, replayLine;
@@ -307,6 +313,8 @@ void ReplayModule::analyseResults(BWAPI::Race race, const char* gameFile, const 
 
 			int gamePeriod = atoi(gameValues[1].c_str());
 			int replayPeriod = atoi(replayValues[1].c_str());
+			odin_utils::debug("Game Period", gamePeriod);
+			odin_utils::debug("Replay Period", replayPeriod);
 			if (gamePeriod > replayPeriod) 
 			{
 				result.push_back(std::make_pair(0, 0));
@@ -332,11 +340,12 @@ void ReplayModule::analyseResults(BWAPI::Race race, const char* gameFile, const 
 
 		//write to file
 		std::ostringstream resultFilename;
-		resultFilename << "bwapi-data/Odin/odin_data/BNlog/" << OdinUtils::Instance().gameID << ".txt";
+		resultFilename << "bwapi-data/Odin/odin_data/BNlog/" << timePeriodAhead << "/" << OdinUtils::Instance().gameID << ".txt";
+		odin_utils::debug(resultFilename.str());
 		storeResult(resultFilename.str(), result);
 		
 		//sum up all results EVER into results-vector
-		std::string raceResultFile = getRaceResultFile(race);
+		std::string raceResultFile = getRaceResultFile(race, timePeriodAhead);
 		odin_utils::debug(raceResultFile);
 		std::ifstream allResults (raceResultFile.c_str());
 		if (allResults.is_open())
@@ -365,6 +374,7 @@ void ReplayModule::analyseResults(BWAPI::Race race, const char* gameFile, const 
 		}
 
 		//write summed up results to file
+		odin_utils::debug(raceResultFile.c_str());
 		storeResult(raceResultFile, result);
 
 		gameBN.close();
@@ -390,10 +400,10 @@ void ReplayModule::storeResult(std::string filename, std::vector<IntPair> result
 	}
 }
 
-std::string ReplayModule::getRaceResultFile(BWAPI::Race race)
+std::string ReplayModule::getRaceResultFile(BWAPI::Race race, int timePeriodAhead)
 {
 	std::ostringstream resultStream;
-	resultStream << RACE_RESULT_FILE_BASE << race.getName() << ".txt";
+	resultStream << RACE_RESULT_FILE_BASE << race.getName() << timePeriodAhead << ".txt";
 	return resultStream.str();
 }
 
@@ -403,9 +413,9 @@ void ReplayModule::onEnd(std::string BNfilename, bool isWinner)
 	//Replay has ended. Save data to database here
 	if(!gameSeen)
 	{
-		std::ostringstream gameBN;
-		gameBN << "bwapi-data/Odin/odin_data/BNlog/game/" << OdinUtils::Instance().gameID << ".txt";
-		std::string replayBN = odin_utils::getOutputFile(OdinUtils::Instance().gameID);
+		std::string replayBN = odin_utils::getBNOutputFile(OdinUtils::Instance().gameID);
+		odin_utils::debug(replayBN);
+		odin_utils::debug(getEnemy()->getRace().getName());
 
 		if(!zergUnits.empty())
 		{
@@ -433,7 +443,12 @@ void ReplayModule::onEnd(std::string BNfilename, bool isWinner)
 			writeToFile(replayBN.c_str(), terranUnits, terranUnitsAll);
 		}
 
-		analyseResults(getEnemy()->getRace(), gameBN.str().c_str(), replayBN.c_str());
+		// analyse results for all predictions
+		for (int timePeriodsAhead = 0; timePeriodsAhead <= OdinUtils::Instance().predictTimePeriodsAhead; timePeriodsAhead++)
+		{
+			analyseResults(timePeriodsAhead, getEnemy()->getRace());
+		}
+		
 	}
 
 	//Count seen replays
@@ -470,13 +485,18 @@ void ReplayModule::onEnd(std::string BNfilename, bool isWinner)
 const char* ReplayModule::getReplayFileSpecificForInstance(BWAPI::Race race)
 {
 	std::ostringstream filename;
-	filename << REPLAY_DATA_PATH << race.getName().c_str() << "/" << BWAPI::Broodwar->getInstanceNumber() <<".txt";
+	filename << REPLAY_DATA_PATH << race.getName().c_str() << "/" << BWAPI::Broodwar->getInstanceNumber() <<"_instance.txt";
 	return filename.str().c_str();
 }
 
 void ReplayModule::writeToFile(const char* file, std::map<const char*,int> stuffToWrite, std::map<const char*,int> unitList)
 {
-	myfile.open (file, std::ios::app);
+	std::ofstream myfile (file, ios::app);
+
+	odin_utils::debug("WriteToFile:");
+	odin_utils::debug(file);
+
+	if (!myfile.is_open()) { odin_utils::debug("WTF, THE FILE IS NOT OPEN!"); return;}
 
 	std::vector<int> temp(unitList.size()+1, 0);
 	std::map<const char*,int>::iterator it;
@@ -485,6 +505,7 @@ void ReplayModule::writeToFile(const char* file, std::map<const char*,int> stuff
 		std::string stuffName = it->first;
 		odin_utils::replaceAllString(stuffName, " Siege Mode", ""); //Special case for siege tanks
 		odin_utils::replaceAllString(stuffName, " Tank Mode", "");
+		odin_utils::debug(stuffName);
 
 		std::map<const char*,int>::iterator tempIt;
 		for(tempIt=unitList.begin(); tempIt!=unitList.end();)
@@ -494,7 +515,10 @@ void ReplayModule::writeToFile(const char* file, std::map<const char*,int> stuff
 				if (temp.at(tempIt->second) == 0)	//Just set the value if it hasn't been set already
 				{									//(Special case with siege tanks)
 					temp.at(tempIt->second) = it->second;
+					odin_utils::debug("Yes, these units match!");
 				}
+				
+				break;
 				//myfile << " in if "<< tempIt->second << " " << it->second << " ";
 			}
 			tempIt++;
@@ -510,6 +534,8 @@ void ReplayModule::writeToFile(const char* file, std::map<const char*,int> stuff
 	{
 		nrOfPeriods = 25;
 	}
+
+	odin_utils::debug(myfile.is_open() ? "File is open" : "file is NOT open");
 	for(int timePeriod = 1; timePeriod <= nrOfPeriods; timePeriod++)
 	{
 		myfile << "period";

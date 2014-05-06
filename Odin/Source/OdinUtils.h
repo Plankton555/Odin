@@ -29,9 +29,9 @@ namespace odin_utils
 	//In order to use the short name in the BN
 	inline void shortenUnitName(std::string &str)
 	{
-		replaceAllString(str, "Protoss", "");
-		replaceAllString(str, "Terran", "");
-		replaceAllString(str, "Zerg", "");
+		replaceString(str, "Protoss", "");
+		replaceString(str, "Terran", "");
+		replaceString(str, "Zerg", "");
 		replaceAllString(str," ",""); //Remove all spaces
 		replaceAllString(str,"-",""); //remove '-' for u-238 shells
 		replaceAllString(str,"SiegeMode",""); //Siege tanks have two modes

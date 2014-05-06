@@ -38,10 +38,10 @@ void Odin::onStart()
 {	
 	DataModule::init();
 
+	OdinUtils::Instance().updateID = true; //important for initialization!
 	odin_utils::increaseID();
-	int gameID = odin_utils::getID();
-	BN_output_file = odin_utils::getOutputFile(gameID);//BWAPI::Broodwar->get
-
+	int gameID = OdinUtils::Instance().gameID;
+	BN_output_file = odin_utils::getOutputFile(gameID); //BWAPI::Broodwar->get
 	if(BWAPI::Broodwar->isReplay()){
 
 		/* If we want to show stuff on the screen. */

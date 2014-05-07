@@ -473,16 +473,14 @@ void ReplayModule::onEnd(std::string BNfilename, bool isWinner)
 const char* ReplayModule::getReplayFileSpecificForInstance(BWAPI::Race race)
 {
 	std::ostringstream filename;
-	filename << REPLAY_DATA_PATH << race.getName() << "/" << BWAPI::Broodwar->getInstanceNumber() <<"_instance.txt";
+	filename << REPLAY_DATA_PATH << race.getName().c_str()[0] << "/";
+	filename << BWAPI::Broodwar->getInstanceNumber() <<"O.txt";
+	odin_utils::debug(filename.str());
 	return filename.str().c_str();
 }
 
 void ReplayModule::writeToFile(const char* file, std::map<const char*,int> stuffToWrite, std::map<const char*,int> unitList)
 {
-	std::ofstream myfile (file, ios::app);
-
-	if (!myfile.is_open()) { return;}
-
 	std::vector<int> temp(unitList.size()+1, 0);
 	std::map<const char*,int>::iterator it;
 	for(it=stuffToWrite.begin(); it!=stuffToWrite.end();)
@@ -517,6 +515,9 @@ void ReplayModule::writeToFile(const char* file, std::map<const char*,int> stuff
 	{
 		nrOfPeriods = 25;
 	}
+
+	std::ofstream myfile (file, ios::app);
+	if (!myfile.is_open()) { odin_utils::debug("öhh, filen är ju inte ens öppen!"); odin_utils::debug(file); return; }
 
 	for(int timePeriod = 1; timePeriod <= nrOfPeriods; timePeriod++)
 	{

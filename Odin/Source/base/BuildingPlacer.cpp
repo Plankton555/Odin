@@ -224,29 +224,30 @@ BWAPI::TilePosition BuildingPlacer::getBuildLocationNear(const Building & b, int
 			bool tileInRegion				= (tileRegion == myRegion);
 
 			// is the building a pylon and proposed tile close to another pylon?
-			/*
+			
 			if (bIsPylon && isPosCloseToPylon(x, y))
 			{
-				continue;
+				// do nothing
 			}
-			*/
-
-			// if this location has priority to be built within our own region
-			if (inRegionPriority)
-			{
-				// if the tile is in region and we can build it there
-				if (tileInRegion && canBuild)
-				{
-					// return that position
-					return BWAPI::TilePosition(x, y);
-				}
-			}
-			// otherwise priority is not set for this building
 			else
 			{
-				if (canBuild)
+				// if this location has priority to be built within our own region
+				if (inRegionPriority)
 				{
-					 return BWAPI::TilePosition(x, y);
+					// if the tile is in region and we can build it there
+					if (tileInRegion && canBuild)
+					{
+						// return that position
+						return BWAPI::TilePosition(x, y);
+					}
+				}
+				// otherwise priority is not set for this building
+				else
+				{
+					if (canBuild)
+					{
+						 return BWAPI::TilePosition(x, y);
+					}
 				}
 			}
 		}

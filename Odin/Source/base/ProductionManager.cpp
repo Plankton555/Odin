@@ -81,9 +81,12 @@ void ProductionManager::performBuildOrderSearch(const std::vector< std::pair<Met
 			int numGates =				BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Gateway);
 			int numProbes =				BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Probe);
 			int numDrags =				BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Dragoon);
-			for(int i = 0; i < numNexus; i++)
+			if( numProbes + numNexus < 90)
 			{
-				queue.queueAsLowestPriority(MetaType(BWAPI::UnitTypes::Protoss_Probe), true);
+				for(int i = 0; i < numNexus; i++)
+				{
+					queue.queueAsLowestPriority(MetaType(BWAPI::UnitTypes::Protoss_Probe), true);
+				}
 			}
 			for(int i = 0; i < numGates; i++)
 			{

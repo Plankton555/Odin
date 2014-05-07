@@ -75,4 +75,19 @@ namespace odin_utils
 		std::string newStr = stringStream.str();
 		debug(newStr);
 	}
+
+	inline std::vector<std::string> splitDelim(const std::string& str, const std::string& delim)
+	{
+		std::string s = str;
+		std::vector<std::string> output;
+		size_t pos = 0;
+		std::string token;
+		while ((pos = s.find(delim)) != std::string::npos) {
+			token = s.substr(0, pos);
+			output.push_back(token);
+			s.erase(0, pos + delim.length());
+		}
+		output.push_back(s);
+		return output;
+	}
 };

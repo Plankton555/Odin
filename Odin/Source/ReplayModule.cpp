@@ -215,9 +215,9 @@ void ReplayModule::onStart()
 	string folder;
 	folder = pathname.substr(0, pathname.size()-filename.size());
 	string line;
-	ifstream myfile (SEEN_REPLAYS_PATH.c_str());
-	if (myfile.is_open()) {
-		while (getline(myfile,line)) {
+	ifstream repfile (SEEN_REPLAYS_PATH.c_str());
+	if (repfile.is_open()) {
+		while (getline(repfile,line)) {
 			if (line.compare(Broodwar->mapFileName()) == 0) {
 				Broodwar->printf("This replay has already been seen.");
 				gameSeen = true;
@@ -225,7 +225,7 @@ void ReplayModule::onStart()
 				return;
 			}
 		}
-		myfile.close();
+		repfile.close();
 	} else {
 		Broodwar->printf("Unable to open file.");
 	}
@@ -442,12 +442,12 @@ void ReplayModule::onEnd(std::string BNfilename, bool isWinner)
 	//Count seen replays
 	string line;
 	int nrFiles = 0;
-	ifstream myfile (SEEN_REPLAYS_PATH.c_str());
-	if (myfile.is_open()) {
-		while (getline(myfile,line)) {
+	ifstream seenrepfile (SEEN_REPLAYS_PATH.c_str());
+	if (seenrepfile.is_open()) {
+		while (getline(seenrepfile,line)) {
 			nrFiles++;
 		}
-		myfile.close();
+		seenrepfile.close();
 	} else {
 		Broodwar->printf("Unable to open file.");
 	}
@@ -470,16 +470,15 @@ void ReplayModule::onEnd(std::string BNfilename, bool isWinner)
 
 }
 
-const char* ReplayModule::getReplayFileSpecificForInstance(BWAPI::Race race)
+std::string ReplayModule::getReplayFileSpecificForInstance(BWAPI::Race race)
 {
 	std::ostringstream filename;
-	filename << REPLAY_DATA_PATH << race.getName().c_str()[0] << "/";
-	filename << BWAPI::Broodwar->getInstanceNumber() <<"O.txt";
+	filename << REPLAY_DATA_PATH << race.getName().c_str()[0] << BWAPI::Broodwar->getInstanceNumber() <<".txt";
 	odin_utils::debug(filename.str());
-	return filename.str().c_str();
+	return filename.str();
 }
 
-void ReplayModule::writeToFile(const char* file, std::map<const char*,int> stuffToWrite, std::map<const char*,int> unitList)
+void ReplayModule::writeToFile(std::string file, std::map<const char*,int> stuffToWrite, std::map<const char*,int> unitList)
 {
 	std::vector<int> temp(unitList.size()+1, 0);
 	std::map<const char*,int>::iterator it;
@@ -516,33 +515,47 @@ void ReplayModule::writeToFile(const char* file, std::map<const char*,int> stuff
 		nrOfPeriods = 25;
 	}
 
-	std::ofstream myfile (file, ios::app);
-	if (!myfile.is_open()) { odin_utils::debug("öhh, filen är ju inte ens öppen!"); odin_utils::debug(file); return; }
+	//std::ofstream myfile (file, ios::app);
+	//if (!myfile.is_open()) { odin_utils::debug("öhh, filen är ju inte ens öppen!"); odin_utils::debug(file); }
 
+	std::string filename = file; //"bwapi-data/Odin/odin_data/replays/P/test.txt";
 	for(int timePeriod = 1; timePeriod <= nrOfPeriods; timePeriod++)
 	{
-		myfile << "period";
-		if (timePeriod <= 9) myfile << "0";
-		myfile <<timePeriod << ",";
+		odin_utils::logBN(filename, "period");
+		odin_utils::logBN(filename, timePeriod, true);
+		odin_utils::logBN(filename, ",");
+
+
+		//myfile << "period";
+		//if (timePeriod <= 9) myfile << "0";
+		//myfile <<timePeriod << ",";
 
 		for(int i = 1; i < temp.size(); i++)
 		{	
-			if(temp.at(i)>0&&(temp.at(i)/1000<timePeriod||timePeriod==nrOfPeriods))
+			bool present = temp.at(i)>0&&(temp.at(i)/1000<timePeriod||timePeriod==nrOfPeriods);
+			odin_utils::logBN(filename, present ? 1 : 0);
+			if (i < temp.size()-1)
 			{
-				myfile << 1;
-			}else
-			{
-				myfile << 0;
-			}
-			if(i<temp.size()-1)
-			{
-				myfile << ",";
+				odin_utils::logBN(filename, ",");
 			}
 
+			//if(temp.at(i)>0&&(temp.at(i)/1000<timePeriod||timePeriod==nrOfPeriods))
+			//{
+			//	myfile << 1;
+			//}else
+			//{
+			//	myfile << 0;
+			//}
+			//if(i<temp.size()-1)
+			//{
+			//	myfile << ",";
+			//}
+
 		}
-		myfile << "\n";
+		odin_utils::logBN(filename, "\n");
+		//myfile << "\n";
 	}
-	myfile.close();
+	//myfile.close();
 }
 
 

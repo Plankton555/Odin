@@ -45,7 +45,7 @@ private:
 	bool gameSeen;
 	int replayLength;
 
-	void writeToFile(const char* file, std::map<const char*,int> stuffToWrite, std::map<const char*,int> unitList);
+	void writeToFile(std::string file, std::map<const char*,int> stuffToWrite, std::map<const char*,int> unitList);
 	void createMaps();
 
 	static BWAPI::Player* ReplayModule::enemy;
@@ -57,6 +57,6 @@ private:
 	void analyseResults(int timePeriodAhead, BWAPI::Race race);
 	void storeResult(std::string filename, std::vector<IntPair> result);
 	std::string getRaceResultFile(BWAPI::Race race, int timePeriodAhead);
-	const char* getReplayFileSpecificForInstance(BWAPI::Race race);
+	std::string getReplayFileSpecificForInstance(BWAPI::Race race);
 
 };

@@ -106,6 +106,16 @@ namespace odin_utils
 		logBN(filename, intToString.str());
 	}
 
+	inline void logBN(std::string filename, int number, bool doubleDigit)
+	{
+		if (doubleDigit && number < 10)
+		{
+			logBN(filename, 0);
+		}
+
+		logBN(filename, number);
+	}
+
 	inline void logBN(std::string filename, double number)
 	{
 		std::stringstream doubleToString;

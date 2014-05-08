@@ -145,12 +145,12 @@ void ProductionManager::update()
 		queue.queueAsHighestPriority(MetaType(BWAPI::Broodwar->self()->getRace().getSupplyProvider()), true);
 	}
 
-	// build pylons if minerals go high
-	int pylonTime = max(BWAPI::Broodwar->getFrameCount()/10, 720);
-	if ((BWAPI::Broodwar->getFrameCount() % pylonTime == 0) && BWAPI::Broodwar->self()->minerals()>1000)
+	// build pylons if minerals go high	
+	if ((BWAPI::Broodwar->getFrameCount() - nextProductionDeadlockCheck > 0) && BWAPI::Broodwar->self()->minerals()>1000)
 	{
 		BWAPI::Broodwar->printf("Production deadlock detected, building pylon!");
 		queue.queueAsHighestPriority(MetaType(BWAPI::Broodwar->self()->getRace().getSupplyProvider()), true);
+		nextProductionDeadlockCheck = BWAPI::Broodwar->getFrameCount() + max(BWAPI::Broodwar->getFrameCount()/10, 720);
 	}
 
 	// if they have cloaked units get a new goal asap

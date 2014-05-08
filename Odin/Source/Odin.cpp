@@ -59,7 +59,7 @@ void Odin::onStart()
 		// Save game ID as system environment variable so that game gets stored
 		std::ostringstream stringStream;
 		stringStream << "GAME_ID=";
-		stringStream << OdinUtils::Instance().gameID;
+		stringStream << odin_utils::getID();
 		putenv(stringStream.str().c_str());
 
 		BWAPI::Broodwar->setLocalSpeed(0);

@@ -60,7 +60,10 @@ void CombatCommander::assignIdleSquads(std::set<BWAPI::Unit *> & unitsToAssign)
 			}
 			regionIt++;
 		}
-
+		if(regionClosestToEnemy==NULL)
+		{
+			regionClosestToEnemy = getClosestEnemyRegion();
+		}
 		squadData.addSquad(Squad(combatUnits, SquadOrder(SquadOrder::Defend, BWAPI::Position(regionClosestToEnemy->getCenter()), 1000, "Defend Idle")));
 
 	}else

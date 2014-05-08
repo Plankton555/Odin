@@ -1,0 +1,1 @@
+TimePeriod,SpawningPool,Zergling,EvolutionChamber,CreepColony,SporeColony,SunkenColony,Extractor,HydraliskDen,Lair,QueensNest,Hive,DefilerMound,NydusCanal,UltraliskCavern,Spire,GreaterSpire,Hydralisk,Lurker,Queen,Defiler,Mutalisk,Scourge,Guardian,Devourer,Ultralisk,Overlord

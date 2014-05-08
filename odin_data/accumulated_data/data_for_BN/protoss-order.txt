@@ -1,0 +1,1 @@
+TimePeriod,Assimilator,Pylon,Gateway,Zealot,CyberCore,CitadelOfAdun,TemplarArchives,DarkTemplar,RoboticsFacility,RoboticsSupportBay,Forge,PhotonCannon,Stargate,Observatory,ArbiterTribunal,FleetBeacon,ShieldBattery,Dragoon,HighTemplar,Shuttle,Reaver,Observer,Carrier,Scout,Corsair,Arbiter,DarkArchon,Archon

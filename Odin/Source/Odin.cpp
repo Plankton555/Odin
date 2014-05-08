@@ -157,7 +157,7 @@ void Odin::onFrame()
 		{
 			for (int i = 0; i <= OdinUtils::Instance().predictTimePeriodsAhead; i++)
 			{
-				StrategyManager::Instance().getBayesianNet()->PrintBN(odin_utils::getOutputFile(odin_utils::getID(), i));
+				StrategyManager::Instance().getBayesianNet()->PrintBN(odin_utils::getOutputFile(odin_utils::getID(), i), i);
 			}
 		}
 

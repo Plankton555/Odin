@@ -123,16 +123,10 @@ double BayesianNet::ReadProbability(const std::string &nodeName, int nodeState)
 }
 
 
-void BayesianNet::UpdateBeliefs(int timePeriod)
+void BayesianNet::UpdateBeliefs()
 {
 	delete solution;
 	solution = new bayesian_network_join_tree(bn, join_tree);
-	SetEvidence("TimePeriod", timePeriod);
-}
-
-void BayesianNet::UpdateBeliefs()
-{
-	UpdateBeliefs(std::min(24, odin_utils::getTimePeriod() - 1));
 }
 
 bool BayesianNet::exists(const std::string &nodeName)
@@ -147,9 +141,13 @@ void BayesianNet::PrintBN(std::string filename)
 
 void BayesianNet::PrintBN(std::string filename, int timePeriodsAhead)
 {
+	if (BWAPI::Broodwar->enemy()->getRace() == BWAPI::Races::Unknown) { return; }
+
 	// set evidence of TimePeriod in BN
-	UpdateBeliefs(odin_utils::getTimePeriod() + timePeriodsAhead);
-	
+	int timePeriod = std::min(24, odin_utils::getTimePeriod() + timePeriodsAhead - 1);
+	SetEvidence("TimePeriod", timePeriod);
+	UpdateBeliefs();
+
 	// print all nodes values
 	BWAPI::Race enemyRace = BWAPI::Broodwar->enemy()->getRace();
 	if (enemyRace == BWAPI::Races::Unknown || enemyRace == BWAPI::Races::Random) { return; }
@@ -163,6 +161,8 @@ void BayesianNet::PrintBN(std::string filename, int timePeriodsAhead)
 	odin_utils::logBN(filename, "\n");
 	
 	//set Beliefs back to normal again
+	timePeriod = std::min(24, odin_utils::getTimePeriod() - 1);
+	SetEvidence("TimePeriod", timePeriod);
 	UpdateBeliefs(); 
 }
 

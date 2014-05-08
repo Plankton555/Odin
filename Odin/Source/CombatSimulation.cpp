@@ -22,16 +22,35 @@ void CombatSimulation::setCombatUnits(const BWAPI::Position & center, const int 
 
 	BOOST_FOREACH (BWAPI::Unit * unit, ourCombatUnits)
 	{
-        if (InformationManager::Instance().isCombatUnit(unit->getType()) && SparCraft::System::isSupportedUnitType(unit->getType()))
+        if (InformationManager::Instance().isCombatUnit(unit->getType()))
 		{
-            try
-            {
-			    s.addUnit(getSparCraftUnit(unit));
-            }
-            catch (int e)
-            {
-                BWAPI::Broodwar->printf("Problem Adding Self Unit with ID: %d", unit->getID());
-            }
+			if( SparCraft::System::isSupportedUnitType(unit->getType()) )
+			{
+				try
+				{
+					s.addUnit(getSparCraftUnit(unit));
+				}
+				catch (int e)
+				{
+					BWAPI::Broodwar->printf("Problem Adding Self Unit with ID: %d", unit->getID());
+				}
+			}
+			else
+			{
+				try
+				{
+					if(		unit->getType() == BWAPI::UnitTypes::Protoss_Reaver 
+						||	unit->getType() == BWAPI::UnitTypes::Protoss_Carrier
+						||	unit->getType() == BWAPI::UnitTypes::Protoss_High_Templar )
+					{
+						s.addUnit(getSparCraftDragoon(unit));
+					}
+				}
+				catch (int e)
+				{
+					BWAPI::Broodwar->printf("Problem Adding Self Unit with ID: %d", unit->getID());
+				}
+			}
 		}
 	}
 
@@ -63,6 +82,19 @@ const SparCraft::Unit CombatSimulation::getSparCraftUnit(BWAPI::Unit * unit) con
                             unit->getID(), 
                             getSparCraftPlayerID(unit->getPlayer()), 
                             unit->getHitPoints() + unit->getShields(), 
+                            0,
+		                    BWAPI::Broodwar->getFrameCount(), 
+                            BWAPI::Broodwar->getFrameCount());	
+}
+
+const SparCraft::Unit CombatSimulation::getSparCraftDragoon(BWAPI::Unit * unit) const
+{
+	BWAPI::UnitType dragoon = BWAPI::UnitTypes::Protoss_Dragoon;
+	return SparCraft::Unit( dragoon,
+                            SparCraft::Position(unit->getPosition()), 
+                            unit->getID(), 
+                            getSparCraftPlayerID(unit->getPlayer()), 
+							dragoon.maxHitPoints() + dragoon.maxShields(), 
                             0,
 		                    BWAPI::Broodwar->getFrameCount(), 
                             BWAPI::Broodwar->getFrameCount());	

@@ -41,7 +41,7 @@ namespace odin_utils
 	inline int getTimePeriod()
 	{
 		int timePeriod = BWAPI::Broodwar->getFrameCount()/1000;
-		return std::min(25, timePeriod);
+		return std::min(24, timePeriod);
 	}
 
 	inline void debug(std::string str)

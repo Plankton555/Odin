@@ -98,9 +98,11 @@ void BNetParser::characters(const std::string& data)
 			doubleVec->push_back(x);
 		}
 		currentNode->probabilities = *doubleVec;
+		delete doubleVec;
 		// Possibly memory leak if not removing dataVec (since doubleVec is used instead)
 		waitingForProbs = -1; // don't wait for more probabilities
 	}
+	delete dataVec;
 }
 
 void BNetParser::processing_instruction(const unsigned long line_number, const std::string& target, const std::string& data)

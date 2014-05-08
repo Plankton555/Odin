@@ -99,6 +99,19 @@ std::map<std::string,std::vector<int>*>* DataModule::getFuzzyValues()
 	return units;
 }
 
+int DataModule::getSomeFuzzy(std::string unit)
+{
+	std::map<std::string,std::vector<int>* >::iterator it;
+	for (it = units->begin(); it != units->end(); it++)
+	{
+		if (strcmp(it->first.c_str(), unit.c_str()) == 0 && it->second->size() > 2)
+		{
+			return it->second->at(2);
+		}
+	}
+	return NULL;
+}
+
 std::vector<BWAPI::UnitType> * DataModule::getCounter(std::string unit)
 {
 	std::map<std::string,std::vector<BWAPI::UnitType>* >::iterator it = counters->find(unit);

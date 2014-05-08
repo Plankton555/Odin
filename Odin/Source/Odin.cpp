@@ -159,8 +159,11 @@ void Odin::onFrame()
 			{
 				StrategyManager::Instance().getBayesianNet()->PrintBN(odin_utils::getOutputFile(odin_utils::getID(), i), i);
 			}
-			StrategyManager::Instance().getBayesianNet()->SetEvidence("TimePeriod", odin_utils::getTimePeriod());
-			StrategyManager::Instance().getBayesianNet()->UpdateBeliefs(); 
+			if (BWAPI::Broodwar->enemy()->getRace() != BWAPI::Races::Unknown)
+			{
+				StrategyManager::Instance().getBayesianNet()->SetEvidence("TimePeriod", odin_utils::getTimePeriod());
+				StrategyManager::Instance().getBayesianNet()->UpdateBeliefs(); 
+			}
 		}
 
 		if (Options::Modules::USING_UNIT_COMMAND_MGR)

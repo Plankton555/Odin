@@ -5,6 +5,7 @@
 #include <boost/algorithm/string.hpp>
 
 #define ODIN_DEBUG true
+#define TIME_PERIODS_AHEAD (6)
 
 using namespace std;
 

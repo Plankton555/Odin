@@ -29,7 +29,7 @@
 typedef std::vector<BWAPI::Unit*> UnitVector;
 const std::string ODIN_DATA_FILEPATH = "bwapi-data/Odin/odin_data/";
 
-#define MAX_TIME_PERIODS 24
+#define MAX_TIME_PERIODS (24)
 
 BWAPI::AIModule * __NewAIModule();
 

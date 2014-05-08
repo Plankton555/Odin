@@ -83,8 +83,7 @@ namespace odin_utils
 
 	inline int getTimePeriod()
 	{
-		int timePeriod = BWAPI::Broodwar->getFrameCount()/1000;
-		return timePeriod + 1;
+		return std::min(MAX_TIME_PERIODS, BWAPI::Broodwar->getFrameCount()/1000);
 	}
 
 	inline void logBN(std::string filename, std::string str)

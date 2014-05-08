@@ -142,10 +142,11 @@ void BayesianNet::PrintBN(std::string filename)
 void BayesianNet::PrintBN(std::string filename, int timePeriodsAhead)
 {
 	if (BWAPI::Broodwar->enemy()->getRace() == BWAPI::Races::Unknown) { return; }
+	if (MAX_TIME_PERIODS < odin_utils::getTimePeriod() + timePeriodsAhead) { return; }
 
 	// set evidence of TimePeriod in BN
-	int timePeriod = std::min(24, odin_utils::getTimePeriod() + timePeriodsAhead - 1);
-	SetEvidence("TimePeriod", timePeriod);
+	
+	SetEvidence("TimePeriod", odin_utils::getTimePeriod() + timePeriodsAhead);
 	UpdateBeliefs();
 
 	// print all nodes values
@@ -160,10 +161,7 @@ void BayesianNet::PrintBN(std::string filename, int timePeriodsAhead)
 	}
 	odin_utils::logBN(filename, "\n");
 	
-	//set Beliefs back to normal again
-	timePeriod = std::min(24, odin_utils::getTimePeriod() - 1);
-	SetEvidence("TimePeriod", timePeriod);
-	UpdateBeliefs(); 
+	//NOTE: Beliefs are set back to normal again by the caller!
 }
 
 void BayesianNet::PrintNode(std::string filename, ParsedNode * node)
@@ -186,7 +184,7 @@ void BayesianNet::PrintNode(std::string filename, ParsedNode * node)
 
 		if (!legitTimePeriod)
 		{
-			odin_utils::logBN(filename, (odin_utils::getTimePeriod()));
+			odin_utils::logBN(filename, (odin_utils::getTimePeriod() + 1));
 		}
 	} 
 	else

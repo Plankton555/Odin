@@ -663,10 +663,18 @@ const MetaPairVector StrategyManager::getBuildOrderGoal()
 	return getDefaultBuildOrderGoal();
 }
 
+bool comPair( const std::pair<MetaType, UnitCountType>& i, const std::pair<MetaType, UnitCountType>& j ) 
+{
+	int iNow = BWAPI::Broodwar->self()->allUnitCount(i.first.unitType);
+	int jNow = BWAPI::Broodwar->self()->allUnitCount(j.first.unitType);
+	return (i.second - iNow) < (j.second - jNow);
+}
+
 const MetaPairVector StrategyManager::getProtossCounterBuildOrderGoal()
 {
 	MetaPairVector goal;
 	bool shouldMakeStorm = false;
+	bool techedThisGoal = false;
 	std::map<std::vector<BWAPI::UnitType>*, double>::iterator it;
 	for (it = armyCounters.begin(); it != armyCounters.end(); it++)
 	{
@@ -698,9 +706,10 @@ const MetaPairVector StrategyManager::getProtossCounterBuildOrderGoal()
 					wantedType = it->first->at(0);
 
 					//Tech to expensive if can afford
-					if (BWAPI::Broodwar->self()->minerals() > MINERALS_NEEDED_TO_TECH_EXPENSIVE_COUNTER && 
+					if (!techedThisGoal && BWAPI::Broodwar->self()->minerals() > MINERALS_NEEDED_TO_TECH_EXPENSIVE_COUNTER && 
 						BWAPI::Broodwar->self()->gas() > GAS_NEEDED_TO_TECH_EXPENSIVE_COUNTER)
 					{
+						techedThisGoal = true;
 						BWAPI::Broodwar->printf("Teching for %s", it->first->at(1).getName().c_str());
 						for(mit = m.begin(); mit != m.end(); mit++)
 						{
@@ -722,10 +731,15 @@ const MetaPairVector StrategyManager::getProtossCounterBuildOrderGoal()
 			int nrUnitsNow = BWAPI::Broodwar->self()->allUnitCount(wantedType);
 			int nrUnitsWanted = nrExtraUnits + nrUnitsNow;
 
-			if (wantedType == BWAPI::UnitTypes::Protoss_Photon_Cannon)
+			if (wantedType == BWAPI::UnitTypes::Protoss_Photon_Cannon
+				|| wantedType == BWAPI::UnitTypes::Protoss_High_Templar
+				|| wantedType == BWAPI::UnitTypes::Protoss_Reaver
+				|| wantedType == BWAPI::UnitTypes::Protoss_Observer
+				|| wantedType == BWAPI::UnitTypes::Protoss_Dark_Templar)
 			{
-				nrUnitsWanted = std::min(5, nrUnitsWanted); //Don't mass out tons of photon cannons
-				if (nrUnitsWanted < nrUnitsNow) continue; //Don't even add this line if we have enough cannons
+				int maxUnits = DataModule::getSomeFuzzy(wantedType.getName());
+				nrUnitsWanted = std::min(maxUnits, nrUnitsWanted); //Don't mass out tons of units not meant to
+				if (nrUnitsWanted <= nrUnitsNow) continue; //Don't even add this line if we have enough cannons
 				nrExtraUnits = 0; //So we don't add any extra if photon cannon is added already
 			}
 
@@ -753,6 +767,23 @@ const MetaPairVector StrategyManager::getProtossCounterBuildOrderGoal()
 			}
 		}
 	}
+	//Fix so the goals will not be too big. Take top 3 units but beware of Observers
+	std::sort(goal.begin(), goal.end(), comPair);
+	MetaPairVector::iterator start = goal.begin();
+	while( goal.end() - start > 3)
+	{
+		BWAPI::UnitType ut = start->first.unitType;
+		//dont remove buildings or observers form the queue
+		if ( ut.isBuilding() || ut == BWAPI::UnitTypes::Protoss_Observer)
+		{
+			start += 1;
+		}
+		else
+		{
+			goal.erase(start);
+		}
+	}
+
 	int numNexusAll =			BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Nexus);
 	int numProbes =				BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Probe);
 

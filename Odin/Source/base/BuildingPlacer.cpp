@@ -189,6 +189,7 @@ BWAPI::TilePosition BuildingPlacer::getBuildLocationNear(const Building & b, int
 	bool first = true;
 	int dx     = 0;
 	int dy     = 1;
+	bool bIsPylon = (b.type == BWAPI::UnitTypes::Protoss_Pylon) ? true : false;
 
     SparCraft::Timer t;
     t.start();
@@ -222,22 +223,31 @@ BWAPI::TilePosition BuildingPlacer::getBuildLocationNear(const Building & b, int
 			// is the proposed tile in our region?
 			bool tileInRegion				= (tileRegion == myRegion);
 
-			// if this location has priority to be built within our own region
-			if (inRegionPriority)
+			// is the building a pylon and proposed tile close to another pylon?
+			
+			if (bIsPylon && isPosCloseToPylon(x, y))
 			{
-				// if the tile is in region and we can build it there
-				if (tileInRegion && canBuild)
-				{
-					// return that position
-					return BWAPI::TilePosition(x, y);
-				}
+				// do nothing
 			}
-			// otherwise priority is not set for this building
 			else
 			{
-				if (canBuild)
+				// if this location has priority to be built within our own region
+				if (inRegionPriority)
 				{
-					 return BWAPI::TilePosition(x, y);
+					// if the tile is in region and we can build it there
+					if (tileInRegion && canBuild)
+					{
+						// return that position
+						return BWAPI::TilePosition(x, y);
+					}
+				}
+				// otherwise priority is not set for this building
+				else
+				{
+					if (canBuild)
+					{
+						 return BWAPI::TilePosition(x, y);
+					}
 				}
 			}
 		}
@@ -276,6 +286,21 @@ BWAPI::TilePosition BuildingPlacer::getBuildLocationNear(const Building & b, int
 	}
 
 	return  BWAPI::TilePositions::None;
+}
+
+bool BuildingPlacer::isPosCloseToPylon(int x, int y) const
+{
+	BOOST_FOREACH (BWAPI::Unit * unit, BWAPI::Broodwar->self()->getUnits())
+	{
+		if (unit->getType() == BWAPI::UnitTypes::Protoss_Pylon)
+		{
+			if (std::abs(unit->getTilePosition().x() - x) < 6 && std::abs(unit->getTilePosition().y() - y) < 6)
+			{
+				return true;
+			}
+		}
+	}
+	return false;
 }
 
 bool BuildingPlacer::tileOverlapsBaseLocation(BWAPI::TilePosition tile, BWAPI::UnitType type) const

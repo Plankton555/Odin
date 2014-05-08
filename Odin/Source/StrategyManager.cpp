@@ -703,7 +703,25 @@ const MetaPairVector StrategyManager::getProtossCounterBuildOrderGoal()
 					if (nrExtraUnits > 1) //If we want more than 1 unit, then let half the units be cheap units
 					{
 						nrExtraUnits /= 2;
-						goal.push_back(MetaPair(it->first->at(0), nrExtraUnits));
+						int unitsNow = BWAPI::Broodwar->self()->allUnitCount(it->first->at(0));
+						//If we already have included this unit, then just add the nr, don't add a new line
+						boolean isIncluded = false;
+						MetaPairVector::iterator gIt;
+						for (gIt = goal.begin(); gIt != goal.end(); gIt++)
+						{
+							if (gIt->first.unitType == it->first->at(0))
+							{
+								gIt->second += nrExtraUnits;
+								isIncluded = true;
+								break;
+							}
+						}
+
+						if (!isIncluded)
+						{
+							goal.push_back(MetaPair(it->first->at(0), unitsNow+nrExtraUnits));
+						}
+
 					}
 					wantedType = it->first->at(1);
 				} else
@@ -788,7 +806,6 @@ const MetaPairVector StrategyManager::getProtossCounterBuildOrderGoal()
 			goal.erase(start);
 		}
 	}
-
 	int numNexusAll =			BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Nexus);
 	int numProbes =				BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Probe);
 

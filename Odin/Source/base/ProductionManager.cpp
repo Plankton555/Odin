@@ -41,6 +41,73 @@ void ProductionManager::setBuildOrder(const std::vector<MetaType> & buildOrder)
 	}
 }
 
+bool ProductionManager::canBuild(MetaType entity)
+{
+	if (entity.isUnit())
+	{
+		if (odin_utils::getRequiredUnits(entity.unitType).size() == 0) //No requirements means that we can build
+		{
+			return true;
+		}
+	}
+	else if (entity.isTech())
+	{
+		if (BWAPI::Broodwar->self()->allUnitCount(entity.techType.whatResearches()) > 0) //More than 0 means that we can research
+		{
+			return true;
+		}
+	}
+	else if (entity.isUpgrade())
+	{
+		if (BWAPI::Broodwar->self()->allUnitCount(entity.upgradeType.whatUpgrades()) > 0) //More than 0 means that we can research
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+void ProductionManager::simplifyGoal()
+{
+	//Try to build something directly
+	bool canBuildSomething = false;
+	for (int i = 0; i < searchingGoal.size(); i++)
+	{
+		if (canBuild(searchingGoal.at(i).first))
+		{
+			int nrExtraUnits = 1;
+			if (searchingGoal.at(i).first.isUnit())
+			{
+				nrExtraUnits = searchingGoal.at(i).second - BWAPI::Broodwar->self()->allUnitCount(searchingGoal.at(i).first.unitType);
+			}
+			
+			BWAPI::Broodwar->printf("Moving %s from goal to build queue", searchingGoal.at(i).first.getName().c_str());
+			odin_utils::debug(searchingGoal.at(i).first.getName().c_str());
+			odin_utils::debug("x", nrExtraUnits);
+			for (int j = 0; j < nrExtraUnits; j++) //Add to the queue
+			{
+				queue.queueAsLowestPriority(searchingGoal.at(i).first, true);
+			}
+
+			searchingGoal.erase(searchingGoal.begin() + i);
+			i--;
+			canBuildSomething = true;
+		}
+	}
+
+	if (!canBuildSomething)
+	{
+		//Half the goal size
+		BWAPI::Broodwar->printf("Trying to make the goal smaller", searchingGoal.size());
+		odin_utils::debug("MAKING SMALLER!");
+		int size = searchingGoal.size();
+		while(searchingGoal.size() > size/2 && searchingGoal.size() > 1)
+		{
+			searchingGoal.pop_back();
+		}
+	}
+}
+
 void ProductionManager::performBuildOrderSearch(const std::vector< std::pair<MetaType, UnitCountType> > & goal)
 {	
 	if (searchingGoal.size() == 0) //No goal is being searched
@@ -58,18 +125,14 @@ void ProductionManager::performBuildOrderSearch(const std::vector< std::pair<Met
 		searchCounter = 0;
 		searchingGoal.clear(); //empty it to allow a new search
 	}
-	else if(BWAPI::Broodwar->getFrameCount()-lastBuildOrderUpdate>500)
+	else if(BWAPI::Broodwar->getFrameCount()-lastBuildOrderUpdate>500) //If the search takes long time, then do some nice stuff about it!
 	{	
 		if(searchingGoal.size() > 0 && searchCounter < 3)
 		{	
+			simplifyGoal();
+
 			lastBuildOrderUpdate = BWAPI::Broodwar->getFrameCount();
-			BWAPI::Broodwar->printf("Trying to make the goal smaller", searchingGoal.size());
 			searchCounter++;
-			int size = searchingGoal.size();
-			while(searchingGoal.size() > size/2 && searchingGoal.size() > 1)
-			{
-				searchingGoal.pop_back();
-			}
 		}
 		else
 		{	

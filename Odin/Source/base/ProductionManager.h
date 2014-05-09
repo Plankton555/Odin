@@ -51,6 +51,8 @@ class ProductionManager
 	BuildOrderQueue				queue;
 	BWAPI::UnitType				getProducer(MetaType t);
 
+	bool						canBuild(MetaType entity);
+	void						simplifyGoal();
 	bool						contains(UnitVector & units, BWAPI::Unit * unit);
 	void						populateTypeCharMap();
 	bool						hasResources(BWAPI::UnitType type);

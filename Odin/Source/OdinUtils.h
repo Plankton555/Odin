@@ -2,7 +2,7 @@
 
 #include "Common.h"
 
-#define ODIN_DEBUG false
+#define ODIN_DEBUG true
 
 using namespace std;
 
@@ -89,5 +89,20 @@ namespace odin_utils
 		}
 		output.push_back(s);
 		return output;
+	}
+
+	inline std::vector<BWAPI::UnitType> getRequiredUnits(BWAPI::UnitType entity)
+	{
+		std::vector<BWAPI::UnitType> needTech;
+		std::map<BWAPI::UnitType, int> m = entity.requiredUnits();
+		std::map<BWAPI::UnitType, int>::iterator mit;
+		for (mit = m.begin(); mit != m.end(); mit++)
+		{
+			if (BWAPI::Broodwar->self()->allUnitCount(mit->first) < mit->second)
+			{
+				needTech.push_back(mit->first);
+			}
+		}
+		return needTech;
 	}
 };

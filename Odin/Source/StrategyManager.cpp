@@ -119,7 +119,6 @@ StrategyManager & StrategyManager::Instance()
 		default:
 			break;
 	}
-	BWAPI::Broodwar->printf(("Strategy state updated to " + stateName).c_str());
  }
  
 const double StrategyManager::getArmyPotential(BWAPI::Player *player, double economy) const
@@ -260,7 +259,6 @@ void StrategyManager::loadBayesianNetwork()
 			dlib::parse_xml(BAYESNET_FOLDER + "protoss.xdsl", parser);
 			bayesianNet = parser.getBayesianNet();
 			bayesianNet->UpdateBeliefs();
-			BWAPI::Broodwar->printf("Enemy race identified as Protoss. Bayesian Network loaded.");
 		}
 		else if (enemyRace ==  BWAPI::Races::Terran)
 		{
@@ -268,7 +266,6 @@ void StrategyManager::loadBayesianNetwork()
 			dlib::parse_xml(BAYESNET_FOLDER + "terran.xdsl", parser);
 			bayesianNet = parser.getBayesianNet();
 			bayesianNet->UpdateBeliefs();
-			BWAPI::Broodwar->printf("Enemy race identified as Terran. Bayesian Network loaded.");
 		}
 			else if (enemyRace == BWAPI::Races::Zerg)
 		{
@@ -276,7 +273,6 @@ void StrategyManager::loadBayesianNetwork()
 			dlib::parse_xml(BAYESNET_FOLDER + "zerg.xdsl", parser);
 			bayesianNet = parser.getBayesianNet();
 			bayesianNet->UpdateBeliefs();
-			BWAPI::Broodwar->printf("Enemy race identified as Zerg. Bayesian Network loaded.");
 		}
 	}
 }
@@ -388,8 +384,8 @@ void StrategyManager::readResults()
 		BWAPI::Broodwar->printf(
 			"Unable to open file for recorded data, starting from scratch");
 	}
-	BWAPI::Broodwar->printf("Results (%s): (%d %d) (%d %d) (%d %d)", BWAPI::Broodwar->enemy()->getName().c_str(), 
-		results[0].first, results[0].second, results[1].first, results[1].second, results[2].first, results[2].second);
+	//BWAPI::Broodwar->printf("Results (%s): (%d %d) (%d %d) (%d %d)", BWAPI::Broodwar->enemy()->getName().c_str(), 
+	//	results[0].first, results[0].second, results[1].first, results[1].second, results[2].first, results[2].second);
 	
 }
 
@@ -618,7 +614,6 @@ const MetaPairVector StrategyManager::getBuildOrderGoal()
 				MetaPairVector goal = getProtossCounterBuildOrderGoal();
 				if (goal.size() > 1)
 				{
-					BWAPI::Broodwar->printf("(Attack) Goal set with length: (%d) ", goal.size());
 					return goal;
 				} 
 				else 
@@ -645,9 +640,6 @@ const MetaPairVector StrategyManager::getBuildOrderGoal()
 			returnGoal.reserve( cannonGoal.size() + armyGoal.size() ); // preallocate memory
 			returnGoal.insert( returnGoal.end(), armyGoal.begin(), armyGoal.end() );
 			returnGoal.insert( returnGoal.end(), cannonGoal.begin(), cannonGoal.end() );
-
-			BWAPI::Broodwar->printf("(Defend) Goal set with length: (%d) ", returnGoal.size());
-			BWAPI::Broodwar->printf("(Army) Goal set with length: (%d) ", armyGoal.size());
 			return returnGoal;
 
 			break;// do defend

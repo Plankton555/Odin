@@ -1,7 +1,7 @@
 #include "Common.h"
 #include "HighTemplarManager.h"
 
-HighTemplarManager::HighTemplarManager()  { }
+HighTemplarManager::HighTemplarManager() : unitClosestToEnemy(NULL) { }
 
 void HighTemplarManager::executeMicro(const UnitVector & targets) 
 {
@@ -23,7 +23,8 @@ void HighTemplarManager::executeMicro(const UnitVector & targets)
 		if (
 			!(targets[i]->getType().isBuilding()) &&
 			!(targets[i]->getType() == BWAPI::UnitTypes::Zerg_Larva) && 
-			!(targets[i]->getType() == BWAPI::UnitTypes::Zerg_Egg)) 
+			!(targets[i]->getType() == BWAPI::UnitTypes::Zerg_Egg) &&
+			targets[i]->isVisible() ) 
 		{
 			hTUnitTargets.push_back(targets[i]);
 		}
@@ -53,22 +54,23 @@ void HighTemplarManager::executeMicro(const UnitVector & targets)
 
 					if( (noShields && enemyDist < enemyRange ) || !enoughEnergy)
 					{
-						BWAPI::Position templarPos = (templar->getPosition() - target->getPosition());
+						BWAPI::Position templarPos = (unitClosestToEnemy->getPosition() - target->getPosition() + unitClosestToEnemy->getPosition());
 						smartMove(templar, templarPos);
 					}else
 					{						
-						smartStormUnit(templar,target);
+						smartStormUnit(templar, target);
 					}
 
 				}		
 
-			}else
+			}
+			else
 			{
 				// if we're not near the order position
-				if (templar->getDistance(order.position) > 100)
+				if (templar->getDistance(order.position) > 300)
 				{
 					// move to it
-					smartMove(templar, order.position);
+					smartMove(templar, unitClosestToEnemy->getPosition());
 				}
 
 			}

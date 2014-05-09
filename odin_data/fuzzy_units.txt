@@ -10,7 +10,7 @@ Protoss Assimilator,0.1.2.5,None
 Protoss Cybernetics Core,0,None
 Protoss Citadel of Adun,0,None
 Protoss Forge,0,None
-Protoss Photon Cannon,0.3.6.10,None
+Protoss Photon Cannon,0.3.5.10,None
 Protoss Stargate,0.1.3.5,None
 Protoss Robotics Facility,0.1.3.5,None
 Protoss Robotics Support Bay,0,None
@@ -22,12 +22,12 @@ Protoss Shield Battery,0,None
 ;
 ;Protoss units
 Protoss Zealot,0.3.8.15,Protoss Dragoon.Protoss High Templar
-Protoss Dragoon,0.3.7.12,Protoss Reaver.Protoss High Templar
-Protoss Dark Templar,0.3.5.7,Protoss Photon Cannon.Protoss Observer
-Protoss High Templar,0.3.5.10,Protoss Reaver.Protoss Dark Templar
+Protoss Dragoon,0.3.7.12,Protoss Dragoon.Protoss High Templar
+Protoss Dark Templar,0.1.3.6,Protoss Photon Cannon.Protoss Observer
+Protoss High Templar,0.3.6.10,Protoss Reaver.Protoss Dark Templar
 Protoss Archon,0.2.4.6,Protoss Reaver.Protoss Carrier
 Protoss Dark Archon,0.2.3.4,Protoss Dragoon.Protoss Reaver
-Protoss Reaver,0.1.2.5,Protoss Dark Templar.Protoss Carrier
+Protoss Reaver,0.2.5.8,Protoss Dark Templar.Protoss Carrier
 Protoss Scout,0.2.4.8,Protoss Dragoon.Protoss Corsair
 Protoss Corsair,0.3.5.10,Protoss Dragoon
 Protoss Arbiter,0.1.2.5,Protoss Observer.Protoss High Templar

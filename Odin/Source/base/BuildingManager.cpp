@@ -97,6 +97,11 @@ void BuildingManager::assignWorkersToUnassignedBuildings()
 		if (!testLocation.isValid())
 		{
 			lastUnsuccessfulSearch = BWAPI::Broodwar->getFrameCount();
+			if (b.type == BWAPI::UnitTypes::Protoss_Pylon)//Remove if it's a pylon that don't have room, probably too much pylons
+			{
+				buildingData.removeCurrentBuilding(ConstructionData::Unassigned);
+				BWAPI::Broodwar->printf("No place to build Pylon, canceling construction order");
+			}
 			continue;
 		}
 

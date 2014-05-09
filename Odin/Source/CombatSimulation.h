@@ -28,6 +28,7 @@ public:
 
 	const SparCraft::Unit			getSparCraftUnit(const UnitInfo & ui) const;
     const SparCraft::Unit			getSparCraftUnit(BWAPI::Unit * unit) const;
+	const SparCraft::Unit			getSparCraftDragoon(BWAPI::Unit * unit) const;
 	const SparCraft::GameState &	getSparCraftState() const;
 
 	const IDType getSparCraftPlayerID(BWAPI::Player * player) const;

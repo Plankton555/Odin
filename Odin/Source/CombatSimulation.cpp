@@ -1,4 +1,5 @@
 #include "CombatSimulation.h"
+#include "OdinUtils.h"
 
 CombatSimulation::CombatSimulation()
 	: hasLogged(false)
@@ -22,12 +23,18 @@ void CombatSimulation::setCombatUnits(const BWAPI::Position & center, const int 
 
 	BOOST_FOREACH (BWAPI::Unit * unit, ourCombatUnits)
 	{
-        if (InformationManager::Instance().isCombatUnit(unit->getType()))
+		if (InformationManager::Instance().isCombatUnit(unit->getType()) || unit->getType() == BWAPI::UnitTypes::Protoss_High_Templar)
 		{
 			if( SparCraft::System::isSupportedUnitType(unit->getType()) )
 			{
 				try
 				{
+					if( !(unit->getType() == BWAPI::UnitTypes::Protoss_Zealot
+						|| unit->getType() == BWAPI::UnitTypes::Protoss_Dragoon) )
+					{
+						odin_utils::debug("Supported: " + unit->getType().getName());
+					}
+					
 					s.addUnit(getSparCraftUnit(unit));
 				}
 				catch (int e)
@@ -39,10 +46,12 @@ void CombatSimulation::setCombatUnits(const BWAPI::Position & center, const int 
 			{
 				try
 				{
+					odin_utils::debug("NotSupported: " + unit->getType().getName());
 					if(		unit->getType() == BWAPI::UnitTypes::Protoss_Reaver 
 						||	unit->getType() == BWAPI::UnitTypes::Protoss_Carrier
 						||	unit->getType() == BWAPI::UnitTypes::Protoss_High_Templar )
 					{
+						odin_utils::debug("Added: " + unit->getType().getName());
 						s.addUnit(getSparCraftDragoon(unit));
 					}
 				}

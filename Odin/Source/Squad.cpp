@@ -245,7 +245,7 @@ BWAPI::Position Squad::calcRegroupPosition()
 
 	BOOST_FOREACH(BWAPI::Unit * unit, units)
 	{
-		if (!nearEnemy[unit])
+		if (!nearEnemy[unit]&&!unit->isUnderAttack())
 		{
 			int dist = unit->getDistance(order.position);
 			if (dist < minDist)

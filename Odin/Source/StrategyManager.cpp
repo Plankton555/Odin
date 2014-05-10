@@ -930,9 +930,17 @@ const bool StrategyManager::shouldExpand() const
 	double opArmy = getArmyPotential(BWAPI::Broodwar->enemy(), opEconomy)*enemyUncertaintyFactor;
 	double opDefense = getDefensePotential(BWAPI::Broodwar->enemy())*enemyUncertaintyFactor;
 
+	//If we are already building a nexus
+	if (BWAPI::Broodwar->self()->completedUnitCount(BWAPI::UnitTypes::Protoss_Nexus) < 
+			BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Nexus))
+	{
+		return false;
+	}
+
 	// if there are more than 10 idle workers, expand
 	if (WorkerManager::Instance().getNumIdleWorkers() > IDLE_WORKERS_THRESHOLD_TO_EXPAND) 
 	{
+		BWAPI::Broodwar->printf("Exping - too many idle workers");
 		return true;
 	}
 
@@ -943,16 +951,19 @@ const bool StrategyManager::shouldExpand() const
 
 	if (minerals > 600 && myArmy>opArmy*enemyUncertaintyFactor)
 	{
+		BWAPI::Broodwar->printf("Exping - good army");
 		return true;
 	}
 
 	if(myEconomy<opEconomy*enemyUncertaintyFactor)
 	{
+		BWAPI::Broodwar->printf("Exping - good economy");
 		return true;
 	}
 
 	if(minerals > MINERAL_THRESHOLD_TO_EXPAND)
 	{
+		BWAPI::Broodwar->printf("Exping - much minerals");
 		return true;
 	}
 

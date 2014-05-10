@@ -19,6 +19,7 @@ ProductionManager::ProductionManager()
 	, enemyCloakedDetected(false)
 	, rushDetected(false)
 	, lastBuildOrderUpdate(0)
+	, lastFrameMadeForge(0)
 {
 	populateTypeCharMap();
 
@@ -221,6 +222,10 @@ void ProductionManager::update()
 		BWAPI::Broodwar->printf("Production deadlock detected, building pylon!");
 		queue.queueAsHighestPriority(MetaType(BWAPI::Broodwar->self()->getRace().getSupplyProvider()), true);
 		nextProductionDeadlockCheck = BWAPI::Broodwar->getFrameCount() + max(BWAPI::Broodwar->getFrameCount()/10, 720);
+	}
+	if( BWAPI::Broodwar->getFrameCount() % 24 == 0 )
+	{
+		checkAndUpgrade(); 
 	}
 
 	// if they have cloaked units get a new goal asap
@@ -674,4 +679,56 @@ ProductionManager & ProductionManager::Instance() {
 void ProductionManager::onGameEnd()
 {
 	buildLearner.onGameEnd();
+}
+
+BWAPI::UpgradeType getPrioUpgrade()
+{
+	int atkLvl = !BWAPI::Broodwar->self()->isUpgrading(BWAPI::UpgradeTypes::Protoss_Ground_Weapons) ? BWAPI::Broodwar->self()->getUpgradeLevel(BWAPI::UpgradeTypes::Protoss_Ground_Weapons) : 4;
+	int defLvl = !BWAPI::Broodwar->self()->isUpgrading(BWAPI::UpgradeTypes::Protoss_Ground_Armor) ? BWAPI::Broodwar->self()->getUpgradeLevel(BWAPI::UpgradeTypes::Protoss_Ground_Armor) : 4;
+	int shdLvl = !BWAPI::Broodwar->self()->isUpgrading(BWAPI::UpgradeTypes::Protoss_Plasma_Shields) ? BWAPI::Broodwar->self()->getUpgradeLevel(BWAPI::UpgradeTypes::Protoss_Plasma_Shields) : 4;
+	if( atkLvl < 4 && atkLvl <= defLvl && atkLvl <= shdLvl)
+	{
+		return BWAPI::UpgradeTypes::Protoss_Ground_Weapons;
+		
+	}
+	else if(defLvl < 4 && defLvl <= shdLvl)
+	{
+		return BWAPI::UpgradeTypes::Protoss_Ground_Armor;
+	}
+	else if(shdLvl < 4)
+	{
+		return BWAPI::UpgradeTypes::Protoss_Plasma_Shields;
+	}
+	else
+	{
+		return NULL;
+	}
+}
+
+void ProductionManager::checkAndUpgrade()
+{
+	if( BWAPI::Broodwar->self()->minerals() > 800 && BWAPI::Broodwar->self()->gas() > 800 )
+	{
+		BOOST_FOREACH(BWAPI::Unit * u, BWAPI::Broodwar->self()->getUnits())
+		{
+			if(u->getType() == BWAPI::UnitTypes::Protoss_Forge)
+			{
+				if( !u->isUpgrading() )
+				{
+					BWAPI::UpgradeType topPrio = getPrioUpgrade();
+					u->upgrade(topPrio);
+				}
+			}
+		}
+		int size = queue.size();
+		if( size == 0 && BWAPI::Broodwar->getFrameCount() - lastFrameMadeForge > 1000)
+		{
+			int forgesToMake = 2 - BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Forge);
+			lastFrameMadeForge = BWAPI::Broodwar->getFrameCount();
+			for(int i = 0; i < forgesToMake; i++)
+			{
+				queue.queueAsLowestPriority(MetaType(BWAPI::UnitTypes::Protoss_Forge), true);
+			}
+		}
+	}
 }

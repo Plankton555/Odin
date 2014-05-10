@@ -46,6 +46,7 @@ class ProductionManager
 	bool						rushDetected;
 
 	int							searchCounter;
+	int							lastFrameMadeForge;
 
 	BWAPI::TilePosition			predictedTilePosition;
 	BWAPI::Unit *				selectUnitOfType(BWAPI::UnitType type, bool leastTrainingTimeRemaining = true, BWAPI::Position closestTo = BWAPI::Position(0,0));
@@ -71,6 +72,8 @@ class ProductionManager
 
 	int							getFreeMinerals();
 	int							getFreeGas();
+
+	void						checkAndUpgrade();
 
 public:
 

@@ -223,9 +223,11 @@ BWAPI::TilePosition BuildingPlacer::getBuildLocationNear(const Building & b, int
 			// is the proposed tile in our region?
 			bool tileInRegion				= (tileRegion == myRegion);
 
-			// is the building a pylon and proposed tile close to another pylon?
+			bool tileInEnemyRegion			= InformationManager::Instance().isEnemyBuildingInRegion(tileRegion);
+
+			// is the building a pylon and proposed tile close to another pylon or in an enemy region?
 			
-			if (bIsPylon && isPosCloseToPylon(x, y))
+			if (bIsPylon && (isPosCloseToPylon(x, y)||tileInEnemyRegion))
 			{
 				// do nothing
 			}

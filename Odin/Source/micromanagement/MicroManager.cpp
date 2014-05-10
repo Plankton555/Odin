@@ -195,9 +195,32 @@ void MicroManager::smartAttackMove(BWAPI::Unit * attacker, BWAPI::Position targe
 
 	// if we've already told this unit to attack this target, ignore this command
 	if (currentCommand.getType() == BWAPI::UnitCommandTypes::Attack_Move &&	currentCommand.getTargetPosition() == targetPosition)
-	{
+	{	
+		if(targetPosition == attacker->getPosition()&&attacker->isUnderAttack())
+		{	
+			//Find unit fartherst away from the enemy
+			BWAPI::Unit * closest = NULL;
+			int closestDist = 0;
+
+			BOOST_FOREACH (BWAPI::Unit * unit, units)
+			{				
+				// the distance to the order position
+				int dist = MapTools::Instance().getGroundDistance(unit->getPosition(), order.position);
+
+				if (dist != -1 && (!closest || dist > closestDist))
+				{
+					closest = unit;
+					closestDist = dist;
+				}
+			}
+			if(closest)
+			{
+				smartMove(attacker,closest->getPosition());
+			}
+		}
 		return;
 	}
+
 
 	// if nothing prevents it, attack the target
 	attacker->attack(targetPosition);

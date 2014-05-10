@@ -84,7 +84,10 @@ void BuildingManager::assignWorkersToUnassignedBuildings()
 		if (debugMode) { BWAPI::Broodwar->printf("Assigning Worker To: %s", b.type.getName().c_str()); }
 
 		// remove all refineries after 3, i don't know why this happens
-		if (b.type.isRefinery() && (BWAPI::Broodwar->self()->allUnitCount(b.type) >= 3))
+		bool shouldMakeRefinery = (BWAPI::Broodwar->self()->minerals()/1.5>BWAPI::Broodwar->self()->gas() 
+								&& BWAPI::Broodwar->self()->allUnitCount( BWAPI::Broodwar->self()->getRace().getRefinery())
+								< BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Nexus));
+		if (b.type.isRefinery() && !shouldMakeRefinery)
 		{
 			buildingData.removeCurrentBuilding(ConstructionData::Unassigned);
 			break;

@@ -75,6 +75,8 @@ class ProductionManager
 
 	void						checkAndUpgrade();
 
+	BWAPI::TilePosition			buildSearchPosition();
+
 public:
 
 	static ProductionManager &	Instance();

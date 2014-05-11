@@ -335,7 +335,7 @@ void ProductionManager::manageBuildOrderQueue()
 		if (currentItem.metaType.isBuilding() && !(producer && canMake))
 		{
 			// construct a temporary building object
-			Building b(currentItem.metaType.unitType, BWAPI::Broodwar->self()->getStartLocation());
+			Building b(currentItem.metaType.unitType, buildSearchPosition());
 
 			// set the producer as the closest worker, but do not set its job yet
 			producer = WorkerManager::Instance().getBuilder(b, false);
@@ -535,7 +535,7 @@ void ProductionManager::createMetaType(BWAPI::Unit * producer, MetaType t)
 		&& t.unitType != BWAPI::UnitTypes::Zerg_Greater_Spire)
 	{
 		// send the building task to the building manager
-		BuildingManager::Instance().addBuildingTask(t.unitType, BWAPI::Broodwar->self()->getStartLocation());
+		BuildingManager::Instance().addBuildingTask(t.unitType, buildSearchPosition());
 	}
 	// if we're dealing with a non-building unit
 	else if (t.isUnit()) 
@@ -690,6 +690,35 @@ ProductionManager & ProductionManager::Instance() {
 void ProductionManager::onGameEnd()
 {
 	buildLearner.onGameEnd();
+}
+
+BWAPI::TilePosition	ProductionManager::buildSearchPosition()
+{
+	std::set<BWTA::Region *> occupiedRegions = InformationManager::Instance().getOccupiedRegions(BWAPI::Broodwar->self());
+	int leastBuildingsInRegion = 200;
+	BWTA::Region * regionWithLeastBuildings;
+	BOOST_FOREACH(BWTA::Region * myRegion, occupiedRegions)
+	{
+		int buildingsInRegion = 0;
+		BOOST_FOREACH(BWAPI::Unit * u, BWAPI::Broodwar->self()->getUnits())
+		{
+			if(u->getType().isBuilding())
+			{
+				if(BWTA::getRegion(BWAPI::TilePosition(u->getPosition())) == myRegion)
+				{
+					buildingsInRegion++;
+				}
+			}
+		}
+		if(!regionWithLeastBuildings || buildingsInRegion < leastBuildingsInRegion)
+		{
+			regionWithLeastBuildings = myRegion;
+			leastBuildingsInRegion = buildingsInRegion;
+		}
+	}
+	
+	return BWAPI::TilePosition(regionWithLeastBuildings->getCenter());
+
 }
 
 BWAPI::UpgradeType getPrioUpgrade()

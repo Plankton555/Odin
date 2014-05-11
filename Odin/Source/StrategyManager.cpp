@@ -802,7 +802,9 @@ const MetaPairVector StrategyManager::getProtossCounterBuildOrderGoal()
 	int numProbes =				BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Probe);
 
 	//add psi-storm if we use high templars
-	if(shouldMakeStorm && !BWAPI::Broodwar->self()->hasResearched(BWAPI::TechTypes::Psionic_Storm))
+	
+	if(shouldMakeStorm && !BWAPI::Broodwar->self()->hasResearched(BWAPI::TechTypes::Psionic_Storm) 
+		&& !BWAPI::Broodwar->self()->isResearchingBWAPI::TechTypes::Psionic_Storm))
 	{
 		goal.push_back(MetaPair(BWAPI::TechTypes::Psionic_Storm,1));
 	}

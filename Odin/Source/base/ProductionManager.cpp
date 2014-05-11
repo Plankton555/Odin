@@ -241,19 +241,19 @@ void ProductionManager::update()
 		{
 			queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Protoss_Observer), true);
 		}
-		if (BWAPI::Broodwar->self()->completedUnitCount(BWAPI::UnitTypes::Protoss_Observatory) < 1)
+		if (BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Observatory) < 1)
 		{
 			queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Protoss_Observatory), true);
 		}
-		if (BWAPI::Broodwar->self()->completedUnitCount(BWAPI::UnitTypes::Protoss_Robotics_Facility) < 1)
+		if (BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Robotics_Facility) < 1)
 		{
 			queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Protoss_Robotics_Facility), true);
 		}
-		if (BWAPI::Broodwar->self()->completedUnitCount(BWAPI::UnitTypes::Protoss_Cybernetics_Core) < 1)
+		if (BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Cybernetics_Core) < 1)
 		{
 			queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Protoss_Cybernetics_Core), true);
 		}
-		if (BWAPI::Broodwar->self()->completedUnitCount(BWAPI::UnitTypes::Protoss_Gateway) < 1)
+		if (BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Gateway) < 1)
 		{
 			queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Protoss_Gateway), true);
 		}
@@ -268,7 +268,10 @@ void ProductionManager::update()
 		{
 			queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Protoss_Forge), true);
 		}
-
+		if (BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Assimilator) == 0)
+		{
+			queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Protoss_Assimilator), true);
+		}
 		BWAPI::Broodwar->printf("Enemy Cloaked Unit Detected!");
 		enemyCloakedDetected = true;
 	}

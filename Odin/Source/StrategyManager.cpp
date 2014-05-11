@@ -924,6 +924,12 @@ const bool StrategyManager::shouldExpand() const
 	int frame =					BWAPI::Broodwar->getFrameCount();
 	int minerals =				BWAPI::Broodwar->self()->minerals();
 
+	//If we dont have any nexuses it is a good time to exp. 
+	if( numNexus == 0 )
+	{
+		return true;
+	}
+
 	double enemyUncertaintyFactor = 1.5;
 	double myEconomy = getEconomyPotential(BWAPI::Broodwar->self());
 	double myArmy = getArmyPotential(BWAPI::Broodwar->self(), myEconomy);

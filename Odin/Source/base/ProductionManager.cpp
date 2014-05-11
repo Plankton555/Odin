@@ -221,7 +221,7 @@ void ProductionManager::update()
 	{
 		BuildingManager::Instance().fixedBuildingDeadlock();
 		
-		if(BWAPI::Broodwar->self()->completedUnitCount(BWAPI::UnitTypes::Protoss_Pylon) < 
+		if(BWAPI::Broodwar->self()->completedUnitCount(BWAPI::UnitTypes::Protoss_Pylon) == 
 			BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Pylon))//If a pylon is under construction the deadlock is about to be solved
 		{
 			BWAPI::Broodwar->printf("Production deadlock detected, building pylon!");

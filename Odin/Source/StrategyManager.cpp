@@ -804,7 +804,7 @@ const MetaPairVector StrategyManager::getProtossCounterBuildOrderGoal()
 	//add psi-storm if we use high templars
 	
 	if(shouldMakeStorm && !BWAPI::Broodwar->self()->hasResearched(BWAPI::TechTypes::Psionic_Storm) 
-		&& !BWAPI::Broodwar->self()->isResearchingBWAPI::TechTypes::Psionic_Storm))
+		&& !BWAPI::Broodwar->self()->isResearching(BWAPI::TechTypes::Psionic_Storm))
 	{
 		goal.push_back(MetaPair(BWAPI::TechTypes::Psionic_Storm,1));
 	}

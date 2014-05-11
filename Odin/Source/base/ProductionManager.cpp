@@ -216,16 +216,13 @@ void ProductionManager::update()
 		queue.queueAsHighestPriority(MetaType(BWAPI::Broodwar->self()->getRace().getSupplyProvider()), true);
 	}
 
-	// build pylons if minerals go high	
-	if (BuildingManager::Instance().buildingDeadLock())
+	// detect if there's no room for buildings
+	if ((BWAPI::Broodwar->getFrameCount() % 240 == 0) && (BuildingManager::Instance().buildingDeadLock()))
 	{
 		BuildingManager::Instance().fixedBuildingDeadlock();
-		BuildOrderItem<PRIORITY_TYPE> & currentItem = queue.getHighestPriorityItem();
-
-		bool pylonInQueue = currentItem.metaType.unitType == BWAPI::Broodwar->self()->getRace().getSupplyProvider();
 		
 		if(BWAPI::Broodwar->self()->completedUnitCount(BWAPI::UnitTypes::Protoss_Pylon) < 
-			BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Pylon)&&!pylonInQueue)//If a pylon is under construction the deadlock is about to be solved
+			BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Pylon))//If a pylon is under construction the deadlock is about to be solved
 		{
 			BWAPI::Broodwar->printf("Production deadlock detected, building pylon!");
 			queue.queueAsHighestPriority(MetaType(BWAPI::Broodwar->self()->getRace().getSupplyProvider()), true);

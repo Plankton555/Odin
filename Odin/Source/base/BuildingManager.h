@@ -18,6 +18,8 @@ class BuildingManager {
 	bool						debugMode;
 	int							totalBuildTasks;
 
+	bool						noPlaceForBuilding;
+
 	int							reservedMinerals;				// minerals reserved for planned buildings
 	int							reservedGas;					// gas reserved for planned buildings
 	int							buildingSpace;					// how much space we want between buildings
@@ -62,6 +64,10 @@ public:
 	void						printBuildingNumbers();
 
 	bool						isBeingBuilt(BWAPI::UnitType type);
+
+	bool						buildingDeadLock();
+
+	void						fixedBuildingDeadlock();
 	
 	void						drawBuildingInformation(int x, int y);
 };

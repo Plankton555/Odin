@@ -217,11 +217,19 @@ void ProductionManager::update()
 	}
 
 	// build pylons if minerals go high	
-	if ((BWAPI::Broodwar->getFrameCount() - nextProductionDeadlockCheck > 0) && BWAPI::Broodwar->self()->minerals()>1000)
+	if (BuildingManager::Instance().buildingDeadLock())
 	{
-		BWAPI::Broodwar->printf("Production deadlock detected, building pylon!");
-		queue.queueAsHighestPriority(MetaType(BWAPI::Broodwar->self()->getRace().getSupplyProvider()), true);
-		nextProductionDeadlockCheck = BWAPI::Broodwar->getFrameCount() + max(BWAPI::Broodwar->getFrameCount()/10, 720);
+		BuildingManager::Instance().fixedBuildingDeadlock();
+		BuildOrderItem<PRIORITY_TYPE> & currentItem = queue.getHighestPriorityItem();
+
+		bool pylonInQueue = currentItem.metaType.unitType == BWAPI::Broodwar->self()->getRace().getSupplyProvider();
+		
+		if(BWAPI::Broodwar->self()->completedUnitCount(BWAPI::UnitTypes::Protoss_Pylon) < 
+			BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Pylon)&&!pylonInQueue)//If a pylon is under construction the deadlock is about to be solved
+		{
+			BWAPI::Broodwar->printf("Production deadlock detected, building pylon!");
+			queue.queueAsHighestPriority(MetaType(BWAPI::Broodwar->self()->getRace().getSupplyProvider()), true);
+		}
 	}
 	if( BWAPI::Broodwar->getFrameCount() % 24 == 0 )
 	{

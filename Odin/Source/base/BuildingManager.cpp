@@ -104,6 +104,9 @@ void BuildingManager::assignWorkersToUnassignedBuildings()
 			{
 				buildingData.removeCurrentBuilding(ConstructionData::Unassigned);
 				BWAPI::Broodwar->printf("No place to build Pylon, canceling construction order");
+			}else
+			{
+				noPlaceForBuilding = true;
 			}
 			continue;
 		}
@@ -421,6 +424,16 @@ int BuildingManager::getReservedMinerals() {
 
 int BuildingManager::getReservedGas() {
 	return reservedGas;
+}
+
+bool BuildingManager::buildingDeadLock() 
+{
+	return noPlaceForBuilding;
+}
+
+void BuildingManager::fixedBuildingDeadlock() 
+{
+	noPlaceForBuilding = false;
 }
 
 void BuildingManager::drawBuildingInformation(int x, int y) {

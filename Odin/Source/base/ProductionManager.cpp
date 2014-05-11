@@ -710,13 +710,19 @@ BWAPI::TilePosition	ProductionManager::buildSearchPosition()
 				}
 			}
 		}
+		//BWAPI::Broodwar->printf("Buildings in region: %d region center: %d, %d",buildingsInRegion, myRegion->getCenter().x(), myRegion->getCenter().y());
 		if(!regionWithLeastBuildings || buildingsInRegion < leastBuildingsInRegion)
 		{
 			regionWithLeastBuildings = myRegion;
 			leastBuildingsInRegion = buildingsInRegion;
 		}
 	}
-	
+	BOOST_FOREACH(BWTA::BaseLocation * base, regionWithLeastBuildings->getBaseLocations())
+	{
+		//BWAPI::Broodwar->printf("Position base returned: %d, %d",base->getPosition().x(),base->getPosition().y());
+		return BWAPI::TilePosition(base->getPosition());
+	}
+	//BWAPI::Broodwar->printf("Position center returned: %d, %d",regionWithLeastBuildings->getCenter().x(),regionWithLeastBuildings->getCenter().y());
 	return BWAPI::TilePosition(regionWithLeastBuildings->getCenter());
 
 }

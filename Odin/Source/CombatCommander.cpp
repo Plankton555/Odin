@@ -24,10 +24,31 @@ void CombatCommander::update(std::set<BWAPI::Unit *> unitsToAssign)
 		// give back combat workers to worker manager
 		WorkerManager::Instance().finishedWithCombatWorkers();
         
+		/*
+		// Check if attacked by invis and no detector near
+		bool invisClose = false;
+		BOOST_FOREACH (BWAPI::Unit* unit, unitsToAssign)
+		{
+			if (unit->isUnderAttack())
+			{
+				BOOST_FOREACH (BWAPI::Unit* enemyUnit, BWAPI::Broodwar->enemy()->getUnits())
+				{
+					if (enemyUnit->isCloaked() && !enemyUnit->isDetected() && MapTools::Instance().getGroundDistance(enemyUnit->getPosition(), unit->getPosition()) < 500)
+					{
+						BWAPI::Broodwar->printf("Attacked by invis: Going defensive!");
+						invisClose = true;
+						break;
+					}
+				}
+			}
+		}
+		*/
+		bool invisClose = false;
+
 		// Assign defense and attack squads
         assignScoutDefenseSquads();
 		assignDefenseSquads(unitsToAssign);
-		if (StrategyManager::Instance().state == StrategyManager::State::ATTACK)
+		if (!invisClose && StrategyManager::Instance().state == StrategyManager::State::ATTACK)
 		{
 			assignAttackSquads(unitsToAssign);
 		}

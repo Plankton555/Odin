@@ -71,6 +71,26 @@ StrategyManager & StrategyManager::Instance()
 
  void StrategyManager::updateState()
  {
+	 bool enemyHasCloak = false;
+	 bool selfHaveObserver = false;
+	
+	selfHaveObserver = BWAPI::Broodwar->self()->completedUnitCount(BWAPI::UnitTypes::Protoss_Observer) > 0;
+
+	BOOST_FOREACH (BWAPI::Unit* enemyUnit, BWAPI::Broodwar->enemy()->getUnits())
+	{
+		if (enemyUnit->isCloaked())
+		{
+			enemyHasCloak = true;
+		}
+	}
+
+	 if (enemyHasCloak && !selfHaveObserver)
+	 {
+		 BWAPI::Broodwar->printf("Attacked by invis: Going defensive!");
+		 state = DEFEND;
+		 return;
+	 }
+
 	double enemyUncertaintyFactor = 1.5;
 	double myEconomy = getEconomyPotential(BWAPI::Broodwar->self());
 	double myArmy = getArmyPotential(BWAPI::Broodwar->self(), myEconomy);

@@ -696,7 +696,7 @@ BWAPI::TilePosition	ProductionManager::buildSearchPosition()
 {
 	std::set<BWTA::Region *> occupiedRegions = InformationManager::Instance().getOccupiedRegions(BWAPI::Broodwar->self());
 	int leastBuildingsInRegion = 200;
-	BWTA::Region * regionWithLeastBuildings;
+	BWTA::Region * regionWithLeastBuildings = InformationManager::Instance().getMainBaseLocation(BWAPI::Broodwar->self())->getRegion();
 	BOOST_FOREACH(BWTA::Region * myRegion, occupiedRegions)
 	{
 		int buildingsInRegion = 0;

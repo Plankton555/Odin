@@ -108,7 +108,7 @@ void ScoutManager::moveObservers()
 		{
 			units.clear();
 			InformationManager::Instance().getNearbyForce(units, unit->getPosition(), BWAPI::Broodwar->enemy(), 900);
-			int dist = MapTools::Instance().getGroundDistance(secObserver->getPosition(), unit->getPosition());
+			int dist = secObserver->getPosition().getDistance(unit->getPosition());
 			if(units.size() > 4 && dist < minDistance)
 			{
 				//Dont get stuck at the bunkers.. or buildings in general :( TODO

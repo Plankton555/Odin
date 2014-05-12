@@ -31,6 +31,7 @@ class ProductionManager
 
 	std::vector< std::pair<MetaType, UnitCountType> >	searchingGoal;
 	int							lastBuildOrderUpdate;
+	int							nextProductionDeadlockCheck;
 
 	BuildLearner				buildLearner;
 	bool						initialBuildSet;
@@ -45,12 +46,15 @@ class ProductionManager
 	bool						rushDetected;
 
 	int							searchCounter;
+	int							lastFrameMadeForge;
 
 	BWAPI::TilePosition			predictedTilePosition;
 	BWAPI::Unit *				selectUnitOfType(BWAPI::UnitType type, bool leastTrainingTimeRemaining = true, BWAPI::Position closestTo = BWAPI::Position(0,0));
 	BuildOrderQueue				queue;
 	BWAPI::UnitType				getProducer(MetaType t);
 
+	bool						canBuild(MetaType entity);
+	void						simplifyGoal();
 	bool						contains(UnitVector & units, BWAPI::Unit * unit);
 	void						populateTypeCharMap();
 	bool						hasResources(BWAPI::UnitType type);
@@ -68,6 +72,10 @@ class ProductionManager
 
 	int							getFreeMinerals();
 	int							getFreeGas();
+
+	void						checkAndUpgrade();
+
+	BWAPI::TilePosition			buildSearchPosition();
 
 public:
 

@@ -42,6 +42,7 @@ void Squad::update()
 
 		meleeManager.regroup(regroupPosition);
 		rangedManager.regroup(regroupPosition);
+		highTemplarManager.regroup(regroupPosition);
 	}
 	else // otherwise, execute micro
 	{
@@ -51,8 +52,8 @@ void Squad::update()
 		rangedManager.setUnitClosestToEnemy(unitClosestToEnemy());
 		rangedManager.execute(order);
 		transportManager.execute(order);
+		highTemplarManager.setUnitClosestToEnemy(unitClosestToEnemy());
 		highTemplarManager.execute(order);
-
 		detectorManager.setUnitClosestToEnemy(unitClosestToEnemy());
 		detectorManager.execute(order);
 	}
@@ -244,7 +245,7 @@ BWAPI::Position Squad::calcRegroupPosition()
 
 	BOOST_FOREACH(BWAPI::Unit * unit, units)
 	{
-		if (!nearEnemy[unit])
+		if (!nearEnemy[unit]&&!unit->isUnderAttack())
 		{
 			int dist = unit->getDistance(order.position);
 			if (dist < minDist)
@@ -272,7 +273,9 @@ BWAPI::Unit * Squad::unitClosestToEnemy()
 
 	BOOST_FOREACH (BWAPI::Unit * unit, units)
 	{
-		if (unit->getType() == BWAPI::UnitTypes::Protoss_Observer || unit->getType() == BWAPI::UnitTypes::Protoss_Carrier)
+		if (unit->getType() == BWAPI::UnitTypes::Protoss_Observer 
+			|| unit->getType() == BWAPI::UnitTypes::Protoss_Carrier 
+			|| unit->getType() == BWAPI::UnitTypes::Protoss_High_Templar)
 		{
 			continue;
 		}

@@ -24,7 +24,7 @@ typedef std::vector<MetaPair> MetaPairVector;
 class StrategyManager 
 {
 	StrategyManager();
-	~StrategyManager() {}
+	~StrategyManager() { delete bayesianNet; }
 
 	std::map<std::vector<BWAPI::UnitType>*, double>	armyCounters;
 	BayesianNet*				bayesianNet;

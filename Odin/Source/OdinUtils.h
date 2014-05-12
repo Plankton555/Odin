@@ -208,4 +208,34 @@ namespace odin_utils
 
 		OdinUtils::Instance().updateID = true;
 	}
+
+	inline std::vector<std::string> splitDelim(const std::string& str, const std::string& delim)
+	{
+		std::string s = str;
+		std::vector<std::string> output;
+		size_t pos = 0;
+		std::string token;
+		while ((pos = s.find(delim)) != std::string::npos) {
+			token = s.substr(0, pos);
+			output.push_back(token);
+			s.erase(0, pos + delim.length());
+		}
+		output.push_back(s);
+		return output;
+	}
+
+	inline std::vector<BWAPI::UnitType> getRequiredUnits(BWAPI::UnitType entity)
+	{
+		std::vector<BWAPI::UnitType> needTech;
+		std::map<BWAPI::UnitType, int> m = entity.requiredUnits();
+		std::map<BWAPI::UnitType, int>::iterator mit;
+		for (mit = m.begin(); mit != m.end(); mit++)
+		{
+			if (BWAPI::Broodwar->self()->allUnitCount(mit->first) < mit->second)
+			{
+				needTech.push_back(mit->first);
+			}
+		}
+		return needTech;
+	}
 };

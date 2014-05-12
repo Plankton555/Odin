@@ -43,56 +43,61 @@ void CombatCommander::assignIdleSquads(std::set<BWAPI::Unit *> & unitsToAssign)
 
 	UnitVector combatUnits(unitsToAssign.begin(), unitsToAssign.end());
 	unitsToAssign.clear();
-	std::set<BWTA::Region *> occupiedRegions = InformationManager::Instance().getOccupiedRegions(BWAPI::Broodwar->self());
-	if(StrategyManager::Instance().state == StrategyManager::DEFEND)
-	{//Place army at the occupied region closest to the enemy
-		std::set<BWTA::Region *>::iterator regionIt = occupiedRegions.begin(); 
-		double closestDistance = 100000;
-		BWTA::Region * regionClosestToEnemy = NULL;
-		for(regionIt=occupiedRegions.begin(); regionIt!=occupiedRegions.end();)
+	std::set<BWTA::Region *> occupiedRegions = InformationManager::Instance().getOccupiedRegions(BWAPI::Broodwar->self());	
+
+
+	BOOST_FOREACH(BWTA::Region * myRegion, occupiedRegions)
+	{
+		BWAPI::Position regionCenter = myRegion->getCenter();
+		if (!regionCenter.isValid())
 		{
-			BWTA::Region * region = *regionIt;
-			double distance = region->getCenter().getDistance(BWAPI::Position(getClosestEnemyRegion()->getCenter()));
-			if (!regionClosestToEnemy || distance < closestDistance)
+			continue;
+		}
+		
+		// all of the enemy units in this region
+		std::set<BWAPI::Unit *> enemyUnitsInRegion;
+		BOOST_FOREACH (BWAPI::Unit * enemyUnit, BWAPI::Broodwar->enemy()->getUnits())
+		{			
+			if (BWTA::getRegion(BWAPI::TilePosition(enemyUnit->getPosition())) == myRegion)
 			{
-				closestDistance = distance;
-				regionClosestToEnemy = region;
+				enemyUnitsInRegion.insert(enemyUnit);
+				// if the enemy isn't a worker, increase the amount of defenders for it
+				if (!enemyUnit->getType().isWorker())
+				{
+					squadData.addSquad(Squad(combatUnits, SquadOrder(SquadOrder::Defend, BWAPI::Position(regionCenter), 1000, "Defend Region")));	
+					return;
+				}
 			}
-			regionIt++;
-		}
-
-		squadData.addSquad(Squad(combatUnits, SquadOrder(SquadOrder::Defend, BWAPI::Position(regionClosestToEnemy->getCenter()), 1000, "Defend Idle")));
-
-	}else
-	{//Dive the army equally between all occupied regions		
-
-		int numberOfParts = occupiedRegions.size();
-		int partSize = combatUnits.size()/numberOfParts+1;
-
-		UnitVector::iterator tempIt;
-		UnitVector armyPart;
-		std::set<BWTA::Region *>::iterator regionIt = occupiedRegions.begin(); 
-		bool fullSquad = false;
-		for(tempIt=combatUnits.begin(); tempIt!=combatUnits.end();)
-		{	
-			armyPart.push_back(*tempIt);
-			fullSquad = false;
-			if(armyPart.size()==partSize&&regionIt!=occupiedRegions.end())
-			{	
-				BWTA::Region * region = *regionIt;
-				fullSquad = true;
-				squadData.addSquad(Squad(armyPart, SquadOrder(SquadOrder::Defend, BWAPI::Position(region->getCenter()), 1000, "Defend Idle")));		
-				regionIt++;
-				armyPart.clear();
-			}
-			tempIt++;
-		}
-		if(!fullSquad&&regionIt!=occupiedRegions.end())
-		{	
-			BWTA::Region * region = *regionIt;
-			squadData.addSquad(Squad(armyPart, SquadOrder(SquadOrder::Defend, BWAPI::Position(region->getCenter()), 1000, "Defend Idle")));
 		}
 	}
+
+	int numberOfParts = occupiedRegions.size();
+	int partSize = combatUnits.size()/numberOfParts+1;
+
+	UnitVector::iterator tempIt;
+	UnitVector armyPart;
+	std::set<BWTA::Region *>::iterator regionIt = occupiedRegions.begin(); 
+	bool fullSquad = false;
+	for(tempIt=combatUnits.begin(); tempIt!=combatUnits.end();)
+	{	
+		armyPart.push_back(*tempIt);
+		fullSquad = false;
+		if(armyPart.size()==partSize&&regionIt!=occupiedRegions.end())
+		{	
+			BWTA::Region * region = *regionIt;
+			fullSquad = true;
+			squadData.addSquad(Squad(armyPart, SquadOrder(SquadOrder::Defend, BWAPI::Position(region->getCenter()), 1000, "Defend Idle")));		
+			regionIt++;
+			armyPart.clear();
+		}
+		tempIt++;
+	}
+	if(!fullSquad&&regionIt!=occupiedRegions.end())
+	{	
+		BWTA::Region * region = *regionIt;
+		squadData.addSquad(Squad(armyPart, SquadOrder(SquadOrder::Defend, BWAPI::Position(region->getCenter()), 1000, "Defend Idle")));
+	}
+	
 
 	
 }

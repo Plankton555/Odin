@@ -19,6 +19,7 @@ ProductionManager::ProductionManager()
 	, enemyCloakedDetected(false)
 	, rushDetected(false)
 	, lastBuildOrderUpdate(0)
+	, lastFrameMadeForge(0)
 {
 	populateTypeCharMap();
 
@@ -41,6 +42,80 @@ void ProductionManager::setBuildOrder(const std::vector<MetaType> & buildOrder)
 	}
 }
 
+bool ProductionManager::canBuild(MetaType entity)
+{
+	if (entity.isUnit())
+	{
+		if (odin_utils::getRequiredUnits(entity.unitType).size() == 0) //No requirements means that we can build
+		{
+			return true;
+		}
+	}
+	else if (entity.isTech())
+	{
+		if (BWAPI::Broodwar->self()->allUnitCount(entity.techType.whatResearches()) > 0) //More than 0 means that we can research
+		{
+			return true;
+		}
+	}
+	else if (entity.isUpgrade())
+	{
+		if (BWAPI::Broodwar->self()->allUnitCount(entity.upgradeType.whatUpgrades()) > 0) //More than 0 means that we can research
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+void ProductionManager::simplifyGoal()
+{
+	//Try to build something directly
+	bool canBuildSomething = false;
+	for (int i = 0; i < searchingGoal.size(); i++)
+	{
+		MetaType type = searchingGoal.at(i).first;
+		if (type.isUnit() && !type.isBuilding() && type.unitType != BWAPI::UnitTypes::Protoss_Probe && canBuild(type)) //Select if army unit
+		{
+			int nrExtraUnits = 1;
+			if (searchingGoal.at(i).first.isUnit())
+			{
+				nrExtraUnits = searchingGoal.at(i).second - BWAPI::Broodwar->self()->allUnitCount(type.unitType);
+
+				//Add production buildings to be able to mass out more units
+				if (type.unitType != BWAPI::UnitTypes::Protoss_Probe
+						&& BWAPI::Broodwar->self()->allUnitCount(type.whatBuilds()) < nrExtraUnits/2)
+				{
+					BWAPI::Broodwar->printf("Adding %s to build queue", type.whatBuilds().getName().c_str());
+					queue.queueAsLowestPriority(type.whatBuilds(), true);
+				}
+			}
+			
+			BWAPI::Broodwar->printf("Moving %ix %s from goal to build queue", nrExtraUnits, type.getName().c_str());
+			for (int j = 0; j < nrExtraUnits; j++) //Add to the queue
+			{
+				queue.queueAsLowestPriority(type, true);
+			}
+
+			searchingGoal.erase(searchingGoal.begin() + i);
+			i--;
+			canBuildSomething = true;
+			break;
+		}
+	}
+
+	if (!canBuildSomething)
+	{
+		//Half the goal size
+		BWAPI::Broodwar->printf("Trying to make the goal smaller", searchingGoal.size());
+		int size = searchingGoal.size();
+		while(searchingGoal.size() > size/2 && searchingGoal.size() > 1)
+		{
+			searchingGoal.pop_back();
+		}
+	}
+}
+
 void ProductionManager::performBuildOrderSearch(const std::vector< std::pair<MetaType, UnitCountType> > & goal)
 {	
 	if (searchingGoal.size() == 0) //No goal is being searched
@@ -58,18 +133,14 @@ void ProductionManager::performBuildOrderSearch(const std::vector< std::pair<Met
 		searchCounter = 0;
 		searchingGoal.clear(); //empty it to allow a new search
 	}
-	else if(BWAPI::Broodwar->getFrameCount()-lastBuildOrderUpdate>500)
+	else if(BWAPI::Broodwar->getFrameCount()-lastBuildOrderUpdate>250) //If the search takes long time, then do some nice stuff about it!
 	{	
 		if(searchingGoal.size() > 0 && searchCounter < 3)
 		{	
+			simplifyGoal();
+
 			lastBuildOrderUpdate = BWAPI::Broodwar->getFrameCount();
-			BWAPI::Broodwar->printf("Trying to make the goal smaller", searchingGoal.size());
 			searchCounter++;
-			int size = searchingGoal.size();
-			while(searchingGoal.size() > size/2 && searchingGoal.size() > 1)
-			{
-				searchingGoal.pop_back();
-			}
 		}
 		else
 		{	
@@ -145,11 +216,21 @@ void ProductionManager::update()
 		queue.queueAsHighestPriority(MetaType(BWAPI::Broodwar->self()->getRace().getSupplyProvider()), true);
 	}
 
-	// build pylons if minerals go high
-	if ((BWAPI::Broodwar->getFrameCount() % 720 == 0) && BWAPI::Broodwar->self()->minerals()>1000)
+	// detect if there's no room for buildings
+	if ((BWAPI::Broodwar->getFrameCount() % 240 == 0) && (BuildingManager::Instance().buildingDeadLock()))
 	{
-		BWAPI::Broodwar->printf("Production deadlock detected, building pylon!");
-		queue.queueAsHighestPriority(MetaType(BWAPI::Broodwar->self()->getRace().getSupplyProvider()), true);
+		BuildingManager::Instance().fixedBuildingDeadlock();
+		
+		if(BWAPI::Broodwar->self()->completedUnitCount(BWAPI::UnitTypes::Protoss_Pylon) == 
+			BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Pylon))//If a pylon is under construction the deadlock is about to be solved
+		{
+			BWAPI::Broodwar->printf("Production deadlock detected, building pylon!");
+			queue.queueAsHighestPriority(MetaType(BWAPI::Broodwar->self()->getRace().getSupplyProvider()), true);
+		}
+	}
+	if( BWAPI::Broodwar->getFrameCount() % 24 == 0 )
+	{
+		checkAndUpgrade(); 
 	}
 
 	// if they have cloaked units get a new goal asap
@@ -160,19 +241,19 @@ void ProductionManager::update()
 		{
 			queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Protoss_Observer), true);
 		}
-		if (BWAPI::Broodwar->self()->completedUnitCount(BWAPI::UnitTypes::Protoss_Observatory) < 1)
+		if (BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Observatory) < 1)
 		{
 			queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Protoss_Observatory), true);
 		}
-		if (BWAPI::Broodwar->self()->completedUnitCount(BWAPI::UnitTypes::Protoss_Robotics_Facility) < 1)
+		if (BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Robotics_Facility) < 1)
 		{
 			queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Protoss_Robotics_Facility), true);
 		}
-		if (BWAPI::Broodwar->self()->completedUnitCount(BWAPI::UnitTypes::Protoss_Cybernetics_Core) < 1)
+		if (BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Cybernetics_Core) < 1)
 		{
 			queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Protoss_Cybernetics_Core), true);
 		}
-		if (BWAPI::Broodwar->self()->completedUnitCount(BWAPI::UnitTypes::Protoss_Gateway) < 1)
+		if (BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Gateway) < 1)
 		{
 			queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Protoss_Gateway), true);
 		}
@@ -187,7 +268,10 @@ void ProductionManager::update()
 		{
 			queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Protoss_Forge), true);
 		}
-
+		if (BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Assimilator) == 0)
+		{
+			queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Protoss_Assimilator), true);
+		}
 		BWAPI::Broodwar->printf("Enemy Cloaked Unit Detected!");
 		enemyCloakedDetected = true;
 	}
@@ -238,7 +322,10 @@ void ProductionManager::manageBuildOrderQueue()
 		bool canMake = canMakeNow(producer, currentItem.metaType);
 
 		// if we try to build too many refineries manually remove it
-		if (currentItem.metaType.isRefinery() && (BWAPI::Broodwar->self()->allUnitCount(BWAPI::Broodwar->self()->getRace().getRefinery() >= 3)))
+		bool shouldMakeRefinery = (BWAPI::Broodwar->self()->minerals()/1.5>BWAPI::Broodwar->self()->gas() 
+								&& BWAPI::Broodwar->self()->allUnitCount( BWAPI::Broodwar->self()->getRace().getRefinery())
+								< BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Nexus));
+		if (currentItem.metaType.isRefinery()&&!shouldMakeRefinery)
 		{
 			queue.removeCurrentHighestPriorityItem();
 			break;
@@ -248,7 +335,7 @@ void ProductionManager::manageBuildOrderQueue()
 		if (currentItem.metaType.isBuilding() && !(producer && canMake))
 		{
 			// construct a temporary building object
-			Building b(currentItem.metaType.unitType, BWAPI::Broodwar->self()->getStartLocation());
+			Building b(currentItem.metaType.unitType, buildSearchPosition());
 
 			// set the producer as the closest worker, but do not set its job yet
 			producer = WorkerManager::Instance().getBuilder(b, false);
@@ -448,7 +535,7 @@ void ProductionManager::createMetaType(BWAPI::Unit * producer, MetaType t)
 		&& t.unitType != BWAPI::UnitTypes::Zerg_Greater_Spire)
 	{
 		// send the building task to the building manager
-		BuildingManager::Instance().addBuildingTask(t.unitType, BWAPI::Broodwar->self()->getStartLocation());
+		BuildingManager::Instance().addBuildingTask(t.unitType, buildSearchPosition());
 	}
 	// if we're dealing with a non-building unit
 	else if (t.isUnit()) 
@@ -603,4 +690,91 @@ ProductionManager & ProductionManager::Instance() {
 void ProductionManager::onGameEnd()
 {
 	buildLearner.onGameEnd();
+}
+
+BWAPI::TilePosition	ProductionManager::buildSearchPosition()
+{
+	std::set<BWTA::Region *> occupiedRegions = InformationManager::Instance().getOccupiedRegions(BWAPI::Broodwar->self());
+	int leastBuildingsInRegion = 200;
+	BWTA::Region * regionWithLeastBuildings;
+	BOOST_FOREACH(BWTA::Region * myRegion, occupiedRegions)
+	{
+		int buildingsInRegion = 0;
+		BOOST_FOREACH(BWAPI::Unit * u, BWAPI::Broodwar->self()->getUnits())
+		{
+			if(u->getType().isBuilding())
+			{
+				if(BWTA::getRegion(BWAPI::TilePosition(u->getPosition())) == myRegion)
+				{
+					buildingsInRegion++;
+				}
+			}
+		}
+		//BWAPI::Broodwar->printf("Buildings in region: %d region center: %d, %d",buildingsInRegion, myRegion->getCenter().x(), myRegion->getCenter().y());
+		if(!regionWithLeastBuildings || buildingsInRegion < leastBuildingsInRegion)
+		{
+			regionWithLeastBuildings = myRegion;
+			leastBuildingsInRegion = buildingsInRegion;
+		}
+	}
+	BOOST_FOREACH(BWTA::BaseLocation * base, regionWithLeastBuildings->getBaseLocations())
+	{
+		//BWAPI::Broodwar->printf("Position base returned: %d, %d",base->getPosition().x(),base->getPosition().y());
+		return BWAPI::TilePosition(base->getPosition());
+	}
+	//BWAPI::Broodwar->printf("Position center returned: %d, %d",regionWithLeastBuildings->getCenter().x(),regionWithLeastBuildings->getCenter().y());
+	return BWAPI::TilePosition(regionWithLeastBuildings->getCenter());
+
+}
+
+BWAPI::UpgradeType getPrioUpgrade()
+{
+	int atkLvl = !BWAPI::Broodwar->self()->isUpgrading(BWAPI::UpgradeTypes::Protoss_Ground_Weapons) ? BWAPI::Broodwar->self()->getUpgradeLevel(BWAPI::UpgradeTypes::Protoss_Ground_Weapons) : 4;
+	int defLvl = !BWAPI::Broodwar->self()->isUpgrading(BWAPI::UpgradeTypes::Protoss_Ground_Armor) ? BWAPI::Broodwar->self()->getUpgradeLevel(BWAPI::UpgradeTypes::Protoss_Ground_Armor) : 4;
+	int shdLvl = !BWAPI::Broodwar->self()->isUpgrading(BWAPI::UpgradeTypes::Protoss_Plasma_Shields) ? BWAPI::Broodwar->self()->getUpgradeLevel(BWAPI::UpgradeTypes::Protoss_Plasma_Shields) : 4;
+	if( atkLvl < 4 && atkLvl <= defLvl && atkLvl <= shdLvl)
+	{
+		return BWAPI::UpgradeTypes::Protoss_Ground_Weapons;
+		
+	}
+	else if(defLvl < 4 && defLvl <= shdLvl)
+	{
+		return BWAPI::UpgradeTypes::Protoss_Ground_Armor;
+	}
+	else if(shdLvl < 4)
+	{
+		return BWAPI::UpgradeTypes::Protoss_Plasma_Shields;
+	}
+	else
+	{
+		return NULL;
+	}
+}
+
+void ProductionManager::checkAndUpgrade()
+{
+	if( BWAPI::Broodwar->self()->minerals() > 800 && BWAPI::Broodwar->self()->gas() > 800 )
+	{
+		BOOST_FOREACH(BWAPI::Unit * u, BWAPI::Broodwar->self()->getUnits())
+		{
+			if(u->getType() == BWAPI::UnitTypes::Protoss_Forge)
+			{
+				if( !u->isUpgrading() )
+				{
+					BWAPI::UpgradeType topPrio = getPrioUpgrade();
+					u->upgrade(topPrio);
+				}
+			}
+		}
+		int size = queue.size();
+		if( size == 0 && BWAPI::Broodwar->getFrameCount() - lastFrameMadeForge > 1000)
+		{
+			int forgesToMake = 2 - BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Forge);
+			lastFrameMadeForge = BWAPI::Broodwar->getFrameCount();
+			for(int i = 0; i < forgesToMake; i++)
+			{
+				queue.queueAsLowestPriority(MetaType(BWAPI::UnitTypes::Protoss_Forge), true);
+			}
+		}
+	}
 }

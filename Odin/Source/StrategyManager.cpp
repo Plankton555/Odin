@@ -119,7 +119,6 @@ StrategyManager & StrategyManager::Instance()
 		default:
 			break;
 	}
-	BWAPI::Broodwar->printf(("Strategy state updated to " + stateName).c_str());
  }
  
 const double StrategyManager::getArmyPotential(BWAPI::Player *player, double economy) const
@@ -260,7 +259,6 @@ void StrategyManager::loadBayesianNetwork()
 			dlib::parse_xml(BAYESNET_FOLDER + "protoss.xdsl", parser);
 			bayesianNet = parser.getBayesianNet();
 			bayesianNet->UpdateBeliefs();
-			BWAPI::Broodwar->printf("Enemy race identified as Protoss. Bayesian Network loaded.");
 		}
 		else if (enemyRace ==  BWAPI::Races::Terran)
 		{
@@ -268,7 +266,6 @@ void StrategyManager::loadBayesianNetwork()
 			dlib::parse_xml(BAYESNET_FOLDER + "terran.xdsl", parser);
 			bayesianNet = parser.getBayesianNet();
 			bayesianNet->UpdateBeliefs();
-			BWAPI::Broodwar->printf("Enemy race identified as Terran. Bayesian Network loaded.");
 		}
 			else if (enemyRace == BWAPI::Races::Zerg)
 		{
@@ -276,7 +273,6 @@ void StrategyManager::loadBayesianNetwork()
 			dlib::parse_xml(BAYESNET_FOLDER + "zerg.xdsl", parser);
 			bayesianNet = parser.getBayesianNet();
 			bayesianNet->UpdateBeliefs();
-			BWAPI::Broodwar->printf("Enemy race identified as Zerg. Bayesian Network loaded.");
 		}
 	}
 }
@@ -388,8 +384,8 @@ void StrategyManager::readResults()
 		BWAPI::Broodwar->printf(
 			"Unable to open file for recorded data, starting from scratch");
 	}
-	BWAPI::Broodwar->printf("Results (%s): (%d %d) (%d %d) (%d %d)", BWAPI::Broodwar->enemy()->getName().c_str(), 
-		results[0].first, results[0].second, results[1].first, results[1].second, results[2].first, results[2].second);
+	//BWAPI::Broodwar->printf("Results (%s): (%d %d) (%d %d) (%d %d)", BWAPI::Broodwar->enemy()->getName().c_str(), 
+	//	results[0].first, results[0].second, results[1].first, results[1].second, results[2].first, results[2].second);
 	
 }
 
@@ -618,7 +614,6 @@ const MetaPairVector StrategyManager::getBuildOrderGoal()
 				MetaPairVector goal = getProtossCounterBuildOrderGoal();
 				if (goal.size() > 1)
 				{
-					BWAPI::Broodwar->printf("(Attack) Goal set with length: (%d) ", goal.size());
 					return goal;
 				} 
 				else 
@@ -645,9 +640,6 @@ const MetaPairVector StrategyManager::getBuildOrderGoal()
 			returnGoal.reserve( cannonGoal.size() + armyGoal.size() ); // preallocate memory
 			returnGoal.insert( returnGoal.end(), armyGoal.begin(), armyGoal.end() );
 			returnGoal.insert( returnGoal.end(), cannonGoal.begin(), cannonGoal.end() );
-
-			BWAPI::Broodwar->printf("(Defend) Goal set with length: (%d) ", returnGoal.size());
-			BWAPI::Broodwar->printf("(Army) Goal set with length: (%d) ", armyGoal.size());
 			return returnGoal;
 
 			break;// do defend
@@ -700,6 +692,29 @@ const MetaPairVector StrategyManager::getProtossCounterBuildOrderGoal()
 
 				if (haveTeched) //have Teched for expensive
 				{
+					if (nrExtraUnits > 1) //If we want more than 1 unit, then let half the units be cheap units
+					{
+						nrExtraUnits /= 2;
+						int unitsNow = BWAPI::Broodwar->self()->allUnitCount(it->first->at(0));
+						//If we already have included this unit, then just add the nr, don't add a new line
+						boolean isIncluded = false;
+						MetaPairVector::iterator gIt;
+						for (gIt = goal.begin(); gIt != goal.end(); gIt++)
+						{
+							if (gIt->first.unitType == it->first->at(0))
+							{
+								gIt->second += nrExtraUnits;
+								isIncluded = true;
+								break;
+							}
+						}
+
+						if (!isIncluded)
+						{
+							goal.push_back(MetaPair(it->first->at(0), unitsNow+nrExtraUnits));
+						}
+
+					}
 					wantedType = it->first->at(1);
 				} else
 				{
@@ -783,12 +798,13 @@ const MetaPairVector StrategyManager::getProtossCounterBuildOrderGoal()
 			goal.erase(start);
 		}
 	}
-
 	int numNexusAll =			BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Nexus);
 	int numProbes =				BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Probe);
 
 	//add psi-storm if we use high templars
-	if(shouldMakeStorm && !BWAPI::Broodwar->self()->hasResearched(BWAPI::TechTypes::Psionic_Storm))
+	
+	if(shouldMakeStorm && !BWAPI::Broodwar->self()->hasResearched(BWAPI::TechTypes::Psionic_Storm) 
+		&& !BWAPI::Broodwar->self()->isResearching(BWAPI::TechTypes::Psionic_Storm))
 	{
 		goal.push_back(MetaPair(BWAPI::TechTypes::Psionic_Storm,1));
 	}
@@ -908,6 +924,12 @@ const bool StrategyManager::shouldExpand() const
 	int frame =					BWAPI::Broodwar->getFrameCount();
 	int minerals =				BWAPI::Broodwar->self()->minerals();
 
+	//If we dont have any nexuses it is a good time to exp. 
+	if( numNexus == 0 )
+	{
+		return true;
+	}
+
 	double enemyUncertaintyFactor = 1.5;
 	double myEconomy = getEconomyPotential(BWAPI::Broodwar->self());
 	double myArmy = getArmyPotential(BWAPI::Broodwar->self(), myEconomy);
@@ -916,9 +938,17 @@ const bool StrategyManager::shouldExpand() const
 	double opArmy = getArmyPotential(BWAPI::Broodwar->enemy(), opEconomy)*enemyUncertaintyFactor;
 	double opDefense = getDefensePotential(BWAPI::Broodwar->enemy())*enemyUncertaintyFactor;
 
+	//If we are already building a nexus
+	if (BWAPI::Broodwar->self()->completedUnitCount(BWAPI::UnitTypes::Protoss_Nexus) < 
+			BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Nexus))
+	{
+		return false;
+	}
+
 	// if there are more than 10 idle workers, expand
 	if (WorkerManager::Instance().getNumIdleWorkers() > IDLE_WORKERS_THRESHOLD_TO_EXPAND) 
 	{
+		BWAPI::Broodwar->printf("Exping - too many idle workers");
 		return true;
 	}
 
@@ -929,16 +959,19 @@ const bool StrategyManager::shouldExpand() const
 
 	if (minerals > 600 && myArmy>opArmy*enemyUncertaintyFactor)
 	{
+		BWAPI::Broodwar->printf("Exping - good army");
 		return true;
 	}
 
 	if(myEconomy<opEconomy*enemyUncertaintyFactor)
 	{
+		BWAPI::Broodwar->printf("Exping - good economy");
 		return true;
 	}
 
 	if(minerals > MINERAL_THRESHOLD_TO_EXPAND)
 	{
+		BWAPI::Broodwar->printf("Exping - much minerals");
 		return true;
 	}
 

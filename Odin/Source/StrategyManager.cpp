@@ -71,7 +71,7 @@ StrategyManager & StrategyManager::Instance()
 
  void StrategyManager::updateState()
  {
-	double enemyUncertaintyFactor = 1.0;
+	double enemyUncertaintyFactor = 1.25;
 	double myEconomy = getEconomyPotential(BWAPI::Broodwar->self());
 	double myArmy = getArmyPotential(BWAPI::Broodwar->self(), myEconomy);
 	double myDefense = getDefensePotential(BWAPI::Broodwar->self());

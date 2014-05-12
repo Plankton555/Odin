@@ -326,6 +326,27 @@ void ReplayModule::analyseResults(int timePeriodAhead, BWAPI::Race race)
 				{
 					correctPredictions++;
 				}
+				else
+				{
+					//print to file what was wrong!!
+					BWAPI::Race race = getEnemy()->getRace();//std::map<const char*,int>
+					std::map<const char*,int> units;
+					if (race == BWAPI::Races::Protoss) { units = protossUnitsAll; }
+					if (race == BWAPI::Races::Terran) { units = terranUnitsAll; }
+					if (race == BWAPI::Races::Zerg) { units = zergUnitsAll; }
+					std::map<const char*, int>::iterator it;
+					int index = 0;
+					for(it = units.begin(); index < i-1 && it != units.end(); index++, it++) { }
+					if (it != units.end())
+					{
+						std::ostringstream out;
+						out << it->first << ", ";
+						out << atof(gameValues[i].c_str()) << " vs " << atof(replayValues[i].c_str());
+						odin_utils::debug(out.str());
+					}
+
+
+				}
 			}
 
 			int totalPredictions = std::min(gameSize, replaySize) - 2;
@@ -474,7 +495,6 @@ std::string ReplayModule::getReplayFileSpecificForInstance(BWAPI::Race race)
 {
 	std::ostringstream filename;
 	filename << REPLAY_DATA_PATH << race.getName().c_str()[0] << BWAPI::Broodwar->getInstanceNumber() <<".txt";
-	odin_utils::debug(filename.str());
 	return filename.str();
 }
 

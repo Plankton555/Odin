@@ -14,7 +14,7 @@ BuildingManager::BuildingManager()
 }
 
 // gets called every frame from GameCommander
-void BuildingManager::update() 
+void BuildingManager::update(double maxTime, TimerManager * timer) 
 {
 	// Step through building logic, issue orders, manage data as necessary
 	//drawBuildingInformation(340, 50);
@@ -23,7 +23,7 @@ void BuildingManager::update()
 	validateWorkersAndBuildings();	
 
 	// assign workers to the unassigned buildings and label them 'planned'
-	assignWorkersToUnassignedBuildings();
+	assignWorkersToUnassignedBuildings(maxTime, timer);
 
 	// for each planned building, if the worker isn't constructing, send the command
 	constructAssignedBuildings();
@@ -69,7 +69,7 @@ void BuildingManager::validateWorkersAndBuildings()
 }
 
 // STEP 2: ASSIGN WORKERS TO BUILDINGS WITHOUT THEM
-void BuildingManager::assignWorkersToUnassignedBuildings() 
+void BuildingManager::assignWorkersToUnassignedBuildings(double maxTime, TimerManager * timer) 
 {
 	int nrWorkers = BWAPI::Broodwar->self()->allUnitCount( BWAPI::Broodwar->self()->getRace().getWorker());
 	if (BWAPI::Broodwar->getFrameCount() - lastUnsuccessfulSearch < 10 || nrWorkers < 1) //If a recent search has been unsuccessful, don't repeat it every frame
@@ -81,6 +81,11 @@ void BuildingManager::assignWorkersToUnassignedBuildings()
 	buildingData.begin(ConstructionData::Unassigned);
 	while (buildingData.hasNextBuilding(ConstructionData::Unassigned)) 
 	{
+		if (timer->getTotalElapsed() > maxTime)
+		{
+			lastUnsuccessfulSearch = BWAPI::Broodwar->getFrameCount();
+			return; // taken too much time
+		}
 		Building & b = buildingData.getNextBuilding(ConstructionData::Unassigned);
 		if (debugMode) { BWAPI::Broodwar->printf("Assigning Worker To: %s", b.type.getName().c_str()); }
 

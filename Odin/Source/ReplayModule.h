@@ -59,4 +59,7 @@ private:
 	std::string getRaceResultFile(BWAPI::Race race, int timePeriodAhead);
 	std::string getReplayFileSpecificForInstance(BWAPI::Race race);
 
+	void sumUpBadPredictions(void);
+	std::map<const char*, int> badPredictions;
+
 };

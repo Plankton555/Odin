@@ -302,6 +302,7 @@ void ReplayModule::analyseResults(int timePeriodAhead, BWAPI::Race race)
 	if (gameBN.is_open() && replayBN.is_open()) {
 		std::vector<IntPair> result;
 		std::string gameLine, replayLine;
+
 		bool gameLineOK = getline(gameBN, gameLine);
 		while (gameLineOK && getline(replayBN, replayLine)) {
 			std::vector<std::string> gameValues, replayValues;
@@ -329,7 +330,7 @@ void ReplayModule::analyseResults(int timePeriodAhead, BWAPI::Race race)
 				else
 				{
 					//print to file what was wrong!!
-					BWAPI::Race race = getEnemy()->getRace();//std::map<const char*,int>
+					BWAPI::Race race = getEnemy()->getRace();
 					std::map<const char*,int> units;
 					if (race == BWAPI::Races::Protoss) { units = protossUnitsAll; }
 					if (race == BWAPI::Races::Terran) { units = terranUnitsAll; }
@@ -339,13 +340,19 @@ void ReplayModule::analyseResults(int timePeriodAhead, BWAPI::Race race)
 					for(it = units.begin(); index < i-1 && it != units.end(); index++, it++) { }
 					if (it != units.end())
 					{
-						std::ostringstream out;
-						out << it->first << ", ";
-						out << atof(gameValues[i].c_str()) << " vs " << atof(replayValues[i].c_str());
-						odin_utils::debug(out.str());
+						std::map<const char*, int>::iterator tmp = badPredictions.find(it->first);
+						if (tmp != badPredictions.end())
+						{
+							tmp->second = tmp->second + 1;
+						} else
+						{
+							badPredictions.insert(std::make_pair(it->first, 1));
+						}
+						//std::ostringstream out;
+						//out << it->first << ", ";
+						//out << atof(gameValues[i].c_str()) << " vs " << atof(replayValues[i].c_str());
+						//odin_utils::debug(out.str());
 					}
-
-
 				}
 			}
 
@@ -456,6 +463,7 @@ void ReplayModule::onEnd(std::string BNfilename, bool isWinner)
 		for (int timePeriodsAhead = 0; timePeriodsAhead <= OdinUtils::Instance().predictTimePeriodsAhead; timePeriodsAhead++)
 		{
 			analyseResults(timePeriodsAhead, getEnemy()->getRace());
+			if (timePeriodsAhead == 0) { sumUpBadPredictions(); }
 		}
 		
 	}
@@ -489,6 +497,29 @@ void ReplayModule::onEnd(std::string BNfilename, bool isWinner)
 		exit(0);
 	}
 
+}
+
+void ReplayModule::sumUpBadPredictions()
+{
+	//save bad predictions
+	std::ostringstream file;
+	file << "bwapi-data/Odin/odin_data/BNlog/badPredictions" << BWAPI::Broodwar->getInstanceNumber() << ".txt";
+
+	std::map<const char*, int>::iterator tmp;
+	for (tmp = badPredictions.begin(); tmp != badPredictions.end(); tmp++)
+	{
+		std::ofstream file2 (file.str().c_str(), ios::app);
+		if (file2.is_open())
+		{
+			file2 << tmp->first << ", " << tmp->second << "\n";
+			file2.close();
+		}
+	}
+
+	std::ofstream file3 (file.str().c_str(), ios::app);
+	if (file3.is_open()) { file3 << "\n"; file3.close(); }
+
+	badPredictions.clear();
 }
 
 std::string ReplayModule::getReplayFileSpecificForInstance(BWAPI::Race race)

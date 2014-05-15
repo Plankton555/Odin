@@ -71,7 +71,8 @@ void BuildingManager::validateWorkersAndBuildings()
 // STEP 2: ASSIGN WORKERS TO BUILDINGS WITHOUT THEM
 void BuildingManager::assignWorkersToUnassignedBuildings() 
 {
-	if (BWAPI::Broodwar->getFrameCount() - lastUnsuccessfulSearch < 10) //If a recent search has been unsuccessful, don't repeat it every frame
+	int nrWorkers = BWAPI::Broodwar->self()->allUnitCount( BWAPI::Broodwar->self()->getRace().getWorker());
+	if (BWAPI::Broodwar->getFrameCount() - lastUnsuccessfulSearch < 10 || nrWorkers < 1) //If a recent search has been unsuccessful, don't repeat it every frame
 	{																	//It probably failed due to lack of pylons, so wait for more pylons!
 		return;
 	}

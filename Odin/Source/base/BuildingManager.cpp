@@ -14,7 +14,7 @@ BuildingManager::BuildingManager()
 }
 
 // gets called every frame from GameCommander
-void BuildingManager::update(double maxTime, TimerManager * timer) 
+void BuildingManager::update(double timeLimit) 
 {
 	// Step through building logic, issue orders, manage data as necessary
 	//drawBuildingInformation(340, 50);
@@ -23,7 +23,7 @@ void BuildingManager::update(double maxTime, TimerManager * timer)
 	validateWorkersAndBuildings();	
 
 	// assign workers to the unassigned buildings and label them 'planned'
-	assignWorkersToUnassignedBuildings(maxTime, timer);
+	assignWorkersToUnassignedBuildings(timeLimit);
 
 	// for each planned building, if the worker isn't constructing, send the command
 	constructAssignedBuildings();
@@ -69,8 +69,10 @@ void BuildingManager::validateWorkersAndBuildings()
 }
 
 // STEP 2: ASSIGN WORKERS TO BUILDINGS WITHOUT THEM
-void BuildingManager::assignWorkersToUnassignedBuildings(double maxTime, TimerManager * timer) 
+void BuildingManager::assignWorkersToUnassignedBuildings(double timeLimit) 
 {
+	SparCraft::Timer timer;
+	timer.start();
 	int nrWorkers = BWAPI::Broodwar->self()->allUnitCount( BWAPI::Broodwar->self()->getRace().getWorker());
 	if (BWAPI::Broodwar->getFrameCount() - lastUnsuccessfulSearch < 10 || nrWorkers < 1) //If a recent search has been unsuccessful, don't repeat it every frame
 	{																	//It probably failed due to lack of pylons, so wait for more pylons!
@@ -81,7 +83,7 @@ void BuildingManager::assignWorkersToUnassignedBuildings(double maxTime, TimerMa
 	buildingData.begin(ConstructionData::Unassigned);
 	while (buildingData.hasNextBuilding(ConstructionData::Unassigned)) 
 	{
-		if (timer->getTotalElapsed() > maxTime)
+		if (timer.getElapsedTime() > timeLimit)
 		{
 			lastUnsuccessfulSearch = BWAPI::Broodwar->getFrameCount();
 			return; // taken too much time

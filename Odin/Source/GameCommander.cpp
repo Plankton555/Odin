@@ -29,7 +29,7 @@ void GameCommander::update()
 	timerManager.stopTimer(TimerManager::Production);
 
 	timerManager.startTimer(TimerManager::Building);
-	BuildingManager::Instance().update(maxTimePerFrame, &timerManager);
+	BuildingManager::Instance().update(maxTimePerFrame - timerManager.getTotalElapsed());
 	timerManager.stopTimer(TimerManager::Building);
 
 	// combat and scouting managers

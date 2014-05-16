@@ -42,7 +42,7 @@ You should end up with the file structure below (some files/folders omitted).
     |       |-- replays/
 
 You might need to create `BWTA/` and `replays/` yourself.
-More about the different parts of Odin, see `File structure` further down.
+More about the different parts of Odin, see [`File structure`](README.md#file-structure) further down.
 
 How to run
 ----

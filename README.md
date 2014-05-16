@@ -56,3 +56,22 @@ File structure
 ----
 
 In progress
+
+    |-- Starcraft/
+    |   |-- bwapi-data/
+    |       |-- BWTA/
+    |       |-- Odin/
+    |           |-- Odin/
+    |               |-- Source/
+    |               |-- VisualStudio/
+    |           |-- odin_data/
+    |               |-- accumulated_data/
+    |               |-- bayesian_networks/
+    |               |-- openings/
+    |               |-- replaydatastuff/
+    |       |-- BWAPI.dll
+    |       |-- bwapi.ini
+    |       |-- BWAPId.dll
+    |   |-- maps/
+    |       |-- replays/
+    

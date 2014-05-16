@@ -8,7 +8,7 @@ Devoted to the wisest of the supreme Norse gods, Odin.
 
 
 This project is part of a Bachelor's thesis at Chalmers University of Technology, Sweden. 
-The version of the thesis can be found at: TBA
+A version of the thesis can be found at: TBA
 
 Setup
 ----

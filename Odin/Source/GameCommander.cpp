@@ -9,6 +9,7 @@ GameCommander::GameCommander() : numWorkerScouts(0), currentScout(NULL)
 
 void GameCommander::update()
 {
+	int maxTimePerFrame = 35;
 	timerManager.startTimer(TimerManager::All);
 	
 
@@ -28,7 +29,7 @@ void GameCommander::update()
 	timerManager.stopTimer(TimerManager::Production);
 
 	timerManager.startTimer(TimerManager::Building);
-	BuildingManager::Instance().update();
+	BuildingManager::Instance().update(maxTimePerFrame - timerManager.getTotalElapsed());
 	timerManager.stopTimer(TimerManager::Building);
 
 	// combat and scouting managers
@@ -60,7 +61,7 @@ void GameCommander::update()
 	timerManager.stopTimer(TimerManager::MapTools);
 
 	timerManager.startTimer(TimerManager::Search);
-	StarcraftBuildOrderSearchManager::Instance().update(35 - timerManager.getTotalElapsed());
+	StarcraftBuildOrderSearchManager::Instance().update(maxTimePerFrame - timerManager.getTotalElapsed());
 	timerManager.stopTimer(TimerManager::Search);
 		
 	timerManager.stopTimer(TimerManager::All);

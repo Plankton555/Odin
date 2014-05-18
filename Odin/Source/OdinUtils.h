@@ -2,7 +2,7 @@
 
 #include "Common.h"
 
-#define ODIN_DEBUG false
+#define ODIN_DEBUG true
 
 using namespace std;
 

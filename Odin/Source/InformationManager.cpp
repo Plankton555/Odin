@@ -318,7 +318,7 @@ void InformationManager::onUnitDestroy(BWAPI::Unit * unit)
 	{
 		odin_utils::debug("Found addon");
 		odin_utils::debug("Name: "+unit->getPlayer()->getName());
-		string name = unit->getBuildUnit() == NULL ? unit->getBuildUnit()->getType().getName() : "null"; 
+		string name = unit->getBuildUnit() != NULL ? unit->getBuildUnit()->getType().getName() : "null"; 
 		odin_utils::debug("BuildUnit: "+name);
 	}
 	if (unit->getPlayer() == BWAPI::Broodwar->enemy())

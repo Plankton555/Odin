@@ -71,7 +71,7 @@ void CombatCommander::assignIdleSquads(std::set<BWAPI::Unit *> & unitsToAssign)
 		}
 	}
 
-	int numberOfParts = occupiedRegions.size();
+	int numberOfParts = std::max((int)occupiedRegions.size(), 1);
 	int partSize = combatUnits.size()/numberOfParts+1;
 
 	UnitVector::iterator tempIt;

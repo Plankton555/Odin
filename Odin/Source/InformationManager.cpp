@@ -316,10 +316,7 @@ void InformationManager::onUnitDestroy(BWAPI::Unit * unit)
 	// erase the unit
 	if(unit->getType().isAddon())
 	{
-		odin_utils::debug("Found addon");
-		odin_utils::debug("Name: "+unit->getPlayer()->getName());
-		string name = unit->getBuildUnit() != NULL ? unit->getBuildUnit()->getType().getName() : "null"; 
-		odin_utils::debug("BuildUnit: "+name);
+		enemyUnitData.removeBadUnits();
 	}
 	if (unit->getPlayer() == BWAPI::Broodwar->enemy())
 	{

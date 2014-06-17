@@ -8,7 +8,7 @@ Devoted to the wisest of the supreme Norse gods, Odin.
 
 
 This project is part of a Bachelor's thesis at Chalmers University of Technology, Sweden. 
-A version of the thesis can be found at: TBA
+A version of the thesis can be found at (link TBA shortly), and a video of the AI playing against the native (built-in) StarCraft AI can be seen at https://www.youtube.com/watch?v=FlYjBrMTJXI.
 
 Setup
 ----

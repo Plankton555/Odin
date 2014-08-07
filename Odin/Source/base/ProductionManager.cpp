@@ -322,13 +322,16 @@ void ProductionManager::manageBuildOrderQueue()
 		bool canMake = canMakeNow(producer, currentItem.metaType);
 
 		// if we try to build too many refineries manually remove it
-		bool shouldMakeRefinery = (BWAPI::Broodwar->self()->minerals()/1.5>BWAPI::Broodwar->self()->gas() 
+		if (currentItem.metaType.isRefinery())
+		{
+			bool shouldMakeRefinery = (BWAPI::Broodwar->self()->minerals()/1.5>BWAPI::Broodwar->self()->gas() 
 								&& BWAPI::Broodwar->self()->allUnitCount( BWAPI::Broodwar->self()->getRace().getRefinery())
 								< BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Nexus));
-		if (currentItem.metaType.isRefinery()&&!shouldMakeRefinery)
-		{
-			queue.removeCurrentHighestPriorityItem();
-			break;
+			if (!shouldMakeRefinery)
+			{
+				queue.removeCurrentHighestPriorityItem();
+				break;
+			}
 		}
 
 		// if the next item in the list is a building and we can't yet make it

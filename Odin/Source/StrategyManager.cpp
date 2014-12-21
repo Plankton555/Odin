@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include "Common.h"
 #include "StrategyManager.h"
+#include <boost\filesystem.hpp>
 
 #define IDLE_WORKERS_THRESHOLD_TO_EXPAND (10)
 #define MINERAL_THRESHOLD_TO_EXPAND (2000)
@@ -392,7 +393,10 @@ void StrategyManager::readResults()
 
 void StrategyManager::writeResults()
 {
-	//boost::filesystem::exists;
+	if (!boost::filesystem::exists(writeDir))
+	{
+		boost::filesystem::create_directories(writeDir);
+	}
 	std::string writeFile = writeDir  + BWAPI::Broodwar->enemy()->getRace().c_str() + ".txt";
 
 	if(enemyIsRandom)

@@ -5,8 +5,9 @@
 #define IDLE_WORKERS_THRESHOLD_TO_EXPAND (10)
 #define MINERAL_THRESHOLD_TO_EXPAND (2000)
 
-const std::string BAYESNET_FOLDER = ODIN_DATA_FILEPATH + "bayesian_networks/";
-const std::string OPENINGS_FOLDER = ODIN_DATA_FILEPATH + "openings/";
+const std::string BAYESNET_FOLDER = ODIN_DATA_FILEPATH_READ + "bayesian_networks/";
+const std::string OPENINGS_FOLDER_READ = ODIN_DATA_FILEPATH_READ + "openings/";
+const std::string OPENINGS_FOLDER_WRITE = ODIN_DATA_FILEPATH_WRITE + "openings/";
 
 const int MINERALS_NEEDED_TO_TECH_EXPENSIVE_COUNTER = 300;
 const int GAS_NEEDED_TO_TECH_EXPENSIVE_COUNTER = 150;
@@ -287,8 +288,8 @@ void StrategyManager::addStrategies()
 	// if the file doesn't exist something is wrong so just set them to default settings
 	if (stat(Options::FileIO::FILE_SETTINGS, &buf) == -1)
 	{
-		readDir = OPENINGS_FOLDER;
-		writeDir = OPENINGS_FOLDER;
+		readDir = OPENINGS_FOLDER_READ;
+		writeDir = OPENINGS_FOLDER_WRITE;
 	}
 	else
 	{
@@ -391,6 +392,7 @@ void StrategyManager::readResults()
 
 void StrategyManager::writeResults()
 {
+	//boost::filesystem::exists;
 	std::string writeFile = writeDir  + BWAPI::Broodwar->enemy()->getRace().c_str() + ".txt";
 
 	if(enemyIsRandom)

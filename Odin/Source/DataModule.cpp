@@ -7,7 +7,7 @@
 #define FUZZY_VALUES_POSITION (1)
 #define COUNTER_NAMES_POSITION (2)
 #define NR_FUZZY_VALUES  (FUZZY_VALUES_END - FUZZY_VALUES_START)
-const std::string FUZZY_VALUES_FILEPATH = ODIN_DATA_FILEPATH + "fuzzy_units.txt";
+const std::string FUZZY_VALUES_FILEPATH = ODIN_DATA_FILEPATH_READ + "fuzzy_units.txt";
 const std::string SPLIT_SYMBOL = ",";
 const std::string SUB_SPLIT_SYMBOL = ".";
 const char COMMENT_CHAR = ';';

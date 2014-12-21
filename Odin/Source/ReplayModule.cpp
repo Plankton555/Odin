@@ -8,7 +8,7 @@
 using namespace BWAPI;
 using namespace std;
 
-const std::string REPLAY_DATA_PATH = ODIN_DATA_FILEPATH + "replaydatastuff/";
+const std::string REPLAY_DATA_PATH = ODIN_DATA_FILEPATH_WRITE + "replaydatastuff/";
 const std::string SEEN_REPLAYS_PATH = REPLAY_DATA_PATH + "seen_replays.txt";
 
 Player* ReplayModule::player = NULL;
